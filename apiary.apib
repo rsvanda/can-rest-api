@@ -1518,6 +1518,77 @@ These functions can be used for comparing property with a value:
             }
         }
 
+## DWH Explain Query [/rest/projects/{project}/dwh/explain{?size,page,sort}]
+### Explain Query [POST] 
+This resource is useful for debugging and tuning DWH queries. 
+The resource accept standard DWH Query and shows the corresponding SQL statement.
+
+* 200 - OK - query was successfully executed
+
++ Parameters 
+    + size = `200` (optional, number)
+    + page = `0` (optional, number)
+    + sort = `null` (optional, string, `transactions.zsj_d_id`)
+
++ Request (application/json)
+        
+        {  
+           "properties":[  
+              {  
+                 "id":"geometry",
+                 "type":"property",
+                 "value":"restaurant_phx.geometry"
+              }
+           ],
+           "filterBy":[  
+              {  
+                 "property":"restaurant_phx.stars",
+                 "operator":"gte",
+                 "value":3
+              },
+              {  
+                 "property":"restaurant_phx.stars",
+                 "operator":"lte",
+                 "value":5
+              },
+              {  
+                 "property":"restaurant_phx.review_count",
+                 "operator":"gte",
+                 "value":0
+              },
+              {  
+                 "property":"restaurant_phx.review_count",
+                 "operator":"lte",
+                 "value":1800
+              }
+           ]
+        }        
+        
++ Response 200 (text/plain)
+
+        select *
+        from (
+          with "no_agg_func" as (
+            select restaurant_phx.geometry as "geometry"
+            from restaurant_phx
+            where (
+              restaurant_phx.stars >= 3
+              and restaurant_phx.stars <= 5
+              and restaurant_phx.review_count >= 0
+              and restaurant_phx.review_count <= 1800
+            )
+            group by restaurant_phx.geometry
+          )
+          select 
+            coalesce(no_agg_func.geometry) as "geometry", 
+            count(*) over () as "total_rows_count"
+          from no_agg_func
+          group by 1
+          order by 1 asc
+        ) as "inner"
+        limit 200
+        
+
 ## DWH Metric Range [/rest/projects/{project}/dwh/metricRange]
 ### Metric Range Values [POST] 
 Executes a multidimensional query and returns the range values for all given metrics.

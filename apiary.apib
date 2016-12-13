@@ -1388,6 +1388,30 @@ Restricted to *ADMIN* project role.
             "created": false
         }
         
+## Data Pull [/rest/projects/{project}/search/data/pull]
+### Index dataset data [POST] 
+Resource for importing data of given dataset into elasticsearch index.
+There are supported two import modes:
+* full - the existing data in current elasticsearch index are dropped and the new data are loaded
+* incremental - the records are added as new documents to existing dataset index
+
+Currently, this resource does not support asynchronous processing. This means that the size of loaded file is limited to 1 minute timeout.
+
+#### Security
+Restricted to *LOAD_DATA* or *ADMIN* project role that have permission to load data into the project
+
++ Request (application/json)
+
+        {
+            "dataset": "mystores",
+            "mode": "full",
+            "upload": "/rest/accounts/B3mTX6pCTRBSIMRej4q0/uploads/ncesksvg7rjeri7v/test.csv",
+        }
+
+
++ Response 204 (application/json)
+        
+        
 # Group Data Warehouse Service
 ## DWH Query [/rest/projects/{project}/dwh/query{?size,page,sort}]
 ### Run Query [POST] 
@@ -1429,6 +1453,9 @@ List of supported arithmetic functions:
 * function_multiply
 * function_divide
 * function_modulo
+
+List of supported conditional functions:
+* ifnull - define the default value to use if the result of aggregation function is null
 
 The WHERE cause of statement is represent by *filterBy* array. The results must match ALL of filters, there is an AND condition between them.
 These functions can be used for comparing property with a value: 

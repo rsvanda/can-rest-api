@@ -595,7 +595,12 @@ Resource return only those projects where the authenticated user is a member.
     + size = `20` (optional, number)
     + page = `0` (optional, number)
     + sort = `null` (optional, string, `title`)
-    + share = `null` (optional, string, [`DEMO`, `DIMENSION`])
+    + share: `private` (enum[String],optional)
+        Filter project list by `share` attribute.
+        + Members
+            + `private`
+            + `dimension`
+            + `demo`
     + expand: `membership` (enum[String], optional)
         Expand selected attribute(s) to minimalize roundtrips.
         + Members
@@ -1411,6 +1416,7 @@ Restricted to *LOAD_DATA* or *ADMIN* project role that have permission to load d
 
 + Response 204 (application/json)
         
+
         
 # Group Data Warehouse Service
 ## DWH Query [/rest/projects/{project}/dwh/query{?size,page,sort}]
@@ -1514,6 +1520,16 @@ These functions can be used for comparing property with a value:
                     "propertyId": "stores_count",
                     "value": 5,
                     "operator": "gte"
+                }
+            ],
+            "orderBy": [
+                {
+                    "property": "mycustomers.aqusition_date",
+                    "direction": "asc"
+                },
+                {
+                    "propertyId": "cart_avg",
+                    "direction": "desc"
                 }
             ]
         }
@@ -1692,13 +1708,14 @@ Following example returns the `min` and `max` of *stores_count* and *turnover* f
         }
 
 
-## Property Values [/rest/projects/{project}/dwh/values{?property,size,page,dir}]
+## Property Values [/rest/projects/{project}/dwh/values{?property,filter,size,page,dir}]
 ### Get Property Values [GET]
 Gets list of distinct values of given dataset's property. The property is set by mandatory parameter `property`. 
 The distinct values are returned as pageable response.
 
 + Parameters 
     + property (required, string)
+    + filter (optional, string)
     + size = `200` (optional, number)
     + page = `0` (optional, number)
     + dir = `asc` (optional, string, `asc` or `desc`)

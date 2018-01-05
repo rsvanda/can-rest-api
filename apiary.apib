@@ -1,4 +1,4 @@
-FORMAT: 1A
+1FORMAT: 1A
 HOST: https://secure.cleveranalytics.com
 
 # CleverAnalytics
@@ -11,7 +11,7 @@ Refresh token is set as server cookie, with httpOnly flag - forbiden access from
 
 Secondly, you will use the valid refresh token to obtain an access token that is necessary for authentication all request. There must be set a HTTP Header Authentication: Bearer... Access token is a JWT Token and  has a limited validity to 15 minutes, is encrypted, and can be very quickly verified by the resource servers.
 
-For a realy detail inside into authentication see our [blog post](http://blog.cleveranalytics.com/post/106512852494/implementing-token-based-authentication-in-a).
+For a detailed insight into authentication see our [blog post](http://blog.cleveranalytics.com/post/106512852494/implementing-token-based-authentication-in-a).
 
 ## Error Codes
 * 400001 - incorrect old password
@@ -19,6 +19,7 @@ For a realy detail inside into authentication see our [blog post](http://blog.cl
 * 400003 - access to account denied, bearer token does not match requested accountId
 * 400004 - insuciffient OAuth scope. Scope does not contains all required properties.
 * 400005 - update of last project admin denied. There needs to be always at least one user in Admin role in each project.
+* 400006 - metric values distribution for given metric and filters is not supported. The min and max values equals and therefore cannot be splitted into buckets.
 
 
 ## Login [/rest/oauth/login]
@@ -50,6 +51,16 @@ Invalid user email or password.
                 "preferences": {
                     "language": "en",
                     "lastActiveProject": "/rest/projects/ncesksvg7rjeri7v"                
+                },
+                "onboarding": 
+                    "introShown": [
+                        "/rest/projects/vb2b3d8v91jao331/md/views/f2ef07u2c5tikd26",
+                        "/rest/projects/t1n92mu7l0toa84i/md/views/e4cflb6pr6h490fn"
+                    ],
+                    "tipsShown": [
+                        "basicTools",
+                        "extBlockRanking"
+                    ]
                 },
                 "links": [
                     {
@@ -146,6 +157,16 @@ Supported types of social networks and required scope (permissions):
                     "language": "en",
                     "lastActiveProject": "/rest/projects/ncesksvg7rjeri7v"                
                 },
+                "onboarding": 
+                    "introShown": [
+                        "/rest/projects/vb2b3d8v91jao331/md/views/f2ef07u2c5tikd26",
+                        "/rest/projects/t1n92mu7l0toa84i/md/views/e4cflb6pr6h490fn"
+                    ],
+                    "tipsShown": [
+                        "basicTools",
+                        "extBlockRanking"
+                    ]
+                },
                 "links": [
                     {
                         "rel": "self",
@@ -229,6 +250,12 @@ Global set of user accounts. It contains all information about CleverAnalytics u
                 "sendNewsletter": true
                 "lastActiveProject": null
             },
+            "onboarding": 
+                "introShown": [
+                ],
+                "tipsShown": [
+                ]
+            },
             "links": [
                 {
                     "rel": "self",
@@ -272,14 +299,14 @@ The resource has two type of responses:
 * full account datail (request on currently authenticated account)
     * see example response bellow
 * restricted account detail - when getting details about another user account
-    * `id`, `fullName`, `email` and `status` properties are returned
+    * `id`, `fullName`, 'language` and `status` properties are returned
 
 #### Response statuses
 * 200 - OK
 * 404 - Not Found
 
 ### Get Current Account [GET]
-\
+
 + Request (application/json)
 
     + Headers
@@ -298,6 +325,16 @@ The resource has two type of responses:
                 "preferences": {
                     "language": "en",
                     "lastActiveProject": "/rest/projects/ncesksvg7rjeri7v"                
+                },
+                "onboarding": 
+                    "introShown": [
+                        "/rest/projects/vb2b3d8v91jao331/md/views/f2ef07u2c5tikd26",
+                        "/rest/projects/t1n92mu7l0toa84i/md/views/e4cflb6pr6h490fn"
+                    ],
+                    "tipsShown": [
+                        "basicTools",
+                        "extBlockRanking"
+                    ]
                 },
                 "links": [
                     {
@@ -337,6 +374,16 @@ Account for user identified by his/her Bearer token. Resource is the same as the
                 "preferences": {
                     "language": "en",
                     "lastActiveProject": "/rest/projects/ncesksvg7rjeri7v"                
+                },
+                "onboarding": 
+                    "introShown": [
+                        "/rest/projects/vb2b3d8v91jao331/md/views/f2ef07u2c5tikd26",
+                        "/rest/projects/t1n92mu7l0toa84i/md/views/e4cflb6pr6h490fn"
+                    ],
+                    "tipsShown": [
+                        "basicTools",
+                        "extBlockRanking"
+                    ]
                 },
                 "links": [
                     {
@@ -493,6 +540,59 @@ Updates the preferences by merge. If some of preference keys is not present, val
             
 + Response 204
 
+
+## Account Onboarding [/rest/accounts/{accountId}/onboarding]
+Section of account profile for tracking onboarding steps for earch user. It has two sections:
+* introShown - tracks the project views that were already visited by current user
+* tipsShown - list of unique tips that were already presented to current user
+
+#### Response statuses
+* 204 - OK - onboarding were changed
+* 400 - Bad request
+
+#### Security
+User is allowed to read and change only it's own preferences. It means that Bearer token must match {accountId}
+
+### Get account onboarding [GET]
+
++ Response 200
+        
+        {
+            "introShown": [
+                "/rest/projects/vb2b3d8v91jao331/md/views/f2ef07u2c5tikd26",
+                "/rest/projects/t1n92mu7l0toa84i/md/views/e4cflb6pr6h490fn"
+            ],
+            "tipsShown": [
+                "basicTools",
+                "extBlockRanking"
+            ]
+        }
+
+
+### Change onboarding [PUT]
+Update the onboarding object. The previos version is replaced by the new one.
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer {bearer token}
+
+    + Body
+    
+            {
+                "introShown": [
+                    "/rest/projects/vb2b3d8v91jao331/md/views/f2ef07u2c5tikd26",
+                    "/rest/projects/t1n92mu7l0toa84i/md/views/e4cflb6pr6h490fn"
+                ],
+                "tipsShown": [
+                    "basicTools",
+                    "extBlockRanking"
+                ]
+            }
+
++ Response 204
+
 # Group Bootstrap
 ## Bootstrap [/rest/bootstrap]
 ### Bootstrap [GET]
@@ -511,6 +611,16 @@ Get general information as user details, settings, projects and preferences.
                     "preferences": {
                         "language": "en",
                         "lastActiveProject": "/rest/projects/ncesksvg7rjeri7v"                
+                    },
+                    "onboarding": 
+                        "introShown": [
+                            "/rest/projects/vb2b3d8v91jao331/md/views/f2ef07u2c5tikd26",
+                            "/rest/projects/t1n92mu7l0toa84i/md/views/e4cflb6pr6h490fn"
+                        ],
+                        "tipsShown": [
+                            "basicTools",
+                            "extBlockRanking"
+                        ]
                     },
                     "links": [
                         {
@@ -701,7 +811,7 @@ Create a new project and set the authenticated user as the project member in *AD
             ]
         }
 
-## Project [/rest/projects/{project}{?expand}]
+## Project [/rest/projects/{projectId}{?expand}]
 ### Get Project [GET]
 Get project by given project *id*. 
 
@@ -800,7 +910,7 @@ Restricted to *ADMIN* project role.
 
 + Response 204 (application/json)
 
-## Members [/rest/projects/{project}/members{?size,page,sort,expand}]
+## Members [/rest/projects/{projectId}/members{?size,page,sort,expand}]
 ### List Members [GET]
 Get list of project members.
 
@@ -877,10 +987,10 @@ Restricted to *ADMIN* project role.
             "accountId": "O3kTMX6pCTRBSIMRej4q0",
             "role": "EDITOR"
             "status": "ENABLED",
-        }    
+        }
 
 
-## Membership by accountId [/rest/projects/{project}/members{?accountId,expand}]
+## Membership by accountId [/rest/projects/{projectId}/members{?accountId,expand}]
 ### Get Membership by AccountId [GET]
 Get membership for given project and accountId
 
@@ -918,7 +1028,7 @@ Restricted to *ADMIN* project role or is allowed when *accountId* is correspond 
             ]
         }
 
-## Membership [/rest/projects/{project}/members/{membership}]
+## Membership [/rest/projects/{projectId}/members/{membership}]
 ### Get Membership by Id [GET]
 Get detail of user membership in project
 
@@ -1003,7 +1113,7 @@ Restricted to *ADMIN* project role.
 
 + Response 204 (application/json)
 
-## Invitations [/rest/projects/{project}/invitations{?status,size,page,sort}]
+## Invitations [/rest/projects/{projectId}/invitations{?status,size,page,sort}]
 ### List Invitations [GET]
 Get list of project invitations. 
 
@@ -1105,7 +1215,7 @@ Restricted to *ADMIN* project role.
             ]
         }
 
-## Invitation [/rest/projects/{project}/invitations/{invitation}]
+## Invitation [/rest/projects/{projectId}/invitations/{invitation}]
 ### Get Invitation [GET]
 Get detail of an invitation. An invitation status value is one of:
 * PENDING
@@ -1326,100 +1436,64 @@ Restricted to invited user. Authenticated user email must equals to email in the
         }
 
 # Group Search
-## Search [/rest/projects/{project}/search?query=&viewId=]
+## Search [/rest/projects/{projectId}/search{?query}{?dataset}{?size}{?page}]
 ### Search [GET] 
-Full text search in scope of a View in the Project. 
-There are two mandatory request parameters:
-* *query* -  Query parameter is a seach string as specified here: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
-* *viewId* - Id of a metadata object View. Previous query is evaluated in the scope of the given View.
+Full text search on all internal project data.
+The search searvice indexes `title` and `subtitle` of all geometry datasets (`geometryPoint`, `geometryLine`, `geometryPolygon`).
+The dataset's objects are indexed during dataset pull job. It means that if the `title` or `subtitle` definition is changed in dataset's metadata definition, the affected dataset must be loaded again by dataset pull full load process.
 
++ Parameters 
+    + query (string) - Query search phrase. It is split into terms and the resource return dataset's object that contains all terms in their `title` or `subtitle`. 
+    + dataset (optional, string[]) - Search only in given dataset. If the parameter present, only the search results of given datasets are returned.       Parameter can be repeated, e.g. `&dataset=orders&dataset=customers`
+    + size = `20` (optional, number)
+    + page = `0` (optional, number)
+    
 + Response 200 (application/json)
 
        + Body
     
             {
-                {
-                  "took" : 132,
-                  "timed_out" : false,
-                  "_shards" : {
-                    "total" : 5,
-                    "successful" : 5,
-                    "failed" : 0
-                  },
-                  "hits" : {
-                    "total" : 27,
-                    "max_score" : 1.1137681,
-                    "hits" : [ {
-                      "_index" : "demo",
-                      "_type" : "stores",
-                      "_id" : "215",
-                      "_score" : 1.1137681, "_source" : {"nazev":"Prodejna 5","ulice":"Brněnská 1024","obec":"Jihlava","_collection":"1"},
-                      "highlight" : {
-                        "obec" : [ "<em>Jihlava</em>" ],
-                        "nazev" : [ "<em>Prodejna</em> 5" ]
-                      }
-                    }, {
-                      "_index" : "demo",
-                      "_type" : "stores",
-                      "_id" : "703",
-                      "_score" : 1.1137681, "_source" : {"nazev":"Prodejna 14","ulice":"Okružní 15","obec":"Jihlava","_collection":"2"},
-                      "highlight" : {
-                        "obec" : [ "<em>Jihlava</em>" ],
-                        "nazev" : [ "<em>Prodejna</em> 14" ]
-                      }
+                "content": [
+                    {
+                        "id": "E01031244",
+                        "dataset": "lsoa_demo_uk",
+                        "title": "Stratford-on-Avon 001C",
+                        "subtitle": "",
+                        "highlight": {
+                            "title": "Stratford-on-<em>A</em>von 001C"
+                        }
+                    },
+                    {
+                        "id": "2",
+                        "dataset": "shops",
+                        "title": "My Store:  Alum Rock Road",
+                        "subtitle": "adress: STREET & Houzse No., City....to be completed",
+                        "highlight": {
+                            "title": "My Store:  <em>A</em>lum Rock Road",
+                            "subtitle": "<em>a</em>dress: STREET & Houzse No., City....to be completed"
+                        }
                     }
-                    ]
-                 }
+                ],
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/m6pqozml0ckkijzf/search?query=a&size=2&page=0"
+                    },
+                    {
+                        "rel": "next",
+                        "href": "/rest/projects/m6pqozml0ckkijzf/search?query=a&size=2&page=1"
+                    }
+                ],
+                "page": {
+                    "size": 2,
+                    "totalElements": 18,
+                    "totalPages": 9,
+                    "number": 0
+                }
             }
             
-## Search [/rest/projects/{project}/search/load]
-### Search [POST] 
-Triggers reindex the data from all datasets in the project.
-
-#### Security
-Restricted to *ADMIN* project role.
-
-#### Response statuses
-* 200 - OK - data was reindexed
-* 204 - NO CONTENT - request was accepted but there is no data to be reindexed
-
-+ Response 200 (application/json)
-
-        {
-            "_index": "_river",
-            "_type": "stores_river",
-            "_id": "_meta",
-            "_version": 21,
-            "created": false
-        }
-        
-## Data Pull [/rest/projects/{project}/search/data/pull]
-### Index dataset data [POST] 
-Resource for importing data of given dataset into elasticsearch index.
-There are supported two import modes:
-* full - the existing data in current elasticsearch index are dropped and the new data are loaded
-* incremental - the records are added as new documents to existing dataset index
-
-Currently, this resource does not support asynchronous processing. This means that the size of loaded file is limited to 1 minute timeout.
-
-#### Security
-Restricted to *LOAD_DATA* or *ADMIN* project role that have permission to load data into the project
-
-+ Request (application/json)
-
-        {
-            "dataset": "mystores",
-            "mode": "full",
-            "upload": "/rest/accounts/B3mTX6pCTRBSIMRej4q0/uploads/ncesksvg7rjeri7v/test.csv",
-        }
-
-
-+ Response 204 (application/json)
-        
-
-        
 # Group Data Warehouse Service
-## DWH Query [/rest/projects/{project}/dwh/query{?size,page,sort}]
+## DWH Query [/rest/projects/{projectId}/dwh/query{?size,page,sort}]
 ### Run Query [POST] 
 Executes a multidimensional query on datawarehouse. 
 Thanks to the query language you are just defining which properities do you want to get 
@@ -1452,6 +1526,7 @@ List of supported aggregation function:
 List of supported window functions:
 * function_ntile
 * function_rank
+* function_percentile
 
 List of supported arithmetic functions:
 * function_plus
@@ -1466,6 +1541,7 @@ List of supported conditional functions:
 The WHERE cause of statement is represent by *filterBy* array. The results must match ALL of filters, there is an AND condition between them.
 These functions can be used for comparing property with a value: 
 * eq
+* in
 * ne
 * lt
 * lte
@@ -1473,6 +1549,13 @@ These functions can be used for comparing property with a value:
 * gte
 * isNull
 * isNotNull
+* inAttribute
+
+Boolean operators for building advanced conditions:
+* and - requires at least two arguments (subconditions)
+* or - requires at least two arguments (subconditions)
+* not - requires just one argument
+
 
 #### Response statuses
 * 200 - OK - query was successfully executed
@@ -1558,11 +1641,11 @@ These functions can be used for comparing property with a value:
             "links": [
                 {
                     "rel": "self",
-                    "href": "/rest/projects/{project}/dwh/query/page=0&size=200"
+                    "href": "/rest/projects/{projectId}/dwh/query/page=0&size=200"
                 },
                 {
                     "rel": "next",
-                    "href": "/rest/projects/{project}/dwh/query/page=1&size=200"
+                    "href": "/rest/projects/{projectId}/dwh/query/page=1&size=200"
                 }
             ],
             "page": {
@@ -1573,7 +1656,7 @@ These functions can be used for comparing property with a value:
             }
         }
 
-## DWH Explain Query [/rest/projects/{project}/dwh/explain{?size,page,sort}]
+## DWH Explain Query [/rest/projects/{projectId}/dwh/explain{?size,page,sort}]
 ### Explain Query [POST] 
 This resource is useful for debugging and tuning DWH queries. 
 The resource accept standard DWH Query and shows the corresponding SQL statement.
@@ -1644,7 +1727,7 @@ The resource accept standard DWH Query and shows the corresponding SQL statement
         limit 200
         
 
-## DWH Metric Range [/rest/projects/{project}/dwh/metricRange]
+## DWH Metric Range [/rest/projects/{projectId}/dwh/metricRange]
 ### Metric Range Values [POST] 
 Executes a multidimensional query and returns the range values for all given metrics.
 The range values depends on a granularity  - that is defined by query properties.
@@ -1708,17 +1791,326 @@ Following example returns the `min` and `max` of *stores_count* and *turnover* f
         }
 
 
-## Property Values [/rest/projects/{project}/dwh/values{?property,filter,size,page,dir}]
+## DWH Available Granularities [/rest/projects/{projectId}/dwh/availableGranularities]
+### Available Granularities [POST] 
+
++ Request (application/json)
+        
+        {
+            "metrics": [
+                {
+                    "id": "num_of_stores",
+                    "type": "function_count_dist",
+                    "content": [
+                        {
+                            "type": "property",
+                            "value": "mystores.store_id"
+                        }
+                    ]
+                }
+            ]
+        }
+        
+
++ Response 200 (application/json)
+
+        {
+            "content": [
+                {
+                    "metricId": "num_of_stores",
+                    "availableGranularities": [
+                        "/rest/projects/{projectId}/md/datasets/bpotfxdi4pozhx9e",
+                    ]
+                }
+            ]
+        }        
+
+
+## DWH Available Datasets [/rest/projects/{projectId}/dwh/availableDatasets{?subtype,expand}]
+### Available Datasets [POST] 
+List datasets available for drill in for given metric(s). 
+
+The project's data model defines the relations among datasets. Not all metrics are computable at all datasets granularity.
+E.g. population defined on State level cannot be calculated for granularity (dataset) city. 
+
+This endpoint checks the relations from data model and lists only the available datasets for the metrics.
+
++ Parameters 
+    + subtype (optional, string[]) available datasets of subtypes
+
+        If the parameter present, only the datasets of given subtype(s) are returned.
+        Parameter can be repeated, e.g. `?subtype=geometryLine&subtype=geometryPolygon`
+
+        Supported types
+
+        + Values
+            + `geometryPoint`
+            + `geometryLine`    
+            + `geometryPolygon`
+            
+    + expand: `dataset` (enum[String], optional)
+        Expand datasets to minimalize roundtrips.
+        + Members
+            + `dataset` - expand datasets
+            
+
++ Request (application/json)
+        
+        {
+            "metrics": [
+                {
+                    "id": "num_of_stores",
+                    "type": "function_count_dist",
+                    "content": [
+                        {
+                            "type": "property",
+                            "value": "mystores.store_id"
+                        }
+                    ]
+                }
+            ]
+        }
+        
+
++ Response 200 (application/json)
+
+        {
+            "content": [
+                {
+                    "metricId": "num_of_stores",
+                    "availableDatasets": [
+                        "/rest/projects/{projectId}/md/datasets/bpotfxdi4pozhx9e",
+                    ]
+                }
+            ]
+        }        
+
+## DWH Values Distribution [/rest/projects/{projectId}/dwh/valuesDistribution{?property,buckets,min,max}]
+### Values Distribution [GET] 
+Computes distribution (frequency) of given fact (numeric dataset property). Result is splitted into required number of equal size buckets. The frequency is the count of occurencies of given metric in these buckets.
+
++ Parameters 
+    + property (required, string)
+    + buckets = `20` (optional, number)
+    + min (optional, number)
+        Set minimal value for distribution. By default it is a minimal value for the property.
+    + max (optional, number)
+        Set maximal value for distribution. By default it is a maximal value for the property.
+
++ Response 200 (application/json)
+
+        {
+            "content": [
+                 {
+                    "bucket": 1,
+                    "min": 100,
+                    "max": 200,
+                    "content": [
+                        {
+                            "propertyId" : "turnover"
+                            "frequency": 84
+                        }
+                    ]
+                },
+                {
+                    "bucket": 2,
+                    "min": 200,
+                    "max": 300,
+                    "content": [
+                        {
+                            "propertyId" : "turnover"
+                            "frequency": null
+                        }
+                    ]
+                },
+                {
+                    "bucket": 3,
+                    "min": 300,
+                    "max": 400,
+                    "content": [
+                        {
+                            "propertyId" : "turnover"
+                            "frequency": 12
+                        }
+                    ]
+                }
+            ]
+        }
+
+
+
+## DWH Metric Values Distribution [/rest/projects/{projectId}/dwh/metricValuesDistribution]
+### Metric Values Distribution [POST] 
+Executes a multidimensional query and returns the data distribution of given metric. The resource is typically used for preparing data for histogram chart.
+
+#### Distribution methods
+There are currently supported two distribution methods for counting number of elements.
+
+Each method has a custom parameter in request body (see request examples bellow):
+
+* `buckets` (int) - number of bucket for the dynamic splitting
+* `breakpoints` (array<number>) - array of breakpoints for static segments
+
+###### Dynamic buckets split
+Metric range is splitted into required number of equal size buckets. The frequency is the count of occurencies of given metric in these buckets.
+The range values depends on a granularity - that is defined by query properties.
+
+###### Static breakpoints for segments
+Executes a multidimensional query and returns the number of records in each segment. Segments are defined as static breakpoints of the metric distribution.
+To the first segment are counted all regions whose value of metric is between `<breakpoint[0], breakpoint[1]>`.
+The interval for second segment is `(breakpoint[1], breakpoint[2]>`.
+And the last segment is `(breakpoint[last-1], breakpoint[last]>`.
+The minimal required number of breakpoints is 2, it returns count of elements in one segment.
+
+
+Returns:
+* 200 - ok
+* 400 - bad request 
+    * 400006 - metric values distribution for given metric and filters is not supported. The min and max values equals and therefore cannot be splitted into buckets.
+
++ Request (application/json)
+        
+        {
+          "buckets": 3,
+          "query": {
+                "properties": [
+                    {
+                        "id": "state",
+                        "type": "property",
+                        "value": "state.id"
+                    },
+                    {
+                        "id": "turnover",
+                        "type": "function_sum",
+                        "content": [
+                            {
+                                "type": "property",
+                                "value": "transactions.amount"
+                            }
+                        ]
+                    }
+                ],
+                "filterBy": [
+                    {
+                        "property": "mycustomers.customer_value",
+                        "value": 1000,
+                        "operator": "lt"
+                    }
+                ]
+            }
+        }
+
++ Response 200 (application/json)
+
+        {
+            "content": [
+                 {
+                    "min": 100,
+                    "max": 200,
+                    "content": [
+                        {
+                            "propertyId" : "turnover"
+                            "frequency": 84
+                        }
+                    ]
+                },
+                {
+                    "min": 200,
+                    "max": 300,
+                    "content": [
+                        {
+                            "propertyId" : "turnover"
+                            "frequency": null
+                        }
+                    ]
+                },
+                {
+                    "min": 300,
+                    "max": 400,
+                    "content": [
+                        {
+                            "propertyId" : "turnover"
+                            "frequency": 12
+                        }
+                    ]
+                }
+            ]
+        }
+        
+        
++ Request (application/json)
+        
+        {
+          "breakpoints": [12, 35.7, 62],
+          "query": {
+                "properties": [
+                    {
+                        "id": "state",
+                        "type": "property",
+                        "value": "state.id"
+                    },
+                    {
+                        "id": "turnover",
+                        "type": "function_sum",
+                        "content": [
+                            {
+                                "type": "property",
+                                "value": "transactions.amount"
+                            }
+                        ]
+                    }
+                ],
+                "filterBy": [
+                    {
+                        "property": "mycustomers.customer_value",
+                        "value": 1000,
+                        "operator": "lt"
+                    }
+                ]
+            }
+        }
+
++ Response 200 (application/json)
+
+        {
+            "content": [
+                {
+                    "min": 12,
+                    "max": 35.7,
+                    "content": [
+                        {
+                            "propertyId" : "turnover"
+                            "count": 0
+                        }
+                    ]
+                },
+                {
+                    "min": 35.7,
+                    "max": 62,
+                    "content": [
+                        {
+                            "propertyId" : "turnover"
+                            "count": 204
+                        }
+                    ]
+                }
+            ]
+        }
+        
+
+## Property Values [/rest/projects/{projectId}/dwh/values{?property,filter,size,page,direction,orderBy}]
 ### Get Property Values [GET]
 Gets list of distinct values of given dataset's property. The property is set by mandatory parameter `property`. 
 The distinct values are returned as pageable response.
+By default, the values are ordered ascending by the property value. Optionaly the direction can be changed and the values can be sorted by another propety (eg. sort day of week by day id instead of day name).
 
 + Parameters 
     + property (required, string)
     + filter (optional, string)
     + size = `200` (optional, number)
     + page = `0` (optional, number)
-    + dir = `asc` (optional, string, `asc` or `desc`)
+    + direction = `asc` (optional, string, `asc` or `desc`)
+    + orderBy = null (optional, string)
     
 + Response 200 (application/json)
 
@@ -1731,11 +2123,11 @@ The distinct values are returned as pageable response.
             "links": [
                 {
                     "rel": "self",
-                    "href": "/rest/projects/{project}/dwh/values?property=okres.nazev&dir=asc&page=0"
+                    "href": "/rest/projects/{projectId}/dwh/values?property=okres.nazev&dir=asc&page=0"
                 },
                 {
                     "rel": "next",
-                    "href": "/rest/projects/{project}/dwh/values?property=okres.nazev&dir=asc&page=1"
+                    "href": "/rest/projects/{projectId}/dwh/values?property=okres.nazev&dir=asc&page=1"
                 }
             ],
             "page": {
@@ -1747,40 +2139,45 @@ The distinct values are returned as pageable response.
         }    
 
 
-## DWH Upload [/rest/projects/{project}/dwh/data/uploads]
+## DWH Upload [/rest/projects/{projectId}/dwh/data/uploads]
 ### Upload Data [POST] 
-This resource allows to upload the data file (CSV) to internal storage. The request body is a uploaded file. 
-Request is a multipart/form-data mimetype. The origin file name is used as remote file name.
-Example in CuRL: 
+This resource allows to upload the data file (CSV) to internal storage. 
 
-    curl -X POST -H "Accept: application/json" -H "Authorization: Bearer eyJhbGc..." \
-         -H "Content-Type: multipart/form-data; boundary=----WebKitFormBoundary" \
-         -F "file=test.csv" \
-         'https://secure.cleveranalytics.com/rest/projects/ncesksvg7rjeri7v/dwh/data/uploads'
+####Upload flow:
+1. Create a new upload file by `POST /rest/projects/{projectId}/dwh/data/uploads`
+1. Resource generates the new upload `uploadId` with a S3 pre-signed URL `uploadUrl`.
+1. Upload the CSV file by `PUT {uploadUrl}` (no other authentication is required)
+
+The pre-signed URL can be used by any HTTP tool. You can upload the content to the URL without any additional authorization (no bearer token needed).
+Example of upload CSV file on signed URL by *curl*: 
+```
+curl -XPUT \
+'https://s3-eu-west-1.amazonaws.com/can-dwh-upload-uploads-prod/00ubftx6v6TSTKnAt0h7/o3d2ov0p43msl3hf/RjFJt5kW302QNLzFIVnxN369dlY6KUw4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJ6BXDNGJ7WFCT7SQ%2F20170915%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20170915T141016Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=e053197d044345041268b7f22918e2e71e2a3d5a23ceed65a332e1782998739c' \
+-T /home/user/data/mydata.csv
+```
 
 #### Security
 Restricted to *LOAD_DATA* or *ADMIN* project role that have permission to load data into the project
 
-+ Request (*/*)
-
 + Response 200 (application/json)
 
         {
-            "size": 22545124,
-            "createdAt": 1415132126985,
-            "md5": "apYJEA2r4rFbzzn1xRJB7g==",
+            "id": "8yQO2G6QPUNjgCdhCnmzgvVfZHXP6vQZ",
+            "uploadUrl": "https://s3-eu-west-1.amazonaws.com/can-dwh-upload-uploads/B3mTX6pCTRBSIMRej4q0/ncesksvg7rjeri7v/8yQO2G6QPUNjgCdhCnmzgvVfZHXP6vQZ?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJ6BXDNGJ7AFCR7SQ/20171010/eu-west-1/s3/aws4_request&X-Amz-Date=20171010T101340Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=c80416171ea6b9756c4a3b499cc9f34c5638e60d87f5e114cd23c0faec86265d",
             "links": [
                 {
                     "rel": "self",
-                    "href": "/rest/accounts/B3mTX6pCTRBSIMRej4q0/uploads/ncesksvg7rjeri7v/test.csv"
+                    "href": "/rest/accounts/B3mTX6pCTRBSIMRej4q0/uploads/ncesksvg7rjeri7v/8yQO2G6QPUNjgCdhCnmzgvVfZHXP6vQZ"
                 },
                 {
                     "rel": "project",
                     "href": "/rest/projects/ncesksvg7rjeri7v"
                 }
+            ]
         }
+        
 
-## DWH Pull [/rest/projects/{project}/dwh/data/pull]
+## DWH Pull [/rest/projects/{projectId}/dwh/data/pull]
 ### Pull Data into Dataset [POST] 
 Resource for importing given data into data warehouse.
 Data are being pulled from given *upload* to target *dataset*. There are supported two import modes:
@@ -1821,7 +2218,7 @@ Restricted to *LOAD_DATA* or *ADMIN* project role that have permission to load d
 
 + Response 204 (application/json)
 
-## DWH Dataset Dump [/rest/projects/{project}/dwh/data/dumps]
+## DWH Dataset Dump [/rest/projects/{projectId}/dwh/data/dumps]
 ### Dump Dataset [POST] 
 This resource allows to dump all data from given dataset into a file (CSV). 
 The dump file is then stored on local storage and ready to download. 
@@ -1835,7 +2232,7 @@ Currently, there is support only the CSV format of dumps.
 #### Security
 Restricted to *ADMIN* project role that have permission to dump data from the project
 
-+ Request (applicatoin/json)
++ Request (application/json)
 
         [
             { 
@@ -1852,12 +2249,12 @@ Restricted to *ADMIN* project role that have permission to dump data from the pr
           "content": [
             {
               "dataset": "mystores",
-              "dumpId": "1460405219364",
+              "dumpId": "fsadf54a8ef421va5156fs",
               "fileLength": 1878,
               "links": [
                 {
                   "rel": "self",
-                  "href": "/rest/projects/ncesksvg7rjeri7v/dwh/data/dumps/1460405219364/mystores.csv"
+                  "href": "/rest/projects/ncesksvg7rjeri7v/dwh/data/dumps/fsadf54a8ef421va5156fs"
                 }
               ]
             },
@@ -1868,7 +2265,7 @@ Restricted to *ADMIN* project role that have permission to dump data from the pr
               "links": [
                 {
                   "rel": "self",
-                  "href": "/rest/projects/ncesksvg7rjeri7v/dwh/data/dumps/1460405219364/zones.csv"
+                  "href": "/rest/projects/ncesksvg7rjeri7v/dwh/data/dumps/gnidn45isjmb651b1cb5"
                 }
               ]
             }
@@ -1882,11 +2279,12 @@ Restricted to *ADMIN* project role that have permission to dump data from the pr
           }
         }
 
-## DWH Dataset Dump File [/rest/projects/{project}/dwh/data/dumps/{dumpId}/{file}]
+## DWH Dataset Dump File [/rest/projects/{projectId}/dwh/data/dumps/{dumpId}]
 ### Get Dataset Dump File [GET] 
 When the dump process is done, the *dumps* resource returns links for downloading the dumped files. The dumps are available for next 24 hour and then removed.
 
 ##### The output CSV file format is:
+Comma separated format as defined by RFC 4180 with Header as a first line.
 
 * HEADER - first line is a heacder
 * DELIMITER ',' - cells are delimiter by comma
@@ -1896,7 +2294,7 @@ Restricted to *ADMIN* project role that have permission to dump data from the pr
 
 + Response 200 (text/csv)
 
-## DWH Validations [/rest/projects/{project}/dwh/validations]
+## DWH Validations [/rest/projects/{projectId}/dwh/validations]
 ### Validate DWH [POST] 
 Create new task to validate model and data intetagrity of datawarehouse. 
 
@@ -1923,7 +2321,7 @@ Create new task to validate model and data intetagrity of datawarehouse.
 #### Security
 Restricted to *LOAD_DATA* or *ADMIN* project role that have permission to run validation tasks.
 
-+ Request (applicatoin/json)
++ Request (application/json)
 
         
         { 
@@ -1980,15 +2378,278 @@ Restricted to *LOAD_DATA* or *ADMIN* project role that have permission to run va
                 }
             ]
         }
+        
+        
+# Group Jobs
+## Jobs [/rest/jobs]
+
+### Start new job [POST] 
+Start execution of the new project task. The task are processed asynchronously and all jobs are added into a queue.
+
+#### Supported job types
+* dataPull - loads the CSV file to a dataset
+* dataDump - dumps the dataset to a CSV file
+* export - execute DWH query and export result as a CSV file
+* validate - validate project
+
++ Request dataPull (application/json)
+
+        { 
+            "type" : "dataPull",
+            "projectId": "ncesksvg7rjeri7v", 
+            "content": {
+                "dataset": "mystores",
+                "mode": "full",
+                "upload": "/rest/accounts/B3mTX6pCTRBSIMRej4q0/uploads/ncesksvg7rjeri7v/test.csv",
+                "type": "csv",
+                "csvOptions": {
+                    "header": true,
+                    "separator": ",",
+                    "quote": "\"",
+                    "escape": "\\"
+                }
+            }
+        }
+        
++ Request dataDump (application/json)
+
+        { 
+            "type" : "dataDump",
+            "projectId": "ncesksvg7rjeri7v", 
+            "content": {
+                "dataset": "mystores"
+            }
+        }        
+
++ Request export (application/json)
+
+        {  
+           "type":"export",
+           "projectId":"ncesksvg7rjeri7v",
+           "content":{  
+              "filename":"customers-transactions",
+              "format":"csv",
+              "query":{  
+                 "properties":[  
+                    {  
+                       "id":"zsj_d_id",
+                       "type":"property",
+                       "value":"transactions.zsj_d_id"
+                    },
+                    {  
+                       "id":"stores_count",
+                       "type":"function_count",
+                       "content":[  
+                          {  
+                             "type":"property",
+                             "value":"mystores.store_id"
+                          }
+                       ]
+                    },
+                    {  
+                       "id":"cart_avg",
+                       "type":"function_avg",
+                       "content":[  
+                          {  
+                             "type":"property",
+                             "value":"transactions.cart_value"
+                          }
+                       ]
+                    }
+                 ],
+                 "filterBy":[  
+                    {  
+                       "property":"mycustomers.customer_value",
+                       "value":1000,
+                       "operator":"lt"
+                    }
+                 ]
+              },
+              "csvOptions":{  
+                 "header":true,
+                 "separator":",",
+                 "quote":"\"",
+                 "escape":"\\"
+              }
+           }
+        }        
+
++ Request validate (application/json)
+
+        {
+          "type": "validate",
+          "projectId": "ncesksvg7rjeri7v",
+          "content": {
+            "modelValidator": {},
+            "dataValidator": {}
+          }
+        }        
+
++ Response 202 (application/json)
+
+        {
+            "id": "db00de52-5ac8-0dc8-43d8-1cc162605007",
+            "type": "dataPull",
+            "status": "RUNNING",
+            "startDate": 1504597250927,
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/jobs/db00de52-5ac8-0dc8-43d8-1cc162605007?type=dataPull"
+                }
+            ]
+        }
+
+
+## Job Detail [/rest/jobs/{jobId}{?type}]
+### Get job status [GET] 
+Check current status of given job.
+
+#### Job statuses
+* RUNNING - job is just running or waiting in the queue
+* SUCCEEDED - the job was successfully processed
+* FAILED - execution of job fails
+* TIMED_OUT - exectution timouted
+* ABORTED - job execution was aborted
+
++ Parameters
+    + type (required, string, `dataDump`)
+
++ Request dataPull
+    + Parameters
+
+        + type: dataPull
+        
++ Response 200 (application/json)
+
+        {
+            "id": "db00de52-5ac8-0dc8-43d8-1cc162605007",
+            "type": "dataPull",
+            "status": "SUCCEEDED",
+            "startDate": "123434534",
+            "endDate": "123439999",
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/jobs/db00de52-5ac8-0dc8-43d8-1cc162605007?type=dataPull"
+                }
+            ]
+        }
+
++ Request dataDump
+    + Parameters
+
+        + type: dataDump
+        
++ Response 200 (application/json)
+
+        {
+            "id": "bcb5e92a-7f7b-4008-b363-c662dbebf804",
+            "type": "dataDump",
+            "status": "SUCCEEDED",
+            "startDate": 1504597250927,
+            "endDate": 1504597250927,
+            "result": {
+                "dumpId": "07sQaPuv82qhHIZyQ58MxsqGXpuhHwZp",
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ncesksvg7rjeri7v/dwh/data/dumps/07sQaPuv82qhHIZyQ58MxsqGXpuhHwZp"
+                    }
+                ],
+                "dataset": "mystores",
+                "fileLength": 928404
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/jobs/bcb5e92a-7f7b-4008-b363-c662dbebf804?type=dataDump"
+                }
+            ]
+        }
+
++ Request export
+    + Parameters
+
+        + type: export
+        
++ Response 200 (application/json)
+
+        {
+            "id": "db00de52-5ac8-0dc8-43d8-1cc162605007",
+            "type": "export",
+            "status": "SUCCEEDED",
+            "startDate": 1504597250927,
+            "endDate": 1504597250927,
+            "result": {
+                "exportResult": "/rest/projects/ncesksvg7rjeri7v/exports/kfjadofjasoifjasodfj",
+                "md5": "rqwvzd646fafassdfas",
+                "fileLength": 454666,
+                "records": 11111
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/jobs/db00de52-5ac8-0dc8-43d8-1cc162605007?type=export"
+                }
+            ]
+        }
+        
++ Request validate
+    + Parameters
+
+        + type: validate
+        
++ Response 200 (application/json)
+
+        {
+            "id": "2bc8236c-86c9-0f40-c2ba-ab846a63297d",
+            "type": "validate",
+            "status": "SUCCEEDED",
+            "startDate": 1513770118258,
+            "endDate": 1513770118258,
+            "result": {
+                "violations": [
+                    {
+                        "violationType": "unexpectedColumn",
+                        "message": "Unexpected column=lat found in table=demografie_dwh of dataset=demografie_dwh. This column is not specified as property of the dataset.",
+                        "parameters": {
+                            "unexpectedColumn": "lat",
+                            "dataset": "demografie_dwh"
+                        },
+                        "dataSample": []
+                    },
+                    {
+                        "violationType": "notUniquePrimaryKey",
+                        "message": "Primary key contains count=2 duplicate values. Column=id in table=objednavky_dwh of dataset=objednavky_dwh. Sample of duplicated values=[1004636449, 1005184185]",
+                        "parameters": {
+                            "totalDuplicities": 2,
+                            "dataset": "orders_dwh"
+                        },
+                        "dataSample": [
+                            "1004636449",
+                            "1005184185"
+                        ]
+                    }
+                ]
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/jobs/2bc8236c-86c9-0f20-c2ba-ab846a63297d?type=validate"
+                }
+            ]
+        }        
+
 
 # Group Export
-## Export Data [/rest/projects/{project}/export]
+## Export Data [/rest/projects/{projectId}/export]
 ### Export Data by Query [POST] 
 Resource exports a given query to requested format and allow to configure some output options.
 
 Export output formats:
 * xlsx (excel file)
-* csv (not implemented yet)
+* csv (comma-separated values file)
 
 #### Specific Output Formats Options
 Exporter allows to optionaly specify a additional output options for specific output format. Following structure shows the default options for CSV:
@@ -2074,85 +2735,3088 @@ The autofilter set the filter on given properties (columns) identified by proper
 
 
 # Group Metadata
-## Datasets [/rest/projects/{project}/metadata/datasets.json]
-### Get Datasets [GET] 
+Metadata configure the user interface, the data model and the actual computations and analysis done in the project.  
 
-+ Response 200 (application/json)
+Detailed description of all metadata resources can be found in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/120332073/Metadata+model).
 
-        [
+## Dashboards [/rest/projects/{projectId}/md/dashboards]
+Dashboard is an ordered list of Indicator and Indicator Drill pairs.
+
+Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/120336827/Dashboards).
+
+### Create Dashboard [POST]
+Creates new Dashboard.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Dashboard was successfully created
+* 400 - Bad Request - there are syntax errors or validation violations
+* 409 - Conflict - Dashboard with the same name or id already exists
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
+    + Body
+
             {
-                "name": "zsjd",
-                "properties": {
-                    "period": "2015"
-                },
-                "searchBy": ["nazev"],
-                "ref": {
-                    "type": "wfs",
-                    "workspace": "$projectId",
-                    "layer": "zsjd",
-                    "primaryKey": "zsjd_id"
-                }
-            },
-            {
-                "name": "mystores",
-                "properties": {
-                    "period": "4/2014-3/2015"
-                },
-                "searchBy": ["name","street","city"],
-                "ref": {
-                    "type": "dwh",
-                    "table": "stores",
-                    "primaryKey": "id",
-                    "properties": [
+                "name": "penetration_dashboard",
+                "type": "dashboard",
+                "content": {
+                    "indicators": [
                         {
-                            "name": "id",
-                            "column": "id",
-                            "type": "integer"
+                            "indicator": "/rest/projects/$projectId/md/indicators?name=orders_indicator",
+                            "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=orders_indicator_drill"
                         },
                         {
-                            "name": "name",
-                            "column": "name",
-                            "type": "string"
+                            "indicator": "/rest/projects/$projectId/md/indicators?name=revenue_indicator",
+                            "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=revenue_indicator_drill"
                         },
                         {
-                            "name": "office_hours_11",
-                            "column": "office_hours_11",
-                            "type": "boolean"
+                            "indicator": "/rest/projects/$projectId/md/indicators?name=customers_indicator",
+                            "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=customers_indicator_drill"
+                        },
+                        {
+                            "indicator": "/rest/projects/$projectId/md/indicators?name=average_order_indicator",
+                            "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=average_order_indicator_drill"
+                        },
+                        {
+                            "indicator": "/rest/projects/$projectId/md/indicators?name=orders_per_customer_indicator",
+                            "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=orders_per_customer_indicator_drill"
                         }
                     ]
                 }
-            },
+            }
+
++ Response 200 (application/json)
+
             {
-                "name": "can-dim-demographic-cz",
-                "title": "Demografická dimenze CZ",
+                "id": "j13im1r3rbvs4tus",
+                "name": "penetration_dashboard",
+                "type": "dashboard",
+                "content": {
+                    "indicators": [
+                        {
+                            "indicator": "/rest/projects/$projectId/md/indicators?name=orders_indicator",
+                            "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=orders_indicator_drill"
+                        },
+                        {
+                            "indicator": "/rest/projects/$projectId/md/indicators?name=revenue_indicator",
+                            "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=revenue_indicator_drill"
+                        },
+                        {
+                            "indicator": "/rest/projects/$projectId/md/indicators?name=customers_indicator",
+                            "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=customers_indicator_drill"
+                        },
+                        {
+                            "indicator": "/rest/projects/$projectId/md/indicators?name=average_order_indicator",
+                            "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=average_order_indicator_drill"
+                        },
+                        {
+                            "indicator": "/rest/projects/$projectId/md/indicators?name=orders_per_customer_indicator",
+                            "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=orders_per_customer_indicator_drill"
+                        }
+                    ]
+                },
+                "accessInfo": {
+                    "createdAt": "2017-10-18T10:15:40Z"
+                },
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dashboards/j13im1r3rbvs4tus"
+                    }
+                ]
+            }
+
+### Get Dashboard by id [GET /rest/projects/{projectId}/md/dashboards/{id}]
+Returns Dashboard with given *id*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Dashboard by name [GET /rest/projects/{projectId}/md/dashboards?name={name}]
+Returns Dashboard with given *name*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Dashboards [GET /rest/projects/{projectId}/md/dashboards]
+Returns paged collection of all Dashboards in a project.
+
+#### Response statuses
+* 200 - OK
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+            {
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dashboards?page=0&size=5&sort=id"
+                    }
+                ],
+                "content": [
+                    {
+                        "id": "j13im1r3rbvs4tus",
+                        "name": "penetration_dashboard",
+                        "type": "dashboard",
+                        "content": {
+                            "indicators": [
+                                {
+                                    "indicator": "/rest/projects/$projectId/md/indicators?name=orders_indicator",
+                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=orders_indicator_drill"
+                                },
+                                {
+                                    "indicator": "/rest/projects/$projectId/md/indicators?name=revenue_indicator",
+                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=revenue_indicator_drill"
+                                },
+                                {
+                                    "indicator": "/rest/projects/$projectId/md/indicators?name=customers_indicator",
+                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=customers_indicator_drill"
+                                },
+                                {
+                                    "indicator": "/rest/projects/$projectId/md/indicators?name=average_order_indicator",
+                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=average_order_indicator_drill"
+                                },
+                                {
+                                    "indicator": "/rest/projects/$projectId/md/indicators?name=orders_per_customer_indicator",
+                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=orders_per_customer_indicator_drill"
+                                }
+                            ]
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T10:15:40Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dashboards/j13im1r3rbvs4tus"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "m6snd88062msunu1",
+                        "name": "potential_dashboard",
+                        "type": "dashboard",
+                        "content": {
+                            "indicators": [
+                                {
+                                    "indicator": "/rest/projects/$projectId/md/indicators?name=households_indicator",
+                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=households_indicator_drill"
+                                },
+                                {
+                                    "indicator": "/rest/projects/$projectId/md/indicators?name=customers_indicator",
+                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=customers_indicator_drill"
+                                },
+                                {
+                                    "indicator": "/rest/projects/$projectId/md/indicators?name=purchase_strenght_indicator",
+                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=purchase_strenght_indicator_drill"
+                                },
+                                {
+                                    "indicator": "/rest/projects/$projectId/md/indicators?name=households_penetration_indicator",
+                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=households_penetration_indicator_drill"
+                                }
+                            ]
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T10:18:04Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dashboards/m6snd88062msunu1"
+                            }
+                        ]
+                    }
+                ],
+                "page": {
+                    "size": 5,
+                    "totalElements": 2,
+                    "totalPages": 1,
+                    "number": 0
+                }
+            }
+
+### Update Dashboard [PUT /rest/projects/{projectId}/md/dashboards/{id}]
+Updates Dashboard with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Dashboard was successfully updated
+* 400 - Bad Request - there are syntax errors or validation violations
+* 404 - Not Found - Dashboard with given id was not found
+* 409 - Conflict - Dashboard with the same name or id already exists
+* 412 - Precondition Failed - version provided in If-Match header is outdated
+* 428 - Precondition Required - version was not provided in If-Match header
+
++ Request
+
+    + Headers
+
+            If-Match: "0"
+            Content-Type: application/json
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Delete Dashboard [DELETE /rest/projects/{projectId}/md/dashboards/{id}]
+Deletes Dashboard with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to delete metadata of the project.
+
+#### Response statuses
+* 204 - No Content - Dashboard was successfully deleted
+* 404 - Not Found - Dashboard with given id was not found
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {accessToken}
+
++ Response 204
+
+
+## Data Permissions [/rest/projects/{projectId}/md/dataPermissions]
+Data permission object refines data access to specific users on the level of database rows. 
+
+Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/167280805/Data+permissions).
+
+### Create Data Permission [POST]
+Creates new Data Permission.
+
+#### Security
+Restricted to *ADMIN* project role that has the permission to update data permissions of the project.
+
+#### Response statuses
+* 200 - OK - Data Permission was successfully created
+* 400 - Bad Request - there are syntax errors or validation violations
+* 409 - Conflict - Data Permission with the same name or id already exists
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
+    + Body
+
+            {
+                "name": "data_permission_1",
+                "type": "dataPermission",
+                "description": "Permission allowing to view only Blue and Yellow store types in Jihomoravský kraj.",
+                "content": {
+                    "accountId": "00ubfu7fdyIoFKxXm0h7",
+                    "filters": [
+                        {
+                            "property": "region_dwh.name",
+                            "value": "Jihomoravský kraj",
+                            "operator": "eq"
+                        },
+                        {
+                            "property": "store_dwh.type",
+                            "value": [
+                                "blue",
+                                "yellow"
+                            ],
+                            "operator": "in"
+                        }
+                    ]
+                }
+            }
+
++ Response 200 (application/json)
+
+            {
+                "id": "b4j3pm51i1hobqfo",
+                "name": "data_permission_1",
+                "type": "dataPermission",
+                "description": "Permission allowing to view only Blue and Yellow store types in Jihomoravský kraj.",
+                "content": {
+                    "accountId": "00ubfu7fdyIoFKxXm0h7",
+                    "filters": [
+                        {
+                            "property": "region_dwh.name",
+                            "value": "Jihomoravský kraj",
+                            "operator": "eq"
+                        },
+                        {
+                            "property": "store_dwh.type",
+                            "value": [
+                                "blue",
+                                "yellow"
+                            ],
+                            "operator": "in"
+                        }
+                    ]
+                },
+                "accessInfo": {
+                    "createdAt": "2017-10-18T12:57:34Z"
+                },
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dataPermissions/b4j3pm51i1hobqfo"
+                    }
+                ]
+            }
+
+### Get Data Permission by id [GET /rest/projects/{projectId}/md/dataPermissions/{id}]
+Returns Data Permission with given *id*.
+
+#### Security
+Restricted to *ADMIN* project role that has the permission to update data permissions of the project.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Data Permission by accountId [GET /rest/projects/{projectId}/md/dataPermissions?accountId={accountId}]
+Returns Data Permission object of a user with specified *accountId*. 
+
+#### Security
+* If the *accountId* provided in the URL is the same as the *accountId* of currently logged user, return the permission object (not restricted to *ADMIN* role as any user has to be able to get his own permission)
+* If the *accountId* provided in the URL is different than the *accountId* of currently logged user, return the permission only if currently logged user has *ADMIN* role
+
+#### Response statuses
+* 200 - OK
+* 403 - Forbidden
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Data Permissions [GET /rest/projects/{projectId}/md/dataPermissions]
+Returns paged collection of all Data Permissions of all users in a project.
+
+#### Security
+Restricted to *ADMIN* project role that has the permission to update data permissions of the project.
+
+#### Response statuses
+* 200 - OK
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+            {
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dataPermissions?page=0&size=5&sort=id"
+                    }
+                ],
+                "content": [
+                    {
+                        "id": "b4j3pm51i1hobqfo",
+                        "name": "data_permission_1",
+                        "type": "dataPermission",
+                        "description": "Permission allowing to view only Blue and Yellow store types in Jihomoravský kraj.",
+                        "content": {
+                            "accountId": "00ubfu7fdyIoFKxXm0h7",
+                            "filters": [
+                                {
+                                    "property": "region_dwh.name",
+                                    "value": "Jihomoravský kraj",
+                                    "operator": "eq"
+                                },
+                                {
+                                    "property": "store_dwh.type",
+                                    "value": [
+                                        "blue",
+                                        "yellow"
+                                    ],
+                                    "operator": "in"
+                                }
+                            ]
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T12:57:34Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dataPermissions/b4j3pm51i1hobqfo"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "eb7edn1s5ns54v8q",
+                        "name": "data_permission_2",
+                        "type": "dataPermission",
+                        "description": "Permission allowing to view only stores in Kraj Vysočina.",
+                        "content": {
+                            "accountId": "00ubpo9fouIoSKxpX0h6",
+                            "filters": [
+                                {
+                                    "property": "region_dwh.name",
+                                    "value": "Kraj Vysočina",
+                                    "operator": "eq"
+                                }
+                            ]
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T13:00:58Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dataPermissions/eb7edn1s5ns54v8q"
+                            }
+                        ]
+                    }
+                ],
+                "page": {
+                    "size": 5,
+                    "totalElements": 2,
+                    "totalPages": 1,
+                    "number": 0
+                }
+            }
+
+### Update Data Permission [PUT /rest/projects/{projectId}/md/dataPermissions/{id}]
+Updates Data Permission with given *id*.
+
+#### Security
+Restricted to *ADMIN* project role that has the permission to update data permissions of the project.
+
+#### Response statuses
+* 200 - OK - Data Permission was successfully updated
+* 400 - Bad Request - there are syntax errors or validation violations
+* 404 - Not Found - Data Permission with given id was not found
+* 409 - Conflict - Data Permission with the same name or id already exists
+* 412 - Precondition Failed - version provided in If-Match header is outdated
+* 428 - Precondition Required - version was not provided in If-Match header
+
++ Request
+
+    + Headers
+
+            If-Match: "0"
+            Content-Type: application/json
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Delete Data Permission [DELETE /rest/projects/{projectId}/md/dataPermissions/{id}]
+Deletes Data Permission with given *id*.
+
+#### Security
+Restricted to *ADMIN* project role that has the permission to update data permissions of the project.
+
+#### Response statuses
+* 204 - No Content - Data Permission was successfully deleted
+* 404 - Not Found - Data Permission with given id was not found
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {accessToken}
+
++ Response 204
+
+
+
+## Datasets [/rest/projects/{projectId}/md/datasets]
+Datasets describe the data model of the project. They also define constraints and links between all database tables in the project.
+
+Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/120336529/Datasets).
+
+### Create Dataset [POST]
+Creates new Dataset.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Dataset was successfully created
+* 400 - Bad Request - there are syntax errors or validation violations
+* 409 - Conflict - Dataset with the same name or id already exists
+
++ Request (application/json)
+
+    + Headers
+    
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
+    + Body
+
+            {
+                "name": "baskets",
+                "type": "dataset",
+                "title": "Baskets",
+                "origin": "https://staging.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=baskets",
                 "ref": {
                     "type": "dwh",
-                    "table": "dim_demographic_cz",
-                    "primaryKey": "kod_zsj_d",
+                    "subtype": "basic",
+                    "table": "baskets",
+                    "primaryKey": "basket_id",
                     "properties": [
                         {
+                            "foreignKey": "dim_dates",
+                            "name": "date_iso",
+                            "title": "Date ISO",
+                            "column": "date_iso",
+                            "type": "string"
+                        },
+                        {
+                            "foreignKey": "shops",
+                            "name": "shop_id",
+                            "title": "Shop ID",
+                            "column": "shop_id",
+                            "type": "integer"
+                        },
+                        {
+                            "foreignKey": "clients",
+                            "name": "client_id",
+                            "title": "Client ID",
+                            "column": "client_id",
+                            "type": "integer"
+                        },
+                        {
+                            "name": "amount",
+                            "title": "Amount",
+                            "column": "amount",
+                            "type": "double"
+                        },
+                        {
+                            "name": "on_off_name",
+                            "title": "Channel (online/offline)",
+                            "column": "on_off_name",
+                            "type": "string"
+                        },
+                        {
+                            "name": "value_name",
+                            "title": "Item value name",
+                            "column": "value_name",
+                            "type": "string"
+                        },
+                        {
+                            "name": "basket_id",
+                            "title": "Basket ID",
+                            "column": "basket_id",
+                            "type": "integer"
+                        }
+                    ]
+                }
+            }
+
++ Response 200 (application/json)
+
+        {
+            "id": "g2per4det10dta2r",
+            "name": "baskets",
+            "type": "dataset",
+            "title": "Baskets",
+            "origin": "https://staging.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=baskets",
+            "ref": {
+                "subtype": "basic",
+                "type": "dwh",
+                "table": "baskets",
+                "primaryKey": "basket_id",
+                "properties": [
+                    {
+                        "foreignKey": "dim_dates",
+                        "name": "date_iso",
+                        "title": "Date ISO",
+                        "column": "date_iso",
+                        "type": "string"
+                    },
+                    {
+                        "foreignKey": "shops",
+                        "name": "shop_id",
+                        "title": "Shop ID",
+                        "column": "shop_id",
+                        "type": "integer"
+                    },
+                    {
+                        "foreignKey": "clients",
+                        "name": "client_id",
+                        "title": "Client ID",
+                        "column": "client_id",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "amount",
+                        "title": "Amount",
+                        "column": "amount",
+                        "type": "double"
+                    },
+                    {
+                        "name": "on_off_name",
+                        "title": "Channel (online/offline)",
+                        "column": "on_off_name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "value_name",
+                        "title": "Item value name",
+                        "column": "value_name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "basket_id",
+                        "title": "Basket ID",
+                        "column": "basket_id",
+                        "type": "integer"
+                    }
+                ]
+            },
+            "accessInfo": {
+                "createdAt": "2017-10-17T13:28:48Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/yufqzxkbiecj7jot/md/datasets/g2per4det10dta2r"
+                }
+            ]
+        }
+
+### Get Dataset by id [GET /rest/projects/{projectId}/md/datasets/{id}]
+Returns Dataset with given *id*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+    
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Dataset by name [GET /rest/projects/{projectId}/md/datasets?name={name}]
+Returns Dataset with given *name*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+    
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Datasets [GET /rest/projects/{projectId}/md/datasets?type={type}] 
+Returns paged collection of all Datasets in a project.
+
+Contains request parameter *type*, which if specified, returns only collection of datasets of given type. 
+Available types are `dwh`, `vt`, `wfs`.
+
+#### Response statuses
+* 200 - OK
+
++ Request
+
+    + Headers
+    
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+        {
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/datasets?page=0&size=5&sort=id"
+                }
+            ],
+            "content": [
+                {
+                    "id": "g2per4det10dta2r",
+                    "name": "baskets",
+                    "type": "dataset",
+                    "title": "Baskets",
+                    "origin": "https://staging.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=baskets",
+                    "properties": {},
+                    "ref": {
+                        "subtype": "basic",
+                        "type": "dwh",
+                        "table": "baskets",
+                        "primaryKey": "basket_id",
+                        "properties": [
+                            {
+                                "name": "amount",
+                                "title": "Amount",
+                                "column": "amount",
+                                "type": "double"
+                            },
+                            {
+                                "name": "on_off_name",
+                                "title": "Channel (online/offline)",
+                                "column": "on_off_name",
+                                "type": "string"
+                            },
+                            {
+                                "name": "value_name",
+                                "title": "Item value name",
+                                "column": "value_name",
+                                "type": "string"
+                            },
+                            {
+                                "name": "basket_id",
+                                "title": "Basket ID",
+                                "column": "basket_id",
+                                "type": "integer"
+                            }
+                        ]
+                    },
+                    "accessInfo": {
+                        "createdAt": "2017-10-17T13:28:48Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/datasets/g2per4det10dta2r"
+                        }
+                    ]
+                },
+                {
+                    "id": "hb8ugmblksj0p0go",
+                    "name": "clients",
+                    "type": "dataset",
+                    "title": "Clients",
+                    "origin": "https://staging.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=clients",
+                    "properties": {
+                        "featureTitle": {
+                            "type": "property",
+                            "value": "client_id"
+                        }
+                    },
+                    "ref": {
+                        "subtype": "basic",
+                        "type": "dwh",
+                        "table": "clients",
+                        "primaryKey": "client_id",
+                        "properties": [
+                            {
+                                "name": "client_id",
+                                "title": "Client ID",
+                                "column": "client_id",
+                                "type": "integer"
+                            },
+                            {
+                                "name": "postcode",
+                                "title": "postcode",
+                                "column": "postcode",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "accessInfo": {
+                        "createdAt": "2017-10-17T14:21:43Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/datasets/hb8ugmblksj0p0go"
+                        }
+                    ]
+                }
+            ],
+            "page": {
+                "size": 5,
+                "totalElements": 2,
+                "totalPages": 1,
+                "number": 0
+            }
+        }
+    
+        
+### Update Dataset [PUT /rest/projects/{projectId}/md/datasets/{id}]
+Updates Dataset with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Dataset was successfully updated
+* 400 - Bad Request - there are syntax errors or validation violations
+* 404 - Not Found - Dataset with given id was not found
+* 409 - Conflict - Dataset with the same name or id already exists
+* 412 - Precondition Failed - version provided in If-Match header is outdated
+* 428 - Precondition Required - version was not provided in If-Match header
+
++ Request
+
+    + Headers
+    
+            If-Match: "0"
+            Content-Type: application/json
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Delete Dataset [DELETE /rest/projects/{projectId}/md/datasets/{id}]
+Deletes Dataset with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to delete metadata of the project.
+
+#### Response statuses
+* 204 - No Content - Dataset was successfully deleted
+* 404 - Not Found - Dataset with given id was not found
+
++ Request
+
+    + Headers
+    
+            Authorization: Bearer {accessToken}
+            
++ Response 204
+
+## Dataset Properties List [/rest/projects/{projectId}/md/datasetProperties]
+This read-only resource contains all own properties of a Dataset, as well as all DWH properties linked through Dataset's foreign key properties.
+It is used to create a list of available filters, sorted into categories.
+
+### Get Dataset Properties List [GET /rest/projects/{projectId}/md/datasetProperties{?dataset}{?properties}] 
+Returns a list of all DWH properties of given *dataset*.
+
+#### Response statuses
+* 200 - OK
+* 400 - Bad Request - there is a syntax error in some of the request parameters
+* 404 - Not Found - Dataset with given name was not found
+
++ Parameters 
+    + dataset (optional, string) - return properties of that dataset
+    + properties (enum[String], optional)
+        Specifies if only properties marked as filterable, or all properties should be included.
+        + Members
+            + `all` - return all properties
+            + `filterable` - returns only properties marked as filterable
+
+
++ Request dataset
+
+    + Headers
+    
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+            
+    + Parameters
+
+        + dataset: orders_dwh
+
++ Response 200 (application/json)
+
+        {
+            "dataset": "orders_dwh",
+            "listedProperties": "filterable",
+            "ownProperties": [
+                {
+                    "filterable": true,
+                    "name": "id",
+                    "title": "Order ID",
+                    "column": "id",
+                    "type": "integer"
+                },
+                {
+                    "filterable": true,
+                    "name": "id_user",
+                    "title": "Customer ID",
+                    "column": "id_user",
+                    "type": "integer"
+                },
+                {
+                    "filterable": true,
+                    "foreignKey": "dim_dates",
+                    "name": "date",
+                    "title": "Order time",
+                    "column": "date",
+                    "type": "string"
+                },
+                {
+                    "filterable": true,
+                    "name": "price",
+                    "title": "Order size",
+                    "column": "price",
+                    "type": "double"
+                },
+                {
+                    "filterable": true,
+                    "name": "delay",
+                    "title": "Order delay",
+                    "column": "delay",
+                    "type": "integer"
+                },
+                {
+                    "filterable": true,
+                    "name": "city",
+                    "title": "City",
+                    "column": "city",
+                    "type": "string"
+                },
+                {
+                    "filterable": true,
+                    "foreignKey": "zsj_d_dwh",
+                    "name": "kod_zsj_d",
+                    "title": "Order location",
+                    "column": "kod_zsj_d",
+                    "type": "string"
+                }
+            ],
+            "linkedProperties": [
+                {
+                    "foreignKeyTitle": "Order time",
+                    "properties": [
+                        {
+                            "dataset": "dim_dates_year",
+                            "filterable": true,
+                            "name": "year_name",
+                            "title": "Year",
+                            "column": "year_name",
+                            "type": "string"
+                        },
+                        {
+                            "dataset": "dim_dates_month",
+                            "filterable": true,
+                            "name": "month_name_en",
+                            "title": "Month",
+                            "column": "month_name_en",
+                            "type": "string"
+                        },
+                        {
+                            "dataset": "dim_dates_week",
+                            "filterable": true,
+                            "name": "week_name",
+                            "title": "Day of week",
+                            "column": "week_name",
+                            "type": "string"
+                        }
+                    ]
+                },
+                {
+                    "foreignKeyTitle": "Order location",
+                    "properties": [
+                        {
+                            "dataset": "zsj_d_dwh",
+                            "filterable": true,
                             "name": "kod_zsj_d",
-                            "title": "Kód ZSJ Díl",
+                            "title": "Basic administrative unit",
                             "column": "kod_zsj_d",
                             "type": "string"
                         },
                         {
-                            "name": "population_all_men",
-                            "title": "Obyvatelstvo celkem - muži",
-                            "column": "u112100103",
-                            "type": "integer"
+                            "dataset": "municipality_dwh",
+                            "filterable": true,
+                            "name": "municipality",
+                            "title": "Municipality",
+                            "column": "municipality",
+                            "type": "string"
                         },
                         {
-                            "name": "population_avg_age_men",
-                            "title": "Obyvatelstvo - průměrný věk  - muži",
-                            "column": "u112102803",
-                            "type": "integer"
-                        },
-                        {
-                            "type": "foreignKey",
-                            "column": "kodzsjd",
-                            "foreignKey": "can-dim-area-cz"
+                            "dataset": "county_dwh",
+                            "filterable": true,
+                            "name": "county",
+                            "title": "County",
+                            "column": "county",
+                            "type": "string"
                         }
                     ]
                 }
-        ]
+            ]
+        }
+
+
++ Request allDatasets
+
+    + Headers
+    
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+            
++ Response 200 (application/json)
+
+        {
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/datasets?page=0&size=20&properties=filterable"
+                }
+            ],
+            "content": [
+                {
+                    "dataset": "orders_dwh",
+                    "listedProperties": "filterable",
+                    "ownProperties": [
+                        {
+                            "filterable": true,
+                            "name": "id",
+                            "title": "Order ID",
+                            "column": "id",
+                            "type": "integer"
+                        },
+                        {
+                            "filterable": true,
+                            "name": "id_user",
+                            "title": "Customer ID",
+                            "column": "id_user",
+                            "type": "integer"
+                        },
+                        {
+                            "filterable": true,
+                            "foreignKey": "dim_dates",
+                            "name": "date",
+                            "title": "Order time",
+                            "column": "date",
+                            "type": "string"
+                        },
+                        {
+                            "filterable": true,
+                            "name": "price",
+                            "title": "Order size",
+                            "column": "price",
+                            "type": "double"
+                        },
+                        {
+                            "filterable": true,
+                            "name": "delay",
+                            "title": "Order delay",
+                            "column": "delay",
+                            "type": "integer"
+                        },
+                        {
+                            "filterable": true,
+                            "name": "city",
+                            "title": "City",
+                            "column": "city",
+                            "type": "string"
+                        },
+                        {
+                            "filterable": true,
+                            "foreignKey": "zsj_d_dwh",
+                            "name": "kod_zsj_d",
+                            "title": "Order location",
+                            "column": "kod_zsj_d",
+                            "type": "string"
+                        }
+                    ],
+                    "linkedProperties": [
+                        {
+                            "foreignKeyTitle": "Order time",
+                            "properties": [
+                                {
+                                    "dataset": "dim_dates_year",
+                                    "filterable": true,
+                                    "name": "year_name",
+                                    "title": "Year",
+                                    "column": "year_name",
+                                    "type": "string"
+                                },
+                                {
+                                    "dataset": "dim_dates_month",
+                                    "filterable": true,
+                                    "name": "month_name_en",
+                                    "title": "Month",
+                                    "column": "month_name_en",
+                                    "type": "string"
+                                },
+                                {
+                                    "dataset": "dim_dates_week",
+                                    "filterable": true,
+                                    "name": "week_name",
+                                    "title": "Day of week",
+                                    "column": "week_name",
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        {
+                            "foreignKeyTitle": "Order location",
+                            "properties": [
+                                {
+                                    "dataset": "zsj_d_dwh",
+                                    "filterable": true,
+                                    "name": "kod_zsj_d",
+                                    "title": "Basic administrative unit",
+                                    "column": "kod_zsj_d",
+                                    "type": "string"
+                                },
+                                {
+                                    "dataset": "municipality_dwh",
+                                    "filterable": true,
+                                    "name": "municipality",
+                                    "title": "Municipality",
+                                    "column": "municipality",
+                                    "type": "string"
+                                },
+                                {
+                                    "dataset": "county_dwh",
+                                    "filterable": true,
+                                    "name": "county",
+                                    "title": "County",
+                                    "column": "county",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    ],
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/datasetProperties?dataset=orders_dwh&properties=filterable"
+                        }
+                    ]
+                }
+            ],
+            "page": {
+                "size": 20,
+                "totalElements": 1,
+                "totalPages": 1,
+                "number": 0
+            }
+        }
+
+## Exports [/rest/projects/{projectId}/md/exports]
+Export defines a set of dataset properties, which will be present in the exported file.
+
+Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/165773419/Exports).
+
+### Create Export [POST]
+Creates new Export.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Export was successfully created
+* 400 - Bad Request - there are syntax errors or validation violations
+* 409 - Conflict - Export with the same name or id already exists
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
+    + Body
+
+            {
+                "name": "project_export_1",
+                "type": "export",
+                "title": "Export version 1",
+                "description": "All delayed orders made in specific city districts.",
+                "content": {
+                    "properties": [
+                        "city_district_dwh.name",
+                        "city_district_dwh.upper_name",
+                        "orders_dwh.id",
+                        "orders_dwh.id_user",
+                        "orders_dwh.date",
+                        "orders_dwh.price",
+                        "orders_dwh.delay"
+                    ]
+                }
+            }
+
++ Response 200 (application/json)
+
+            {
+                "id": "eqf3525q9jbs2hff",
+                "name": "project_export_1",
+                "type": "export",
+                "title": "Export version 1",
+                "description": "All delayed orders made in specific city districts.",
+                "content": {
+                    "properties": [
+                        "city_district_dwh.name",
+                        "city_district_dwh.upper_name",
+                        "orders_dwh.id",
+                        "orders_dwh.id_user",
+                        "orders_dwh.date",
+                        "orders_dwh.price",
+                        "orders_dwh.delay"
+                    ]
+                },
+                "accessInfo": {
+                    "createdAt": "2017-10-18T11:33:43Z"
+                },
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/exports/eqf3525q9jbs2hff"
+                    }
+                ]
+            }
+
+### Get Export by id [GET /rest/projects/{projectId}/md/exports/{id}]
+Returns Export with given *id*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Export by name [GET /rest/projects/{projectId}/md/exports?name={name}]
+Returns Export with given *name*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Exports [GET /rest/projects/{projectId}/md/exports]
+Returns paged collection of all Exports in a project.
+
+#### Response statuses
+* 200 - OK
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+            {
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/exports?page=0&size=5&sort=id"
+                    }
+                ],
+                "content": [
+                    {
+                        "id": "eqf3525q9jbs2hff",
+                        "name": "project_export_1",
+                        "type": "export",
+                        "title": "Export version 1",
+                        "description": "All delayed orders made in specific city districts.",
+                        "content": {
+                            "properties": [
+                                "city_district_dwh.name",
+                                "city_district_dwh.upper_name",
+                                "orders_dwh.id",
+                                "orders_dwh.id_user",
+                                "orders_dwh.date",
+                                "orders_dwh.price",
+                                "orders_dwh.delay"
+                            ]
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T11:33:43Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/exports/eqf3525q9jbs2hff"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "in89l9pi38ldse6m",
+                        "name": "project_export_2",
+                        "type": "export",
+                        "title": "Export version 2",
+                        "content": {
+                            "properties": [
+                                "city_district_dwh.name",
+                                "orders_dwh.id",
+                                "orders_dwh.date",
+                                "orders_dwh.price"
+                            ]
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T11:34:46Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/exports/in89l9pi38ldse6m"
+                            }
+                        ]
+                    }
+                ],
+                "page": {
+                    "size": 5,
+                    "totalElements": 2,
+                    "totalPages": 1,
+                    "number": 0
+                }
+            }
+
+### Update Export [PUT /rest/projects/{projectId}/md/exports/{id}]
+Updates Export with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Export was successfully updated
+* 400 - Bad Request - there are syntax errors or validation violations
+* 404 - Not Found - Export with given id was not found
+* 409 - Conflict - Export with the same name or id already exists
+* 412 - Precondition Failed - version provided in If-Match header is outdated
+* 428 - Precondition Required - version was not provided in If-Match header
+
++ Request
+
+    + Headers
+
+            If-Match: "0"
+            Content-Type: application/json
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Delete Export [DELETE /rest/projects/{projectId}/md/exports/{id}]
+Deletes Export with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to delete metadata of the project.
+
+#### Response statuses
+* 204 - No Content - Export was successfully deleted
+* 404 - Not Found - Export with given id was not found
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {accessToken}
+
++ Response 204
+
+## Indicators [/rest/projects/{projectId}/md/indicators]
+An Indicator represents a phenomenon that can be displayed on a map. It allows the user to configure how the phenomenon will be displayed.
+
+Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/120336682/Indicators).
+
+### Create Indicator [POST]
+Creates new Indicator.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Indicator was successfully created
+* 400 - Bad Request - there are syntax errors or validation violations
+* 409 - Conflict - Indicator with the same name or id already exists
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
+    + Body
+
+            {
+                "name": "average_delay_indicator",
+                "type": "indicator",
+                "title": "Average delay",
+                "description": "Average order delay",
+                "content": {
+                    "metric": "/rest/projects/$projectId/md/metrics?name=average_delay_metric",
+                    "scale": "negative",
+                    "distribution": "geometric",
+                    "format": {
+                        "type": "number",
+                        "fraction": 1,
+                        "symbol": "min"
+                    }
+                }
+            }
+
++ Response 200 (application/json)
+
+            {
+                "id": "k6hornp6l2bmo14f",
+                "name": "average_delay_indicator",
+                "type": "indicator",
+                "title": "Average delay",
+                "description": "Average order delay",
+                "content": {
+                    "metric": "/rest/projects/$projectId/md/metrics?name=average_delay_metric",
+                    "scale": "negative",
+                    "distribution": "geometric",
+                    "format": {
+                        "type": "number",
+                        "fraction": 1,
+                        "symbol": "min"
+                    }
+                },
+                "accessInfo": {
+                    "createdAt": "2017-10-18T11:49:47Z"
+                },
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicators/k6hornp6l2bmo14f"
+                    }
+                ]
+            }
+
+### Get Indicator by id [GET /rest/projects/{projectId}/md/indicators/{id}]
+Returns Indicator with given *id*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Indicator by name [GET /rest/projects/{projectId}/md/indicators?name={name}]
+Returns Indicator with given *name*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Indicators [GET /rest/projects/{projectId}/md/indicators]
+Returns paged collection of all Indicators in a project.
+
+#### Response statuses
+* 200 - OK
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+            {
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicators?page=0&size=5&sort=id"
+                    }
+                ],
+                "content": [
+                    {
+                        "id": "k6hornp6l2bmo14f",
+                        "name": "average_delay_indicator",
+                        "type": "indicator",
+                        "title": "Average delay",
+                        "description": "Average order delay",
+                        "content": {
+                            "metric": "/rest/projects/$projectId/md/metrics?name=average_delay_metric",
+                            "scale": "negative",
+                            "distribution": "geometric",
+                            "format": {
+                                "type": "number",
+                                "fraction": 1,
+                                "symbol": "min"
+                            }
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T11:49:47Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicators/k6hornp6l2bmo14f"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "utvm7qp1i0qu0eaa",
+                        "name": "average_purchase_indicator",
+                        "type": "indicator",
+                        "title": "Average purchase",
+                        "description": "Average purchase value of a customer",
+                        "content": {
+                            "metric": "/rest/projects/$projectId/md/metrics?name=average_purchase_metric",
+                            "scale": "standard",
+                            "distribution": "uniform",
+                            "format": {
+                                "type": "number",
+                                "fraction": 1,
+                                "symbol": "£"
+                            }
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T11:51:05Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicators/utvm7qp1i0qu0eaa"
+                            }
+                        ]
+                    }
+                ],
+                "page": {
+                    "size": 5,
+                    "totalElements": 2,
+                    "totalPages": 1,
+                    "number": 0
+                }
+            }
+
+### Update Indicator [PUT /rest/projects/{projectId}/md/indicators/{id}]
+Updates Indicator with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Indicator was successfully updated
+* 400 - Bad Request - there are syntax errors or validation violations
+* 404 - Not Found - Indicator with given id was not found
+* 409 - Conflict - Indicator with the same name or id already exists
+* 412 - Precondition Failed - version provided in If-Match header is outdated
+* 428 - Precondition Required - version was not provided in If-Match header
+
++ Request
+
+    + Headers
+
+            If-Match: "0"
+            Content-Type: application/json
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Delete Indicator [DELETE /rest/projects/{projectId}/md/indicators/{id}]
+Deletes Indicator with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to delete metadata of the project.
+
+#### Response statuses
+* 204 - No Content - Indicator was successfully deleted
+* 404 - Not Found - Indicator with given id was not found
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {accessToken}
+
++ Response 204
+
+
+## Indicator Drills [/rest/projects/{projectId}/md/indicatorDrills]
+An Indicator Drill allows you to further analyse an Indicator. Indicator Drill consists of an array of blocks.
+
+Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/120336740/Indicator+drills).
+
+### Create Indicator Drill [POST]
+Creates new Indicator Drill.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Indicator Drill was successfully created
+* 400 - Bad Request - there are syntax errors or validation violations
+* 409 - Conflict - Indicator Drill with the same name or id already exists
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
+    + Body
+
+            {
+                "name": "turnover_indicator_drill",
+                "type": "indicatorDrill",
+                "content": {
+                    "blocks": [
+                        {
+                            "type": "histogram",
+                            "description": "Progress of indicator Turnover value over selected period of time."
+                        },
+                        {
+                            "type": "ranking",
+                            "size": 10,
+                            "description": "Rank of areas according to Turnover value."
+                        },
+                        {
+                            "type": "trend",
+                            "description": "Distribution of Turnover in all areas of selected granularity."
+                        },
+                        {
+                            "type": "barchart",
+                            "title": "Turnover by channel",
+                            "splitProperty": "baskets.on_off_name",
+                            "orderBy": {
+                                "property": "baskets.on_off_name",
+                                "direction": "asc",
+                                "sort": "asc"
+                            },
+                            "description": "Turnover by channel."
+                        }
+                    ]
+                }
+            }
+
++ Response 200 (application/json)
+
+            {
+                "id": "oq0d6btmb7istcc4",
+                "name": "turnover_indicator_drill",
+                "type": "indicatorDrill",
+                "content": {
+                    "blocks": [
+                        {
+                            "type": "histogram",
+                            "description": "Progress of indicator Turnover value over selected period of time."
+                        },
+                        {
+                            "type": "ranking",
+                            "size": 10,
+                            "description": "Rank of areas according to Turnover value."
+                        },
+                        {
+                            "type": "trend",
+                            "description": "Distribution of Turnover in all areas of selected granularity."
+                        },
+                        {
+                            "type": "barchart",
+                            "title": "Turnover by channel",
+                            "splitProperty": "baskets.on_off_name",
+                            "orderBy": {
+                                "property": "baskets.on_off_name",
+                                "direction": "asc",
+                                "sort": "asc"
+                            },
+                            "description": "Turnover by channel."
+                        }
+                    ]
+                },
+                "accessInfo": {
+                    "createdAt": "2017-10-18T12:04:52Z"
+                },
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicatorDrills/oq0d6btmb7istcc4"
+                    }
+                ]
+            }
+
+### Get Indicator Drill by id [GET /rest/projects/{projectId}/md/indicatorDrills/{id}]
+Returns Indicator Drill with given *id*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Indicator Drill by name [GET /rest/projects/{projectId}/md/indicatorDrills?name={name}]
+Returns Indicator Drill with given *name*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Indicator Drills [GET /rest/projects/{projectId}/md/indicatorDrills]
+Returns paged collection of all Indicator Drills in a project.
+
+#### Response statuses
+* 200 - OK
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+            {
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicatorDrills?page=0&size=5&sort=id"
+                    }
+                ],
+                "content": [
+                    {
+                        "id": "euh1qkanhjo28690",
+                        "name": "average_purchase_indicator_drill",
+                        "type": "indicatorDrill",
+                        "content": {
+                            "blocks": [
+                                {
+                                    "type": "histogram",
+                                    "description": "Progress of indicator value over selected period of time"
+                                },
+                                {
+                                    "type": "ranking",
+                                    "size": 10,
+                                    "description": "Ranking of areas with the highest average purchases"
+                                },
+                                {
+                                    "type": "trend",
+                                    "description": "Distribution of selected indicator in all areas of selected granularity"
+                                },
+                                {
+                                    "type": "barchart",
+                                    "title": "Purchases by channel",
+                                    "splitProperty": "baskets.on_off_name",
+                                    "orderBy": {
+                                        "property": "baskets.on_off_name",
+                                        "direction": "asc"
+                                    },
+                                    "description": "Average purchase by channel (Online / Offline)"
+                                }
+                            ]
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T12:05:38Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicatorDrills/euh1qkanhjo28690"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "oq0d6btmb7istcc4",
+                        "name": "turnover_indicator_drill",
+                        "type": "indicatorDrill",
+                        "content": {
+                            "blocks": [
+                                {
+                                    "type": "histogram",
+                                    "description": "Progress of indicator Turnover value over selected period of time."
+                                },
+                                {
+                                    "type": "ranking",
+                                    "size": 10,
+                                    "description": "Rank of areas according to Turnover value."
+                                },
+                                {
+                                    "type": "trend",
+                                    "description": "Distribution of Turnover in all areas of selected granularity."
+                                },
+                                {
+                                    "type": "barchart",
+                                    "title": "Turnover by channel",
+                                    "splitProperty": "baskets.on_off_name",
+                                    "orderBy": {
+                                        "property": "baskets.on_off_name",
+                                        "direction": "asc",
+                                        "sort": "asc"
+                                    },
+                                    "description": "Turnover by channel."
+                                }
+                            ]
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T12:04:52Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicatorDrills/oq0d6btmb7istcc4"
+                            }
+                        ]
+                    }
+                ],
+                "page": {
+                    "size": 5,
+                    "totalElements": 2,
+                    "totalPages": 1,
+                    "number": 0
+                }
+            }
+
+### Update Indicator Drill [PUT /rest/projects/{projectId}/md/indicatorDrills/{id}]
+Updates Indicator Drill with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Indicator Drill was successfully updated
+* 400 - Bad Request - there are syntax errors or validation violations
+* 404 - Not Found - Indicator Drill with given id was not found
+* 409 - Conflict - Indicator Drill with the same name or id already exists
+* 412 - Precondition Failed - version provided in If-Match header is outdated
+* 428 - Precondition Required - version was not provided in If-Match header
+
++ Request
+
+    + Headers
+
+            If-Match: "0"
+            Content-Type: application/json
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Delete Indicator Drill [DELETE /rest/projects/{projectId}/md/indicatorDrills/{id}]
+Deletes Indicator Drill with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to delete metadata of the project.
+
+#### Response statuses
+* 204 - No Content - Indicator Drill was successfully deleted
+* 404 - Not Found - Indicator Drill with given id was not found
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {accessToken}
+
++ Response 204
+
+## Markers [/rest/projects/{projectId}/md/markers]
+Marker represents a specific location on a map. It can be the location of a shop, a warehouse, an ATM, or anything else really.
+
+Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/120337139/Markers).
+
+### Create Marker [POST]
+Creates new Marker.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Marker was successfully created
+* 400 - Bad Request - there are syntax errors or validation violations
+* 409 - Conflict - Marker with the same name or id already exists
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
+    + Body
+
+            {
+                "name": "marker_warehouse",
+                "type": "marker",
+                "title": "Warehouses",
+                "description": "Warehouses owned by the company.",
+                "content": {
+                    "visible": true,
+                    "filterBy": [
+                        {
+                            "property": "warehouse.type",
+                            "value": "1",
+                            "operator": "eq"
+                        }
+                    ],
+                    "style": "marker-orange"
+                }
+            }
+
++ Response 200 (application/json)
+
+            {
+                "id": "pkcu7en74e7695tm",
+                "name": "marker_warehouse",
+                "type": "marker",
+                "title": "Warehouses",
+                "description": "Warehouses owned by the company.",
+                "content": {
+                    "visible": true,
+                    "filterBy": [
+                        {
+                            "property": "warehouse.type",
+                            "value": "1",
+                            "operator": "eq"
+                        }
+                    ],
+                    "style": "marker-orange"
+                },
+                "accessInfo": {
+                    "createdAt": "2017-10-18T12:09:48Z"
+                },
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markers/pkcu7en74e7695tm"
+                    }
+                ]
+            }
+
+### Get Marker by id [GET /rest/projects/{projectId}/md/markers/{id}]
+Returns Marker with given *id*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Marker by name [GET /rest/projects/{projectId}/md/markers?name={name}]
+Returns Marker with given *name*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Markers [GET /rest/projects/{projectId}/md/markers]
+Returns paged collection of all Markers in a project.
+
+#### Response statuses
+* 200 - OK
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+            {
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markers?page=0&size=5&sort=id"
+                    }
+                ],
+                "content": [
+                    {
+                        "id": "jvs7k5iv835i6lbm",
+                        "name": "marker_warehouse_2",
+                        "type": "marker",
+                        "title": "Warehouses",
+                        "description": "Warehouses owned by the company.",
+                        "content": {
+                            "visible": true,
+                            "filterBy": [
+                                {
+                                    "property": "warehouse.type",
+                                    "value": "2",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "style": "marker-blue"
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T12:10:23Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markers/jvs7k5iv835i6lbm"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "pkcu7en74e7695tm",
+                        "name": "marker_warehouse_1",
+                        "type": "marker",
+                        "title": "Warehouses",
+                        "description": "Warehouses owned by the company.",
+                        "content": {
+                            "visible": true,
+                            "filterBy": [
+                                {
+                                    "property": "warehouse.type",
+                                    "value": "1",
+                                    "operator": "eq"
+                                }
+                            ],
+                            "style": "marker-orange"
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T12:09:48Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markers/pkcu7en74e7695tm"
+                            }
+                        ]
+                    }
+                ],
+                "page": {
+                    "size": 5,
+                    "totalElements": 2,
+                    "totalPages": 1,
+                    "number": 0
+                }
+            }
+
+### Update Marker [PUT /rest/projects/{projectId}/md/markers/{id}]
+Updates Marker with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Marker was successfully updated
+* 400 - Bad Request - there are syntax errors or validation violations
+* 404 - Not Found - Marker with given id was not found
+* 409 - Conflict - Marker with the same name or id already exists
+* 412 - Precondition Failed - version provided in If-Match header is outdated
+* 428 - Precondition Required - version was not provided in If-Match header
+
++ Request
+
+    + Headers
+
+            If-Match: "0"
+            Content-Type: application/json
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Delete Marker [DELETE /rest/projects/{projectId}/md/markers/{id}]
+Deletes Marker with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to delete metadata of the project.
+
+#### Response statuses
+* 204 - No Content - Marker was successfully deleted
+* 404 - Not Found - Marker with given id was not found
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {accessToken}
+
++ Response 204
+
+
+## Marker Selectors [/rest/projects/{projectId}/md/markerSelectors]
+Marker Selector groups a type of markers and assigns them to a Dataset.
+
+Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/120337200/Marker+selectors).
+
+### Create Marker Selector [POST]
+Creates new Marker Selector.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Marker Selector was successfully created
+* 400 - Bad Request - there are syntax errors or validation violations
+* 409 - Conflict - Marker Selector with the same name or id already exists
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
+    + Body
+
+            {
+                "name": "shops_marker_selector",
+                "type": "markerSelector",
+                "content": {
+                    "categories": [
+                        {
+                            "markers": [
+                                {
+                                    "visible": true,
+                                    "name": "red_marker"
+                                },
+                                {
+                                    "visible": true,
+                                    "name": "orange_marker"
+                                },
+                                {
+                                    "visible": true,
+                                    "name": "green_marker"
+                                }
+                            ],
+                            "dataset": "/rest/projects/$projectId/md/datasets?name=shops_dwh"
+                        }
+                    ]
+                }
+            }
+
++ Response 200 (application/json)
+
+            {
+                "id": "mgp4vpel6orfeh85",
+                "name": "shops_marker_selector",
+                "type": "markerSelector",
+                "content": {
+                    "categories": [
+                        {
+                            "markers": [
+                                {
+                                    "visible": true,
+                                    "name": "red_marker"
+                                },
+                                {
+                                    "visible": true,
+                                    "name": "orange_marker"
+                                },
+                                {
+                                    "visible": true,
+                                    "name": "green_marker"
+                                }
+                            ],
+                            "dataset": "/rest/projects/$projectId/md/datasets?name=shops_dwh"
+                        }
+                    ]
+                },
+                "accessInfo": {
+                    "createdAt": "2017-10-18T12:18:03Z"
+                },
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markerSelectors/mgp4vpel6orfeh85"
+                    }
+                ]
+            }
+
+### Get Marker Selector by id [GET /rest/projects/{projectId}/md/markerSelectors/{id}]
+Returns Marker Selector with given *id*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Marker Selector by name [GET /rest/projects/{projectId}/md/markerSelectors?name={name}]
+Returns Marker Selector with given *name*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Marker Selectors [GET /rest/projects/{projectId}/md/markerSelectors]
+Returns paged collection of all Marker Selectors in a project.
+
+#### Response statuses
+* 200 - OK
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+            {
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markerSelectors?page=0&size=5&sort=id"
+                    }
+                ],
+                "content": [
+                    {
+                        "id": "hauq9taqq3733mtv",
+                        "name": "atms_marker_selector",
+                        "type": "markerSelector",
+                        "content": {
+                            "categories": [
+                                {
+                                    "markers": [
+                                        {
+                                            "visible": true,
+                                            "name": "red_marker"
+                                        },
+                                        {
+                                            "visible": true,
+                                            "name": "green_marker"
+                                        }
+                                    ],
+                                    "dataset": "/rest/projects/$projectId/md/datasets?name=atms_dwh"
+                                }
+                            ]
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T12:19:08Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markerSelectors/hauq9taqq3733mtv"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "mgp4vpel6orfeh85",
+                        "name": "shops_marker_selector",
+                        "type": "markerSelector",
+                        "content": {
+                            "categories": [
+                                {
+                                    "markers": [
+                                        {
+                                            "visible": true,
+                                            "name": "red_marker"
+                                        },
+                                        {
+                                            "visible": true,
+                                            "name": "orange_marker"
+                                        },
+                                        {
+                                            "visible": true,
+                                            "name": "green_marker"
+                                        }
+                                    ],
+                                    "dataset": "/rest/projects/$projectId/md/datasets?name=shops_dwh"
+                                }
+                            ]
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T12:18:03Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markerSelectors/mgp4vpel6orfeh85"
+                            }
+                        ]
+                    }
+                ],
+                "page": {
+                    "size": 5,
+                    "totalElements": 2,
+                    "totalPages": 1,
+                    "number": 0
+                }
+            }
+
+### Update Marker Selector [PUT /rest/projects/{projectId}/md/markerSelectors/{id}]
+Updates Marker Selector with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Marker Selector was successfully updated
+* 400 - Bad Request - there are syntax errors or validation violations
+* 404 - Not Found - Marker Selector with given id was not found
+* 409 - Conflict - Marker Selector with the same name or id already exists
+* 412 - Precondition Failed - version provided in If-Match header is outdated
+* 428 - Precondition Required - version was not provided in If-Match header
+
++ Request
+
+    + Headers
+
+            If-Match: "0"
+            Content-Type: application/json
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Delete Marker Selector [DELETE /rest/projects/{projectId}/md/markerSelectors/{id}]
+Deletes Marker Selector with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to delete metadata of the project.
+
+#### Response statuses
+* 204 - No Content - Marker Selector was successfully deleted
+* 404 - Not Found - Marker Selector with given id was not found
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {accessToken}
+
++ Response 204
+
+
+## Metrics [/rest/projects/{projectId}/md/metrics]
+A Metric is an expression which describes a computation that will be performed over the project's data.
+
+Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/120336991/Metrics).
+
+### Create Metric [POST]
+Creates new Metric.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Metric was successfully created
+* 400 - Bad Request - there are syntax errors or validation violations
+* 409 - Conflict - Metric with the same name or id already exists
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
+    + Body
+
+            {
+                "name": "orders_metric",
+                "type": "metric",
+                "title": "Orders",
+                "description": "Number of orders (according to chosen time window and filters)",
+                "content": {
+                    "type": "function_count",
+                    "content": [
+                        {
+                            "type": "property",
+                            "value": "objednavky_dwh.id"
+                        }
+                    ]
+                }
+            }
+
++ Response 200 (application/json)
+
+            {
+                "id": "hgosavqognbk4qj7",
+                "name": "orders_metric",
+                "type": "metric",
+                "title": "Orders",
+                "description": "Number of orders (according to chosen time window and filters)",
+                "content": {
+                    "type": "function_count",
+                    "content": [
+                        {
+                            "type": "property",
+                            "value": "objednavky_dwh.id"
+                        }
+                    ]
+                },
+                "accessInfo": {
+                    "createdAt": "2017-10-18T12:24:39Z"
+                },
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/metrics/hgosavqognbk4qj7"
+                    }
+                ]
+            }
+
+### Get Metric by id [GET /rest/projects/{projectId}/md/metrics/{id}]
+Returns Metric with given *id*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Metric by name [GET /rest/projects/{projectId}/md/metrics?name={name}]
+Returns Metric with given *name*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Metrics [GET /rest/projects/{projectId}/md/metrics]
+Returns paged collection of all Metrics in a project.
+
+#### Response statuses
+* 200 - OK
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+            {
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/metrics?page=0&size=5&sort=id"
+                    }
+                ],
+                "content": [
+                    {
+                        "id": "hgosavqognbk4qj7",
+                        "name": "orders_metric",
+                        "type": "metric",
+                        "title": "Orders",
+                        "description": "Number of orders (according to chosen time window and filters)",
+                        "content": {
+                            "type": "function_count",
+                            "content": [
+                                {
+                                    "type": "property",
+                                    "value": "objednavky_dwh.id"
+                                }
+                            ]
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T12:24:39Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/metrics/hgosavqognbk4qj7"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "llhegoo8q1b5fv3n",
+                        "name": "delayed_orders_metric",
+                        "type": "metric",
+                        "content": {
+                            "type": "function_count",
+                            "content": [
+                                {
+                                    "type": "property",
+                                    "value": "objednavky_dwh.id"
+                                }
+                            ],
+                            "options": {
+                                "filterBy": [
+                                    {
+                                        "property": "objednavky_dwh.delay",
+                                        "value": "0",
+                                        "operator": "gt"
+                                    }
+                                ]
+                            }
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T12:25:19Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/metrics/llhegoo8q1b5fv3n"
+                            }
+                        ]
+                    }
+                ],
+                "page": {
+                    "size": 5,
+                    "totalElements": 2,
+                    "totalPages": 1,
+                    "number": 0
+                }
+            }
+
+### Update Metric [PUT /rest/projects/{projectId}/md/metrics/{id}]
+Updates Metric with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - Metric was successfully updated
+* 400 - Bad Request - there are syntax errors or validation violations
+* 404 - Not Found - Metric with given id was not found
+* 409 - Conflict - Metric with the same name or id already exists
+* 412 - Precondition Failed - version provided in If-Match header is outdated
+* 428 - Precondition Required - version was not provided in If-Match header
+
++ Request
+
+    + Headers
+
+            If-Match: "0"
+            Content-Type: application/json
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Delete Metric [DELETE /rest/projects/{projectId}/md/metrics/{id}]
+Deletes Metric with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to delete metadata of the project.
+
+#### Response statuses
+* 204 - No Content - Metric was successfully deleted
+* 404 - Not Found - Metric with given id was not found
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {accessToken}
+
++ Response 204
+
+## Views [/rest/projects/{projectId}/md/views]
+View is a visualization of certain theme using a set of related Indicators and groups of objects (Markers or areas) displayed on a map. View also defines filters, which can be applied on its Indicators.
+
+Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/120336398/Views).
+
+### Create View [POST]
+Creates new View.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - View was successfully created
+* 400 - Bad Request - there are syntax errors or validation violations
+* 409 - Conflict - View with the same name or id already exists
+
++ Request (application/json)
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
+    + Body
+
+            {
+                "name": "penetration",
+                "type": "view",
+                "title": "Orders",
+                "description": "Detailed orders overview. This view shows regions where the biggest revenue is generated.",
+                "content": {
+                    "icon": "catchment_area",
+                    "dashboard": "/rest/projects/$projectId/md/dashboards?name=penetration_dashboard",
+                    "markerSelector": "/rest/projects/$projectId/md/markerSelectors?name=marker_selector_warehouse",
+                    "filterGroup": [
+                        {
+                            "type": "globalDate",
+                            "property": "objednavky_dwh.date",
+                            "factDataset": "objednavky_dwh",
+                            "defaultValues": {
+                                "values": [
+                                    "2016-10-01",
+                                    "2016-12-31"
+                                ]
+                            }
+                        },
+                        {
+                            "type": "date",
+                            "property": "objednavky_dwh.date",
+                            "factDataset": "objednavky_dwh",
+                            "defaultValues": {
+                                "values": [
+                                    "2016-12-11",
+                                    "2016-12-17"
+                                ]
+                            }
+                        },
+                        {
+                            "type": "histogram",
+                            "property": "objednavky_dwh.price",
+                            "format": {
+                                "type": "number",
+                                "fraction": 0
+                            }
+                        },
+                        {
+                            "type": "multiSelect",
+                            "property": "objednavky_dwh.day_nazev",
+                            "orderBy": [
+                                {
+                                    "property": "objednavky_dwh.day",
+                                    "direction": "asc"
+                                }
+                            ]
+                        }
+                    ],
+                    "mapOptions": {
+                        "center": {
+                            "lat": 52.47,
+                            "lng": -1.88
+                        },
+                        "zoom": 12,
+                        "minZoom": 0,
+                        "maxZoom": 18,
+                        "tileLayer": "mapbox"
+                    }
+                }
+            }
+
++ Response 200 (application/json)
+
+            {
+                "id": "pr0i7mi23lk8mspb",
+                "name": "penetration",
+                "type": "view",
+                "title": "Orders",
+                "description": "Detailed orders overview. This view shows regions where the biggest revenue is generated.",
+                "content": {
+                    "icon": "catchment_area",
+                    "dashboard": "/rest/projects/$projectId/md/dashboards?name=penetration_dashboard",
+                    "markerSelector": "/rest/projects/$projectId/md/markerSelectors?name=marker_selector_warehouse",
+                    "filterGroup": [
+                        {
+                            "type": "globalDate",
+                            "property": "objednavky_dwh.date",
+                            "factDataset": "objednavky_dwh",
+                            "defaultValues": {
+                                "values": [
+                                    "2016-10-01",
+                                    "2016-12-31"
+                                ]
+                            }
+                        },
+                        {
+                            "type": "date",
+                            "property": "objednavky_dwh.date",
+                            "factDataset": "objednavky_dwh",
+                            "defaultValues": {
+                                "values": [
+                                    "2016-12-11",
+                                    "2016-12-17"
+                                ]
+                            }
+                        },
+                        {
+                            "type": "histogram",
+                            "property": "objednavky_dwh.price",
+                            "format": {
+                                "type": "number",
+                                "fraction": 0
+                            }
+                        },
+                        {
+                            "type": "multiSelect",
+                            "property": "objednavky_dwh.day_nazev",
+                            "orderBy": [
+                                {
+                                    "property": "objednavky_dwh.day",
+                                    "direction": "asc"
+                                }
+                            ]
+                        }
+                    ],
+                    "mapOptions": {
+                        "center": {
+                            "lat": 52.47,
+                            "lng": -1.88
+                        },
+                        "zoom": 12,
+                        "minZoom": 0,
+                        "maxZoom": 18,
+                        "tileLayer": "mapbox"
+                    }
+                },
+                "accessInfo": {
+                    "createdAt": "2017-10-18T12:31:34Z"
+                },
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/views/pr0i7mi23lk8mspb"
+                    }
+                ]
+            }
+
+### Get View by id [GET /rest/projects/{projectId}/md/views/{id}]
+Returns View with given *id*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get View by name [GET /rest/projects/{projectId}/md/views?name={name}]
+Returns View with given *name*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Get Views [GET /rest/projects/{projectId}/md/views]
+Returns paged collection of all Views in a project.
+
+#### Response statuses
+* 200 - OK
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+            {
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/views?page=0&size=5&sort=id"
+                    }
+                ],
+                "content": [
+                    {
+                        "id": "khi8ingi6dkcgu29",
+                        "name": "customer_intelligence",
+                        "type": "view",
+                        "title": "Customer Intelligence",
+                        "description": "Your customer is not a group of the same people. Find areas, where you have the most loyal customers, that make the biggest transaction. Now you know, where open new services or sell more expensive goods.",
+                        "content": {
+                            "icon": "customer_intelligence",
+                            "dashboard": "/rest/projects/$projectId/md/dashboards?name=customer_intelligence_dashboard",
+                            "markerSelector": "/rest/projects/$projectId/md/markerSelectors?name=marker_selector_shops",
+                            "filterGroup": [
+                                {
+                                    "type": "globalDate",
+                                    "property": "dim_dates.date_iso",
+                                    "factDataset": "baskets",
+                                    "defaultValues": {
+                                        "values": [
+                                            "2016-12-11",
+                                            "2016-12-17"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "type": "multiSelect",
+                                    "property": "baskets.on_off_name",
+                                    "orderBy": [
+                                        {
+                                            "property": "baskets.on_off_name",
+                                            "direction": "asc"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "mapOptions": {
+                                "center": {
+                                    "lat": 52.47,
+                                    "lng": -1.88
+                                },
+                                "zoom": 12,
+                                "minZoom": 0,
+                                "maxZoom": 18,
+                                "tileLayer": "mapbox"
+                            }
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T12:35:16Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/views/khi8ingi6dkcgu29"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "pr0i7mi23lk8mspb",
+                        "name": "penetration",
+                        "type": "view",
+                        "title": "Orders",
+                        "description": "Detailed orders overview. This view shows regions where the biggest revenue is generated.",
+                        "content": {
+                            "icon": "catchment_area",
+                            "dashboard": "/rest/projects/$projectId/md/dashboards?name=penetration_dashboard",
+                            "markerSelector": "/rest/projects/$projectId/md/markerSelectors?name=marker_selector_warehouse",
+                            "filterGroup": [
+                                {
+                                    "type": "globalDate",
+                                    "property": "objednavky_dwh.date",
+                                    "factDataset": "objednavky_dwh",
+                                    "defaultValues": {
+                                        "values": [
+                                            "2016-10-01",
+                                            "2016-12-31"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "type": "date",
+                                    "property": "objednavky_dwh.date",
+                                    "factDataset": "objednavky_dwh",
+                                    "defaultValues": {
+                                        "values": [
+                                            "2016-12-11",
+                                            "2016-12-17"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "type": "histogram",
+                                    "property": "objednavky_dwh.price",
+                                    "format": {
+                                        "type": "number",
+                                        "fraction": 0
+                                    }
+                                },
+                                {
+                                    "type": "multiSelect",
+                                    "property": "objednavky_dwh.day_nazev",
+                                    "orderBy": [
+                                        {
+                                            "property": "objednavky_dwh.day",
+                                            "direction": "asc"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "mapOptions": {
+                                "center": {
+                                    "lat": 52.47,
+                                    "lng": -1.88
+                                },
+                                "zoom": 12,
+                                "minZoom": 0,
+                                "maxZoom": 18,
+                                "tileLayer": "mapbox"
+                            }
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T12:31:34Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/views/pr0i7mi23lk8mspb"
+                            }
+                        ]
+                    }
+                ],
+                "page": {
+                    "size": 5,
+                    "totalElements": 2,
+                    "totalPages": 1,
+                    "number": 0
+                }
+            }
+
+### Update View [PUT /rest/projects/{projectId}/md/views/{id}]
+Updates View with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to update metadata of the project.
+
+#### Response statuses
+* 200 - OK - View was successfully updated
+* 400 - Bad Request - there are syntax errors or validation violations
+* 404 - Not Found - View with given id was not found
+* 409 - Conflict - View with the same name or id already exists
+* 412 - Precondition Failed - version provided in If-Match header is outdated
+* 428 - Precondition Required - version was not provided in If-Match header
+
++ Request
+
+    + Headers
+
+            If-Match: "0"
+            Content-Type: application/json
+            Accept: application/json
+            Authorization: Bearer {accessToken}
+
++ Response 200 (application/json)
+
+### Delete View [DELETE /rest/projects/{projectId}/md/views/{id}]
+Deletes View with given *id*.
+
+#### Security
+Restricted to *EDITOR* project role that has the permission to delete metadata of the project.
+
+#### Response statuses
+* 204 - No Content - View was successfully deleted
+* 404 - Not Found - View with given id was not found
+
++ Request
+
+    + Headers
+
+            Authorization: Bearer {accessToken}
+
++ Response 204

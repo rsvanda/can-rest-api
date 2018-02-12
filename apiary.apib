@@ -567,75 +567,59 @@ Get general information as user details, settings, projects and preferences.
                             "basicTools",
                             "extBlockRanking"
                         ]
-                    },
+                    }              
+                },
+                "projects": {
+                    "content": [
+                        {
+                            "id": "ncesksvg7rjeri7v",
+                            "title": "Testing project",
+                            "description": "Project description",
+                            "status": "ENABLED",
+                            "share": "PRIVATE",
+                            "createdAt": 1415132126985,
+                            "modifiedAt": 1415132126985,
+                            "membership": {
+                                "id": "he1deh9g0pba0ook",
+                                "accountId": "B3mTX6pCTRBSIMRej4q0",
+                                "role": "ADMIN",
+                                "status": "ENABLED",
+                                "createdAt": 1418366533648,
+                                "modifiedAt": 1418366533648
+                            },
+                            "links": [
+                                {
+                                    "rel": "self",
+                                    "href": "/rest/projects/ncesksvg7rjeri7v"
+                                },
+                                {
+                                    "rel": "createdBy",
+                                    "href": "/rest/accounts/O3kTMX6pCTRBSIMRej4q0"
+                                },
+                                {
+                                    "rel": "membership",
+                                    "href": "/rest/projects/ncesksvg7rjeri7v/members?accountId=O3kTMX6pCTRBSIMRej4q0"
+                                },
+                                {
+                                    "rel": "members",
+                                    "href": "/rest/projects/ncesksvg7rjeri7v/members{?page,size,sort}"
+                                }
+                            ]
+                        }
+                    ],
                     "links": [
                         {
                             "rel": "self",
-                            "href": "/rest/accounts/B3mTX6pCTRBSIMRej4q0"
-                        },
-                        {
-                            "rel": "password",
-                            "href": "/rest/accounts/B3mTX6pCTRBSIMRej4q0/password"
-                        },
-                        {
-                            "rel": "preferences",
-                            "href": "/rest/accounts/B3mTX6pCTRBSIMRej4q0/preferences"
+                            "href": "/rest/projects{?page,size,sort}"
                         }
-                    ]                
-                },
-                "projects": [
-                    {
-                        "content": [
-                            {
-                                "id": "ncesksvg7rjeri7v",
-                                "title": "Testing project",
-                                "description": "Project description",
-                                "status": "ENABLED",
-                                "share": "PRIVATE",
-                                "createdAt": 1415132126985,
-                                "modifiedAt": 1415132126985,
-                                "membership": {
-                                  "id": "he1deh9g0pba0ook",
-                                  "accountId": "B3mTX6pCTRBSIMRej4q0",
-                                  "role": "ADMIN",
-                                  "status": "ENABLED",
-                                  "createdAt": 1418366533648,
-                                  "modifiedAt": 1418366533648
-                                },
-                                "links": [
-                                    {
-                                        "rel": "self",
-                                        "href": "/rest/projects/ncesksvg7rjeri7v"
-                                    },
-                                    {
-                                        "rel": "createdBy",
-                                        "href": "/rest/accounts/O3kTMX6pCTRBSIMRej4q0"
-                                    },
-                                    {
-                                      "rel": "membership",
-                                      "href": "/rest/projects/ncesksvg7rjeri7v/members?accountId=O3kTMX6pCTRBSIMRej4q0"
-                                    },
-                                    {
-                                        "rel": "members",
-                                        "href": "/rest/projects/ncesksvg7rjeri7v/members{?page,size,sort}"
-                                    }
-                                ]
-                            }
-                        ],
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": "/rest/projects{?page,size,sort}"
-                            }
-                        ],
-                        "page": {
-                            "size": 20,
-                            "totalElements": 1,
-                            "totalPages": 1,
-                            "number": 0
-                        }
-                    }                
-                ]
+                    ],
+                    "page": {
+                        "size": 20,
+                        "totalElements": 1,
+                        "totalPages": 1,
+                        "number": 0
+                    }
+                }
             }            
 
 

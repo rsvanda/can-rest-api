@@ -1863,47 +1863,6 @@ Following example returns the `min` and `max` of *stores_count* and *turnover* f
         }
 
 
-## DWH Available Granularities [/rest/projects/{projectId}/dwh/availableGranularities]
-### Available Granularities [POST] 
-
-+ Request (application/json)
-
-    + Headers
-    
-            Authorization: Bearer {{accessToken}}
-
-    + Body
-        
-            {
-                "metrics": [
-                    {
-                        "id": "num_of_stores",
-                        "type": "function_count_dist",
-                        "content": [
-                            {
-                                "type": "property",
-                                "value": "mystores.store_id"
-                            }
-                        ]
-                    }
-                ]
-            }
-        
-
-+ Response 200 (application/json)
-
-        {
-            "content": [
-                {
-                    "metricId": "num_of_stores",
-                    "availableGranularities": [
-                        "/rest/projects/{projectId}/md/datasets/bpotfxdi4pozhx9e",
-                    ]
-                }
-            ]
-        }        
-
-
 ## DWH Available Datasets [/rest/projects/{projectId}/dwh/availableDatasets{?subtype,expand}]
 ### Available Datasets [POST] 
 List datasets available for drill in for given metric(s). 

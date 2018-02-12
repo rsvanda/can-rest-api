@@ -1491,7 +1491,7 @@ The search searvice indexes `title` and `subtitle` of all geometry datasets (`ge
 The dataset's objects are indexed during dataset pull job. It means that if the `title` or `subtitle` definition is changed in dataset's metadata definition, the affected dataset must be loaded again by dataset pull full load process.
 
 + Parameters 
-    + query (string) - Query search phrase. It is split into terms and the resource return dataset's object that contains all terms in their `title` or `subtitle`. 
+    + query: `something` (string) - Query search phrase. It is split into terms and the resource return dataset's object that contains all terms in their `title` or `subtitle`. 
     + dataset (optional, string[]) - Search only in given dataset. If the parameter present, only the search results of given datasets are returned.       Parameter can be repeated, e.g. `&dataset=orders&dataset=customers`
     + size = `20` (optional, number)
     + page = `0` (optional, number)
@@ -1972,7 +1972,7 @@ This endpoint checks the relations from data model and lists only the available 
 Computes distribution (frequency) of given fact (numeric dataset property). Result is splitted into required number of equal size buckets. The frequency is the count of occurencies of given metric in these buckets.
 
 + Parameters 
-    + property (required, string)
+    + property: `a_property` (required, string)
     + buckets = `20` (optional, number)
     + min (optional, number)
         Set minimal value for distribution. By default it is a minimal value for the property.
@@ -2205,7 +2205,7 @@ The distinct values are returned as pageable response.
 By default, the values are ordered ascending by the property value. Optionaly the direction can be changed and the values can be sorted by another propety (eg. sort day of week by day id instead of day name).
 
 + Parameters 
-    + property (required, string)
+    + property: `a_property` (required, string)
     + filter (optional, string)
     + size = `200` (optional, number)
     + page = `0` (optional, number)

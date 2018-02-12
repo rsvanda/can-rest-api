@@ -635,10 +635,9 @@ Resource return only those projects where the authenticated user is a member.
     + size = `20` (optional, number)
     + page = `0` (optional, number)
     + sort = `null` (optional, string, `title`)
-    + share: `private` (enum[String],optional)
+    + share: `demo` (enum[String],optional)
         Filter project list by `share` attribute.
         + Members
-            + `private`
             + `dimension`
             + `demo`
     + expand: `membership` (enum[String], optional)
@@ -652,48 +651,53 @@ Resource return only those projects where the authenticated user is a member.
     
             Authorization: Bearer {{accessToken}}
 
-+ Response 200 (application/json)
++ Response 200 (application/hal+json)
 
         {
-            "content": [
-                {
-                    "id": "ncesksvg7rjeri7v",
-                    "title": "Testing project",
-                    "description": "Project description",
-                    "status": "ENABLED",
-                    "share": "PRIVATE",
-                    "createdAt": 1415132126985,
-                    "modifiedAt": 1415132126985,
-                    "links": [
-                        {
-                            "rel": "self",
-                            "href": "/rest/projects/ncesksvg7rjeri7v"
+            "_links": {
+                "self": {
+                    "href": "/rest/projects?share=demo{&page,size,sort}",
+                    "templated": true
+                }
+            },
+            "_embedded": {
+                "projects": [
+                    {
+                        "id": "vb2b3d8v91jao331",
+                        "title": "Retail Solution DEMO",
+                        "description": null,
+                        "status": "ENABLED",
+                        "share": "DEMO",
+                        "createdAt": 1499767558891,
+                        "modifiedAt": 1499767558918,
+                        "services": {
+                            "md": "/rest/projects/vb2b3d8v91jao331/md"
                         },
-                        {
-                            "rel": "createdBy",
-                            "href": "/rest/accounts/O3kTMX6pCTRBSIMRej4q0"
-                        },
-                        {
-                          "rel": "membership",
-                          "href": "/rest/projects/ncesksvg7rjeri7v/members?accountId=O3kTMX6pCTRBSIMRej4q0"
-                        },
-                        {
-                            "rel": "members",
-                            "href": "/rest/projects/ncesksvg7rjeri7v/members{?page,size,sort}"
-                        },
-                        {
-                          "rel": "metadata",
-                          "href": "/rest/projects/ncesksvg7rjeri7v/metadata"
+                        "_links": {
+                            "membership": {
+                                "href": "/rest/projects/vb2b3d8v91jao331/members?accountId=00ubfu6dpmnTMIQKs0h7",
+                                "templated": false
+                            },
+                            "createdBy": {
+                                "href": "/rest/accounts/5DKknL3P6uT3DKhmuprNrU",
+                                "templated": false
+                            },
+                            "md": {
+                                "href": "/rest/projects/vb2b3d8v91jao331/md",
+                                "templated": false
+                            },
+                            "self": {
+                                "href": "/rest/projects/vb2b3d8v91jao331",
+                                "templated": false
+                            },
+                            "members": {
+                                "href": "/rest/projects/vb2b3d8v91jao331/members",
+                                "templated": false
+                            }
                         }
-                    ]
-                }
-            ],
-            "links": [
-                {
-                    "rel": "self",
-                    "href": "/rest/projects{?page,size,sort}"
-                }
-            ],
+                    }
+                ]
+            },
             "page": {
                 "size": 20,
                 "totalElements": 1,
@@ -701,6 +705,7 @@ Resource return only those projects where the authenticated user is a member.
                 "number": 0
             }
         }
+
 
 ### Create New Project [POST]
 Create a new project and set the authenticated user as the project member in *ADMIN* project role.

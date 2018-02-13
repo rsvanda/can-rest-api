@@ -204,6 +204,9 @@ some basic information about the account are returned.
 * 200 - Ok
 * 404 - Not Found
 
++ Parameters
+    + email: `john@cleveranalytics.com` (optional, string) User email address
+
 + Request (application/json)
 
     + Headers
@@ -215,9 +218,7 @@ some basic information about the account are returned.
         {
             "fullName": "John Smith",
             "email": "john@cleveranalytics.com",
-            "preferences": {
-                "language": "en"
-            }                
+            "preferences": {}                
         }
 
 
@@ -444,6 +445,9 @@ Both these preferences are used by CleverAnalytics Client JavaScript application
 User is allowed to read and change only it's own preferences. It means that Bearer token must match {accountId}
 
 ### Get account preferences [GET]
+
++ Parameters
+    + accountId: `DUMxzJ6cMxe4wJRXmFgf` (string) id of the user
 
 + Request (application/json)
 
@@ -767,6 +771,7 @@ Get project by given project *id*.
 Accees is restricted only to users that are members of given project.
 
 + Parameters 
+    + projectId: `vb2b3d8v91jao331` (string) The ID of an actual project
     + expand: `membership` (enum[String], optional)
         Expand selected attribute(s) to minimalize roundtrips.
         + Members
@@ -777,37 +782,42 @@ Accees is restricted only to users that are members of given project.
     + Headers
     
             Authorization: Bearer {{accessToken}}
+            Accept: application/json
 
 + Response 200 (application/json)
 
         {
-            "id": "ncesksvg7rjeri7v",
-            "title": "Testing project",
-            "description": "Project description",
+            "id": "vb2b3d8v91jao331",
+            "title": "Retail Solution DEMO",
+            "description": null,
             "status": "ENABLED",
-            "share": "PRIVATE",
-            "createdAt": 1415132126985,
-            "modifiedAt": 1415132126985,
+            "share": "DEMO",
+            "createdAt": 1499767558891,
+            "modifiedAt": 1499767558918,
+            "services": {
+                "md": "/rest/projects/vb2b3d8v91jao331/md"
+            },
+            "membership": null,
             "links": [
                 {
-                    "rel": "self",
-                    "href": "/rest/projects/ncesksvg7rjeri7v"
+                    "rel": "membership",
+                    "href": "/rest/projects/vb2b3d8v91jao331/members?accountId=00ubfu6dpmnTMIQKs0h7"
                 },
                 {
                     "rel": "createdBy",
-                    "href": "/rest/accounts/O3kTMX6pCTRBSIMRej4q0"
+                    "href": "/rest/accounts/5DKknL3P6uT3DKhmuprNrU"
                 },
                 {
-                  "rel": "membership",
-                  "href": "/rest/projects/ncesksvg7rjeri7v/members?accountId=O3kTMX6pCTRBSIMRej4q0"
+                    "rel": "md",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md"
+                },
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331"
                 },
                 {
                     "rel": "members",
-                    "href": "/rest/projects/ncesksvg7rjeri7v/members{?page,size,sort}"
-                },
-                {
-                  "rel": "metadata",
-                  "href": "/rest/projects/ncesksvg7rjeri7v/metadata"
+                    "href": "/rest/projects/vb2b3d8v91jao331/members"
                 }
             ]
         }
@@ -891,6 +901,7 @@ The membership is a relation between Account and Project and Project Role. The r
 Restricted to *ADMIN* project role.
 
 + Parameters 
+    + projectId: `vb2b3d8v91jao331` (string) The ID of an actual project
     + size = `20` (optional, number)
     + page = `0` (optional, number)
     + sort = `null` (optional, string, `role`)
@@ -973,11 +984,11 @@ Restricted to *ADMIN* project role.
 Get membership for given project and accountId
 
 #### Security
-Restricted to *ADMIN* project role or is allowed when *accountId* is correspond to authenticated user. 
+Restricted to *ADMIN* project role or is allowed when *accountId* corresponds with authenticated user. 
 
 + Parameters 
-    + accountId: `null` (String, optional)
-        id of user account to get
+    + projectId: `vb2b3d8v91jao331` (string) The ID of an actual project
+    + accountId: `DUMxzJ6cMxe4wJRXmFgf` (String, optional) id of user account to get
     + expand: `account` (enum[String], optional)
         Expand selected attribute(s) to minimalize roundtrips.
         + Members
@@ -988,6 +999,7 @@ Restricted to *ADMIN* project role or is allowed when *accountId* is correspond 
     + Headers
     
             Authorization: Bearer {{accessToken}}
+            Accept: application/json
 
 + Response 200 (application/json)
 

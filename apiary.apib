@@ -475,27 +475,6 @@ Section of account profile for tracking onboarding steps for earch user. It has 
 #### Security
 User is allowed to read and change only it's own preferences. It means that Bearer token must match {accountId}
 
-### Get account onboarding [GET]
-
-+ Request (application/json)
-
-    + Headers
-    
-            Authorization: Bearer {{accessToken}}
-
-+ Response 200
-        
-        {
-            "introShown": [
-                "/rest/projects/vb2b3d8v91jao331/md/views/f2ef07u2c5tikd26",
-                "/rest/projects/t1n92mu7l0toa84i/md/views/e4cflb6pr6h490fn"
-            ],
-            "tipsShown": [
-                "basicTools",
-                "extBlockRanking"
-            ]
-        }
-
 
 ### Change onboarding [PUT]
 Update the onboarding object. The previos version is replaced by the new one.

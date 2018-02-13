@@ -240,6 +240,7 @@ The resource has two type of responses:
     + Headers
     
             Authorization: Bearer {{accessToken}}
+            Accept: application/json
 
 + Response 200 (application/json)
 
@@ -289,6 +290,7 @@ Account for user identified by his/her Bearer token. Resource is the same as the
     + Headers
     
             Authorization: Bearer {{accessToken}}
+            Accept: application/json
 
 + Response 200 (application/json)
 
@@ -638,8 +640,8 @@ Resource return only those projects where the authenticated user is a member.
     + share (enum[String],optional)
         Filter project list by `share` attribute.
         + Members
-            + `dimension`
             + `demo`
+            + `dimension`
     + expand: `membership` (enum[String], optional)
         Expand selected attribute(s) to minimalize roundtrips.
         + Members
@@ -650,54 +652,53 @@ Resource return only those projects where the authenticated user is a member.
     + Headers
     
             Authorization: Bearer {{accessToken}}
+            Accept: application/json
 
 + Response 200
 
         {
-            "_links": {
-                "self": {
-                    "href": "/rest/projects?share=demo{&page,size,sort}",
-                    "templated": true
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects?share=demo{&page,size,sort}"
                 }
-            },
-            "_embedded": {
-                "projects": [
-                    {
-                        "id": "vb2b3d8v91jao331",
-                        "title": "Retail Solution DEMO",
-                        "description": null,
-                        "status": "ENABLED",
-                        "share": "DEMO",
-                        "createdAt": 1499767558891,
-                        "modifiedAt": 1499767558918,
-                        "services": {
-                            "md": "/rest/projects/vb2b3d8v91jao331/md"
+            ],
+            "content": [
+                {
+                    "id": "vb2b3d8v91jao331",
+                    "title": "Retail Solution DEMO",
+                    "description": null,
+                    "status": "ENABLED",
+                    "share": "DEMO",
+                    "createdAt": 1499767558891,
+                    "modifiedAt": 1499767558918,
+                    "services": {
+                        "md": "/rest/projects/vb2b3d8v91jao331/md"
+                    },
+                    "links": [
+                        {
+                            "rel": "membership",
+                            "href": "/rest/projects/vb2b3d8v91jao331/members?accountId=00ubfu6dpmnTMIQKs0h7"
                         },
-                        "_links": {
-                            "membership": {
-                                "href": "/rest/projects/vb2b3d8v91jao331/members?accountId=00ubfu6dpmnTMIQKs0h7",
-                                "templated": false
-                            },
-                            "createdBy": {
-                                "href": "/rest/accounts/5DKknL3P6uT3DKhmuprNrU",
-                                "templated": false
-                            },
-                            "md": {
-                                "href": "/rest/projects/vb2b3d8v91jao331/md",
-                                "templated": false
-                            },
-                            "self": {
-                                "href": "/rest/projects/vb2b3d8v91jao331",
-                                "templated": false
-                            },
-                            "members": {
-                                "href": "/rest/projects/vb2b3d8v91jao331/members",
-                                "templated": false
-                            }
+                        {
+                            "rel": "createdBy",
+                            "href": "/rest/accounts/5DKknL3P6uT3DKhmuprNrU"
+                        },
+                        {
+                            "rel": "md",
+                            "href": "/rest/projects/vb2b3d8v91jao331/md"
+                        },
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/vb2b3d8v91jao331"
+                        },
+                        {
+                            "rel": "members",
+                            "href": "/rest/projects/vb2b3d8v91jao331/members"
                         }
-                    }
-                ]
-            },
+                    ]
+                }
+            ],
             "page": {
                 "size": 20,
                 "totalElements": 1,

@@ -635,7 +635,7 @@ Resource return only those projects where the authenticated user is a member.
     + size = `20` (optional, number)
     + page = `0` (optional, number)
     + sort = `null` (optional, string, `title`)
-    + share: `demo` (enum[String],optional)
+    + share (enum[String],optional)
         Filter project list by `share` attribute.
         + Members
             + `dimension`
@@ -651,7 +651,7 @@ Resource return only those projects where the authenticated user is a member.
     
             Authorization: Bearer {{accessToken}}
 
-+ Response 200 (application/hal+json)
++ Response 200
 
         {
             "_links": {

@@ -444,24 +444,6 @@ Both these preferences are used by CleverAnalytics Client JavaScript application
 #### Security
 User is allowed to read and change only it's own preferences. It means that Bearer token must match {accountId}
 
-### Get account preferences [GET]
-
-+ Parameters
-    + accountId: `DUMxzJ6cMxe4wJRXmFgf` (string) id of the user
-
-+ Request (application/json)
-
-    + Headers
-    
-            Authorization: Bearer {{accessToken}}
-
-+ Response 200
-        
-        {
-            "language": "cs",
-            "lastActiveProject": "/rest/projects/ncesksvg7rjeri7v"
-        }
-
 
 ### Change preferences [PUT]
 Updates the preferences by merge. If some of preference keys is not present, value of this key is NOT reset but only given keys are updated.

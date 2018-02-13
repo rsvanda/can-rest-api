@@ -1,0 +1,20 @@
+{
+  "name": "can-rest-api",
+  "version": "1.0.0",
+  "description": "CleverAnalytics API Blueprint",
+  "main": "apiary.apib",
+  "scripts": {
+    "preview": "aglio --input apiary.apib --server",
+    "preview-wide": "npm run preview -- --theme-template triple"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jirizaloudek/can-rest-api.git"
+  },
+  "author": "CleverAnalytics",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jirizaloudek/can-rest-api/issues"
+  },
+  "homepage": "https://cleveranalytics.docs.apiary.io/"
+}

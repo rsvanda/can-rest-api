@@ -601,7 +601,7 @@ Resource return only those projects where the authenticated user is a member.
 + Parameters
     + size = `20` (optional, number)
     + page = `0` (optional, number)
-    + sort = `null` (optional, string, `title`)
+    + sort: `title` (string, optional)
     + share (enum[String],optional)
         Filter project list by `share` attribute.
         + Members
@@ -876,6 +876,7 @@ Restricted to *ADMIN* project role.
     + Headers
     
             Authorization: Bearer {{accessToken}}
+            Accept: application/json
 
 + Response 200 (application/json)
 
@@ -939,9 +940,9 @@ Restricted to *ADMIN* project role.
             "status": "ENABLED",
         }
 
+## Membership [/rest/projects/{projectId}/members/{membershipId}]
 
-## Membership by accountId [/rest/projects/{projectId}/members{?accountId,expand}]
-### Get Membership by AccountId [GET]
+### Get Membership by AccountId [GET /rest/projects/{projectId}/members{?accountId,expand}]
 Get membership for given project and accountId
 
 #### Security
@@ -985,13 +986,23 @@ Restricted to *ADMIN* project role or is allowed when *accountId* corresponds wi
             ]
         }
 
-## Membership [/rest/projects/{projectId}/members/{membership}]
 ### Get Membership by Id [GET]
 Get detail of user membership in project
 
 #### Security
 Restricted to *ADMIN* project role. 
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) The ID of the actual project
+    + membershipId: `hcdjbj20rboo7go2` (string) The ID of a record in members table
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Bearer {{accessToken}}
+            Accept: application/json            
+            
 + Response 200 (application/json)
 
         {
@@ -1090,16 +1101,18 @@ Get list of project invitations.
 Restricted to *ADMIN* project role.
 
 + Parameters 
-    + status = `ACCEPTED` (optional, string)
-    + size = `20` (optional, number)
-    + page = `0` (optional, number)
-    + sort = `null` (optional, string, `role`)
+    + projectId: `vb2b3d8v91jao331` (string) The ID of the actual project
+    + status = `ACCEPTED` (string, optional)
+    + size = `20` (number, optional)
+    + page = `0` (number, optional)
+    + sort (string, optional)
 
 + Request (application/json)
 
     + Headers
     
             Authorization: Bearer {{accessToken}}
+            Accept: application/json
 
 + Response 200 (application/json)
 

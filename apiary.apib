@@ -1214,7 +1214,7 @@ Restricted to *ADMIN* project role.
             ]
         }
 
-### Get Invitation [GET /rest/projects/{projectId}/invitations/{invitation}]
+### Get Invitation [GET /rest/projects/{projectId}/invitations/{invitationId}]
 Get detail of an invitation. An invitation status value is one of:
 * PENDING
 * ACCEPTED
@@ -1224,11 +1224,16 @@ Get detail of an invitation. An invitation status value is one of:
 #### Security
 Restricted to *ADMIN* project role.
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + invitationId: `aH2b62AIqwNswG5VMlye` (string) - The ID of an actual invitation
+
 + Request (application/json)
 
     + Headers
     
             Authorization: Bearer {{accessToken}}
+            Accept: application/json
 
 + Response 200 (application/json)
 

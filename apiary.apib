@@ -733,7 +733,7 @@ Get project by given project *id*.
 Accees is restricted only to users that are members of given project.
 
 + Parameters 
-    + projectId: `vb2b3d8v91jao331` (string) The ID of an actual project
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
     + expand: `membership` (enum[String], optional)
         Expand selected attribute(s) to minimalize roundtrips.
         + Members
@@ -863,7 +863,7 @@ The membership is a relation between Account and Project and Project Role. The r
 Restricted to *ADMIN* project role.
 
 + Parameters 
-    + projectId: `vb2b3d8v91jao331` (string) The ID of an actual project
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
     + size = `20` (optional, number)
     + page = `0` (optional, number)
     + sort = `null` (optional, string, `role`)
@@ -950,7 +950,7 @@ Get membership for given project and accountId
 Restricted to *ADMIN* project role or is allowed when *accountId* corresponds with authenticated user. 
 
 + Parameters 
-    + projectId: `vb2b3d8v91jao331` (string) The ID of an actual project
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
     + accountId: `DUMxzJ6cMxe4wJRXmFgf` (String, optional) id of user account to get
     + expand: `account` (enum[String], optional)
         Expand selected attribute(s) to minimalize roundtrips.
@@ -994,8 +994,8 @@ Get detail of user membership in project
 Restricted to *ADMIN* project role. 
 
 + Parameters
-    + projectId: `vb2b3d8v91jao331` (string) The ID of the actual project
-    + membershipId: `hcdjbj20rboo7go2` (string) The ID of a record in members table
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of the actual project
+    + membershipId: `hcdjbj20rboo7go2` (string) - The ID of a record in members table
 
 + Request (application/json)
 
@@ -1106,7 +1106,7 @@ Get list of project invitations.
 Restricted to *ADMIN* project role.
 
 + Parameters 
-    + projectId: `vb2b3d8v91jao331` (string) The ID of the actual project
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of the actual project
     + status = `ACCEPTED` (string, optional)
     + size = `20` (number, optional)
     + page = `0` (number, optional)
@@ -1475,16 +1475,21 @@ Restricted to invited user. Authenticated user email must equals to email in the
             ]
         }
 
+
 # Group Search
-## Search [/rest/projects/{projectId}/search{?query}{?dataset}{?size}{?page}]
+
+## Search [/rest/projects/{projectId}/search{?query}{&dataset}{&size}{&page}]
+
 ### Search [GET] 
+
 Full text search on all internal project data.
 The search searvice indexes `title` and `subtitle` of all geometry datasets (`geometryPoint`, `geometryLine`, `geometryPolygon`).
 The dataset's objects are indexed during dataset pull job. It means that if the `title` or `subtitle` definition is changed in dataset's metadata definition, the affected dataset must be loaded again by dataset pull full load process.
 
 + Parameters 
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
     + query: `Birmingham` (string) - Query search phrase. It is split into terms and the resource return dataset's object that contains all terms in their `title` or `subtitle`. 
-    + dataset (optional, string[]) - Search only in given dataset. If the parameter present, only the search results of given datasets are returned.       Parameter can be repeated, e.g. `&dataset=orders&dataset=customers`
+    + dataset: `district` (optional, string[]) - Search only in given dataset. If the parameter present, only the search results of given datasets are returned.       Parameter can be repeated, e.g. `&dataset=orders&dataset=customers`
     + size = `20` (optional, number)
     + page = `0` (optional, number)
     

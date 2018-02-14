@@ -725,6 +725,7 @@ Create a new project and set the authenticated user as the project member in *AD
         }
 
 ## Project [/rest/projects/{projectId}{?expand}]
+
 ### Get Project [GET]
 Get project by given project *id*. 
 
@@ -1093,7 +1094,11 @@ Restricted to *ADMIN* project role.
 
 + Response 204 (application/json)
 
-## Invitations [/rest/projects/{projectId}/invitations{?status,size,page,sort}]
+## Project Invitations [/rest/projects/{projectId}/invitations{?status,size,page,sort}]
+
+These endpoints work with invitations to a project. If you want to work with an actual 
+invitation hash, see the [User Invitations group](#user-invitations)
+
 ### List Invitations [GET]
 Get list of project invitations. 
 
@@ -1209,8 +1214,7 @@ Restricted to *ADMIN* project role.
             ]
         }
 
-## Invitation [/rest/projects/{projectId}/invitations/{invitation}]
-### Get Invitation [GET]
+### Get Invitation [GET /rest/projects/{projectId}/invitations/{invitation}]
 Get detail of an invitation. An invitation status value is one of:
 * PENDING
 * ACCEPTED
@@ -1255,7 +1259,8 @@ Restricted to *ADMIN* project role.
             ]
         }
 
-### Update Invitation [PUT]
+### Update Invitation [PUT /rest/projects/{projectId}/invitations/{invitation}]
+
 Cancel or resend project invitation. If an invitation has status PENDING, project Admin can cancel it.
 If the invitation has status CANCELED, EXPIRED or PENDING, user can activate it or resend the invivation email by PUTing the status PENDING.
 
@@ -1361,8 +1366,12 @@ Restricted to *ADMIN* project role.
             ]
         }
 
-## Invitation [/rest/invitations/{invitationHash}]
-### Get Invitation [GET]
+# Group User Invitations
+
+## User Invitation [/rest/invitations/{invitationHash}]
+
+### Get User Invitation [GET]
+
 Get detail of an invitation. An invitation status value is one of:
 * PENDING
 * ACCEPTED
@@ -1408,7 +1417,9 @@ Get detail of an invitation. An invitation status value is one of:
             ]
         }
 
-### Accept Invitation [POST]
+
+### Accept User Invitation [POST]
+
 This resource allows accepting an invitation by an invited user.
 The URL cointains a secret invitationHash that is sent to the invited user by email. 
 By clicking on the href link from invitation email, the user is redirected into CleverAnalytics application and after authentication is the invitation accepted.

@@ -1478,7 +1478,7 @@ Restricted to invited user. Authenticated user email must equals to email in the
 
 # Group Search
 
-## Search [/rest/projects/{projectId}/search{?query}{&dataset}{&size}{&page}]
+## Search [/rest/projects/{projectId}/search{?query,dataset,size,page}]
 
 ### Search [GET] 
 
@@ -1965,16 +1965,18 @@ This endpoint checks the relations from data model and lists only the available 
         }        
 
 ## DWH Values Distribution [/rest/projects/{projectId}/dwh/valuesDistribution{?property,buckets,min,max}]
+
 ### Values Distribution [GET] 
-Computes distribution (frequency) of given fact (numeric dataset property). Result is splitted into required number of equal size buckets. The frequency is the count of occurencies of given metric in these buckets.
+
+Computes distribution (frequency) of given fact (numeric dataset property). Result is splitted into required 
+number of equal size buckets. The frequency is the count of occurencies of given metric in these buckets.
 
 + Parameters 
-    + property: `baskets.amount` (required, string)
-    + buckets = `20` (optional, number)
-    + min (optional, number)
-        Set minimal value for distribution. By default it is a minimal value for the property.
-    + max (optional, number)
-        Set maximal value for distribution. By default it is a maximal value for the property.
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + property: `baskets.amount` (required, string) - The name of a property
+    + buckets: `3` (optional, number) - Number of buckets to split results into
+    + min (optional, number) - Set minimal value for distribution. By default it is a minimal value for the property.
+    + max (optional, number) - Set maximal value for distribution. By default it is a maximal value for the property.
 
 + Request (application/json)
 
@@ -1987,34 +1989,31 @@ Computes distribution (frequency) of given fact (numeric dataset property). Resu
         {
             "content": [
                  {
-                    "bucket": 1,
                     "min": 100,
                     "max": 200,
                     "content": [
                         {
-                            "propertyId" : "turnover"
+                            "propertyId" : "turnover",
                             "frequency": 84
                         }
                     ]
                 },
                 {
-                    "bucket": 2,
                     "min": 200,
                     "max": 300,
                     "content": [
                         {
-                            "propertyId" : "turnover"
+                            "propertyId" : "turnover",
                             "frequency": null
                         }
                     ]
                 },
                 {
-                    "bucket": 3,
                     "min": 300,
                     "max": 400,
                     "content": [
                         {
-                            "propertyId" : "turnover"
+                            "propertyId" : "turnover",
                             "frequency": 12
                         }
                     ]

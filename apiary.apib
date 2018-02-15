@@ -3606,7 +3606,7 @@ Returns paged collection of all Datasets in a project.
                     "name": "baskets",
                     "type": "dataset",
                     "title": "Baskets",
-                    "origin": "https://staging.cleveranalytics.com/rest/projects/vb2b3d8v91jao331/md/datasets?name=baskets",
+                    "origin": "https://secure.cleveranalytics.com/rest/projects/vb2b3d8v91jao331/md/datasets?name=baskets",
                     "properties": {},
                     "ref": {
                         "subtype": "basic",
@@ -3655,7 +3655,7 @@ Returns paged collection of all Datasets in a project.
                     "name": "clients",
                     "type": "dataset",
                     "title": "Clients",
-                    "origin": "https://staging.cleveranalytics.com/rest/projects/vb2b3d8v91jao331/md/datasets?name=clients",
+                    "origin": "https://secure.cleveranalytics.com/rest/projects/vb2b3d8v91jao331/md/datasets?name=clients",
                     "properties": {
                         "featureTitle": {
                             "type": "property",
@@ -3700,7 +3700,273 @@ Returns paged collection of all Datasets in a project.
                 "number": 0
             }
         }
+
+
+### Get Dataset by id [GET /rest/projects/{projectId}/md/datasets/{datasetId}]
+Returns Dataset with given *id*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + datasetId: `n2ma1svl5o5oihrc` (string) - Id of the dataset
+
++ Request
+
+    + Headers
     
+            Accept: application/json
+            Authorization: Bearer {{accessToken}}
+
++ Response 200 (application/json)
+
+        {
+            "id": "n2ma1svl5o5oihrc",
+            "name": "baskets",
+            "type": "dataset",
+            "title": "Baskets",
+            "origin": "https://secure.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=baskets",
+            "properties": {
+                "featureTitle": {
+                    "type": "property",
+                    "value": "basket_id"
+                },
+                "featureAttributes": []
+            },
+            "ref": {
+                "subtype": "basic",
+                "type": "dwh",
+                "table": "baskets",
+                "primaryKey": "basket_id",
+                "properties": [
+                    {
+                        "filterable": true,
+                        "name": "date_iso",
+                        "title": "Date ISO",
+                        "column": "date_iso",
+                        "type": "string",
+                        "foreignKey": "dim_dates"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "shop_id",
+                        "title": "Shop ID",
+                        "column": "shop_id",
+                        "type": "integer",
+                        "foreignKey": "shops"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "client_id",
+                        "title": "Client ID",
+                        "column": "client_id",
+                        "type": "integer",
+                        "foreignKey": "clients"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "amount",
+                        "title": "Purchase value",
+                        "column": "amount",
+                        "type": "double"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "month",
+                        "title": "Month",
+                        "column": "month",
+                        "type": "integer"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "on_off_name",
+                        "title": "Channel",
+                        "column": "on_off_name",
+                        "type": "string"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "action_turnover",
+                        "title": "Action turnover",
+                        "column": "action_turnover",
+                        "type": "double"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "courier",
+                        "title": "Delivery type",
+                        "column": "courier",
+                        "type": "string"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "value_cat",
+                        "title": "Item value category",
+                        "column": "value_cat",
+                        "type": "integer"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "value_name",
+                        "title": "Item value name",
+                        "column": "value_name",
+                        "type": "string"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "basket_id",
+                        "title": "Basket ID",
+                        "column": "basket_id",
+                        "type": "integer"
+                    }
+                ]
+            },
+            "accessInfo": {
+                "createdAt": "2018-01-25T15:30:05Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/datasets/n2ma1svl5o5oihrc"
+                }
+            ]
+        }
+
+### Get Dataset by name [GET /rest/projects/{projectId}/md/datasets{?name}]
+Returns Dataset with given *name*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + name: `baskets` (string) - Name of the dataset
+
+
++ Request
+
+    + Headers
+    
+            Accept: application/json
+            Authorization: Bearer {{accessToken}}
+
++ Response 200 (application/json)
+
+        {
+            "id": "n2ma1svl5o5oihrc",
+            "name": "baskets",
+            "type": "dataset",
+            "title": "Baskets",
+            "origin": "https://secure.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=baskets",
+            "properties": {
+                "featureTitle": {
+                    "type": "property",
+                    "value": "basket_id"
+                },
+                "featureAttributes": []
+            },
+            "ref": {
+                "subtype": "basic",
+                "type": "dwh",
+                "table": "baskets",
+                "primaryKey": "basket_id",
+                "properties": [
+                    {
+                        "filterable": true,
+                        "name": "date_iso",
+                        "title": "Date ISO",
+                        "column": "date_iso",
+                        "type": "string",
+                        "foreignKey": "dim_dates"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "shop_id",
+                        "title": "Shop ID",
+                        "column": "shop_id",
+                        "type": "integer",
+                        "foreignKey": "shops"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "client_id",
+                        "title": "Client ID",
+                        "column": "client_id",
+                        "type": "integer",
+                        "foreignKey": "clients"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "amount",
+                        "title": "Purchase value",
+                        "column": "amount",
+                        "type": "double"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "month",
+                        "title": "Month",
+                        "column": "month",
+                        "type": "integer"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "on_off_name",
+                        "title": "Channel",
+                        "column": "on_off_name",
+                        "type": "string"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "action_turnover",
+                        "title": "Action turnover",
+                        "column": "action_turnover",
+                        "type": "double"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "courier",
+                        "title": "Delivery type",
+                        "column": "courier",
+                        "type": "string"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "value_cat",
+                        "title": "Item value category",
+                        "column": "value_cat",
+                        "type": "integer"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "value_name",
+                        "title": "Item value name",
+                        "column": "value_name",
+                        "type": "string"
+                    },
+                    {
+                        "filterable": true,
+                        "name": "basket_id",
+                        "title": "Basket ID",
+                        "column": "basket_id",
+                        "type": "integer"
+                    }
+                ]
+            },
+            "accessInfo": {
+                "createdAt": "2018-01-25T15:30:05Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/kt3hz932v53vabh8/md/datasets/n2ma1svl5o5oihrc"
+                }
+            ]
+        }
+   
 
 ### Create Dataset [POST]
 Creates new Dataset.
@@ -3726,7 +3992,7 @@ Restricted to *EDITOR* project role that has the permission to update metadata o
                 "name": "baskets",
                 "type": "dataset",
                 "title": "Baskets",
-                "origin": "https://staging.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=baskets",
+                "origin": "https://secure.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=baskets",
                 "ref": {
                     "type": "dwh",
                     "subtype": "basic",
@@ -3789,7 +4055,7 @@ Restricted to *EDITOR* project role that has the permission to update metadata o
             "name": "baskets",
             "type": "dataset",
             "title": "Baskets",
-            "origin": "https://staging.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=baskets",
+            "origin": "https://secure.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=baskets",
             "ref": {
                 "subtype": "basic",
                 "type": "dwh",
@@ -3853,38 +4119,6 @@ Restricted to *EDITOR* project role that has the permission to update metadata o
                 }
             ]
         }
-
-### Get Dataset by id [GET /rest/projects/{projectId}/md/datasets/{id}]
-Returns Dataset with given *id*.
-
-#### Response statuses
-* 200 - OK
-* 404 - Not Found
-
-+ Request
-
-    + Headers
-    
-            Accept: application/json
-            Authorization: Bearer {{accessToken}}
-
-+ Response 200 (application/json)
-
-### Get Dataset by name [GET /rest/projects/{projectId}/md/datasets?name={name}]
-Returns Dataset with given *name*.
-
-#### Response statuses
-* 200 - OK
-* 404 - Not Found
-
-+ Request
-
-    + Headers
-    
-            Accept: application/json
-            Authorization: Bearer {{accessToken}}
-
-+ Response 200 (application/json)
 
         
 ### Update Dataset [PUT /rest/projects/{projectId}/md/datasets/{id}]

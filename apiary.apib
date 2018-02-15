@@ -3288,6 +3288,110 @@ Data permission object refines data access to specific users on the level of dat
 
 Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/167280805/Data+permissions).
 
+
+### List Data Permissions [GET /rest/projects/{projectId}/md/dataPermissions]
+Returns paged collection of all Data Permissions of all users in a project.
+
+#### Security
+Restricted to *ADMIN* project role that has the permission to update data permissions of the project.
+
+#### Response statuses
+* 200 - OK
+
+// remove comments to enable this endpoint in dredd
+// + Parameters
+//     + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+//     + size (optional, number) - The count of records to return for one page
+//         + Default: `20`
+//     + page (optional, number) - Number of the page
+//         + Default: `0`
+//     + sort: `name,asc` (optional, string) - Name of the attribute to use for sorting the results, together with direction (`asc` or `desc`)
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {{accessToken}}
+
++ Response 200 (application/json)
+
+            {
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dataPermissions?page=0&size=5&sort=id"
+                    }
+                ],
+                "contents": [
+                    {
+                        "id": "b4j3pm51i1hobqfo",
+                        "name": "data_permission_1",
+                        "type": "dataPermission",
+                        "description": "Permission allowing to view only Blue and Yellow store types in Jihomoravský kraj.",
+                        "content": {
+                            "accountId": "00ubfu7fdyIoFKxXm0h7",
+                            "filters": [
+                                {
+                                    "property": "region_dwh.name",
+                                    "value": "Jihomoravský kraj",
+                                    "operator": "eq"
+                                },
+                                {
+                                    "property": "store_dwh.type",
+                                    "value": [
+                                        "blue",
+                                        "yellow"
+                                    ],
+                                    "operator": "in"
+                                }
+                            ]
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T12:57:34Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dataPermissions/b4j3pm51i1hobqfo"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "eb7edn1s5ns54v8q",
+                        "name": "data_permission_2",
+                        "type": "dataPermission",
+                        "description": "Permission allowing to view only stores in Kraj Vysočina.",
+                        "content": {
+                            "accountId": "00ubpo9fouIoSKxpX0h6",
+                            "filters": [
+                                {
+                                    "property": "region_dwh.name",
+                                    "value": "Kraj Vysočina",
+                                    "operator": "eq"
+                                }
+                            ]
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T13:00:58Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dataPermissions/eb7edn1s5ns54v8q"
+                            }
+                        ]
+                    }
+                ],
+                "page": {
+                    "size": 5,
+                    "totalElements": 2,
+                    "totalPages": 1,
+                    "number": 0
+                }
+            }
+
+
 ### Create Data Permission [POST]
 Creates new Data Permission.
 
@@ -3407,98 +3511,6 @@ Returns Data Permission object of a user with specified *accountId*.
 
 + Response 200 (application/json)
 
-### Get Data Permissions [GET /rest/projects/{projectId}/md/dataPermissions]
-Returns paged collection of all Data Permissions of all users in a project.
-
-#### Security
-Restricted to *ADMIN* project role that has the permission to update data permissions of the project.
-
-#### Response statuses
-* 200 - OK
-
-+ Request
-
-    + Headers
-
-            Accept: application/json
-            Authorization: Bearer {{accessToken}}
-
-+ Response 200 (application/json)
-
-            {
-                "links": [
-                    {
-                        "rel": "self",
-                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dataPermissions?page=0&size=5&sort=id"
-                    }
-                ],
-                "content": [
-                    {
-                        "id": "b4j3pm51i1hobqfo",
-                        "name": "data_permission_1",
-                        "type": "dataPermission",
-                        "description": "Permission allowing to view only Blue and Yellow store types in Jihomoravský kraj.",
-                        "content": {
-                            "accountId": "00ubfu7fdyIoFKxXm0h7",
-                            "filters": [
-                                {
-                                    "property": "region_dwh.name",
-                                    "value": "Jihomoravský kraj",
-                                    "operator": "eq"
-                                },
-                                {
-                                    "property": "store_dwh.type",
-                                    "value": [
-                                        "blue",
-                                        "yellow"
-                                    ],
-                                    "operator": "in"
-                                }
-                            ]
-                        },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T12:57:34Z"
-                        },
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dataPermissions/b4j3pm51i1hobqfo"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "eb7edn1s5ns54v8q",
-                        "name": "data_permission_2",
-                        "type": "dataPermission",
-                        "description": "Permission allowing to view only stores in Kraj Vysočina.",
-                        "content": {
-                            "accountId": "00ubpo9fouIoSKxpX0h6",
-                            "filters": [
-                                {
-                                    "property": "region_dwh.name",
-                                    "value": "Kraj Vysočina",
-                                    "operator": "eq"
-                                }
-                            ]
-                        },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T13:00:58Z"
-                        },
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dataPermissions/eb7edn1s5ns54v8q"
-                            }
-                        ]
-                    }
-                ],
-                "page": {
-                    "size": 5,
-                    "totalElements": 2,
-                    "totalPages": 1,
-                    "number": 0
-                }
-            }
 
 ### Update Data Permission [PUT /rest/projects/{projectId}/md/dataPermissions/{id}]
 Updates Data Permission with given *id*.

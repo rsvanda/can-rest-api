@@ -3562,6 +3562,146 @@ Datasets describe the data model of the project. They also define constraints an
 
 Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/120336529/Datasets).
 
+
+### List Datasets [GET /rest/projects/{projectId}/md/datasets{?type,page,size,sort}] 
+Returns paged collection of all Datasets in a project.
+
+#### Response statuses
+* 200 - OK
+
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + type (optional, enum[string]) - If specified, returns only collection of datasets of given type
+
+        + Members
+            + `dwh`
+            + `vt`
+            + `wfs`
+
+    + size (optional, number) - The count of records to return for one page
+        + Default: `20`
+    + page (optional, number) - Number of the page
+        + Default: `0`
+    + sort: `name,asc` (optional, string) - Name of the attribute to use for sorting the results, together with direction (`asc` or `desc`)
+
++ Request
+
+    + Headers
+    
+            Accept: application/json
+            Authorization: Bearer {{accessToken}}
+
++ Response 200 (application/json)
+
+        {
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/datasets?page=0&size=5&sort=id"
+                }
+            ],
+            "content": [
+                {
+                    "id": "g2per4det10dta2r",
+                    "name": "baskets",
+                    "type": "dataset",
+                    "title": "Baskets",
+                    "origin": "https://staging.cleveranalytics.com/rest/projects/vb2b3d8v91jao331/md/datasets?name=baskets",
+                    "properties": {},
+                    "ref": {
+                        "subtype": "basic",
+                        "type": "dwh",
+                        "table": "baskets",
+                        "primaryKey": "basket_id",
+                        "properties": [
+                            {
+                                "name": "amount",
+                                "title": "Amount",
+                                "column": "amount",
+                                "type": "double"
+                            },
+                            {
+                                "name": "on_off_name",
+                                "title": "Channel (online/offline)",
+                                "column": "on_off_name",
+                                "type": "string"
+                            },
+                            {
+                                "name": "value_name",
+                                "title": "Item value name",
+                                "column": "value_name",
+                                "type": "string"
+                            },
+                            {
+                                "name": "basket_id",
+                                "title": "Basket ID",
+                                "column": "basket_id",
+                                "type": "integer"
+                            }
+                        ]
+                    },
+                    "accessInfo": {
+                        "createdAt": "2017-10-17T13:28:48Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/vb2b3d8v91jao331/md/datasets/g2per4det10dta2r"
+                        }
+                    ]
+                },
+                {
+                    "id": "hb8ugmblksj0p0go",
+                    "name": "clients",
+                    "type": "dataset",
+                    "title": "Clients",
+                    "origin": "https://staging.cleveranalytics.com/rest/projects/vb2b3d8v91jao331/md/datasets?name=clients",
+                    "properties": {
+                        "featureTitle": {
+                            "type": "property",
+                            "value": "client_id"
+                        }
+                    },
+                    "ref": {
+                        "subtype": "basic",
+                        "type": "dwh",
+                        "table": "clients",
+                        "primaryKey": "client_id",
+                        "properties": [
+                            {
+                                "name": "client_id",
+                                "title": "Client ID",
+                                "column": "client_id",
+                                "type": "integer"
+                            },
+                            {
+                                "name": "postcode",
+                                "title": "postcode",
+                                "column": "postcode",
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "accessInfo": {
+                        "createdAt": "2017-10-17T14:21:43Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/vb2b3d8v91jao331/md/datasets/hb8ugmblksj0p0go"
+                        }
+                    ]
+                }
+            ],
+            "page": {
+                "size": 5,
+                "totalElements": 2,
+                "totalPages": 1,
+                "number": 0
+            }
+        }
+    
+
 ### Create Dataset [POST]
 Creates new Dataset.
 
@@ -3746,132 +3886,6 @@ Returns Dataset with given *name*.
 
 + Response 200 (application/json)
 
-### Get Datasets [GET /rest/projects/{projectId}/md/datasets?type={type}] 
-Returns paged collection of all Datasets in a project.
-
-Contains request parameter *type*, which if specified, returns only collection of datasets of given type. 
-Available types are `dwh`, `vt`, `wfs`.
-
-#### Response statuses
-* 200 - OK
-
-+ Request
-
-    + Headers
-    
-            Accept: application/json
-            Authorization: Bearer {{accessToken}}
-
-+ Response 200 (application/json)
-
-        {
-            "links": [
-                {
-                    "rel": "self",
-                    "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/datasets?page=0&size=5&sort=id"
-                }
-            ],
-            "content": [
-                {
-                    "id": "g2per4det10dta2r",
-                    "name": "baskets",
-                    "type": "dataset",
-                    "title": "Baskets",
-                    "origin": "https://staging.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=baskets",
-                    "properties": {},
-                    "ref": {
-                        "subtype": "basic",
-                        "type": "dwh",
-                        "table": "baskets",
-                        "primaryKey": "basket_id",
-                        "properties": [
-                            {
-                                "name": "amount",
-                                "title": "Amount",
-                                "column": "amount",
-                                "type": "double"
-                            },
-                            {
-                                "name": "on_off_name",
-                                "title": "Channel (online/offline)",
-                                "column": "on_off_name",
-                                "type": "string"
-                            },
-                            {
-                                "name": "value_name",
-                                "title": "Item value name",
-                                "column": "value_name",
-                                "type": "string"
-                            },
-                            {
-                                "name": "basket_id",
-                                "title": "Basket ID",
-                                "column": "basket_id",
-                                "type": "integer"
-                            }
-                        ]
-                    },
-                    "accessInfo": {
-                        "createdAt": "2017-10-17T13:28:48Z"
-                    },
-                    "links": [
-                        {
-                            "rel": "self",
-                            "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/datasets/g2per4det10dta2r"
-                        }
-                    ]
-                },
-                {
-                    "id": "hb8ugmblksj0p0go",
-                    "name": "clients",
-                    "type": "dataset",
-                    "title": "Clients",
-                    "origin": "https://staging.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=clients",
-                    "properties": {
-                        "featureTitle": {
-                            "type": "property",
-                            "value": "client_id"
-                        }
-                    },
-                    "ref": {
-                        "subtype": "basic",
-                        "type": "dwh",
-                        "table": "clients",
-                        "primaryKey": "client_id",
-                        "properties": [
-                            {
-                                "name": "client_id",
-                                "title": "Client ID",
-                                "column": "client_id",
-                                "type": "integer"
-                            },
-                            {
-                                "name": "postcode",
-                                "title": "postcode",
-                                "column": "postcode",
-                                "type": "string"
-                            }
-                        ]
-                    },
-                    "accessInfo": {
-                        "createdAt": "2017-10-17T14:21:43Z"
-                    },
-                    "links": [
-                        {
-                            "rel": "self",
-                            "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/datasets/hb8ugmblksj0p0go"
-                        }
-                    ]
-                }
-            ],
-            "page": {
-                "size": 5,
-                "totalElements": 2,
-                "totalPages": 1,
-                "number": 0
-            }
-        }
-    
         
 ### Update Dataset [PUT /rest/projects/{projectId}/md/datasets/{id}]
 Updates Dataset with given *id*.

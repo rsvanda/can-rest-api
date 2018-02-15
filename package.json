@@ -4,7 +4,7 @@
   "description": "CleverAnalytics API Blueprint",
   "main": "apiary.apib",
   "scripts": {
-    "preview": "aglio --input apiary.apib --server",
+    "preview": "aglio --input apiary.apib --server --no-theme-condense-nav",
     "preview-wide": "npm run preview -- --theme-template triple"
   },
   "repository": {

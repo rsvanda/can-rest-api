@@ -2195,24 +2195,35 @@ Returns:
         
 
 ## Property Values [/rest/projects/{projectId}/dwh/values{?property,filter,size,page,direction,orderBy}]
+
 ### Get Property Values [GET]
+
 Gets list of distinct values of given dataset's property. The property is set by mandatory parameter `property`. 
 The distinct values are returned as pageable response.
 By default, the values are ordered ascending by the property value. Optionaly the direction can be changed and the values can be sorted by another propety (eg. sort day of week by day id instead of day name).
 
 + Parameters 
-    + property: `baskets.courier` (required, string)
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + property: `baskets.courier` (required, string) - Name of the property
     + filter (optional, string)
-    + size = `200` (optional, number)
-    + page = `0` (optional, number)
-    + direction = `asc` (optional, string, `asc` or `desc`)
-    + orderBy = null (optional, string)
+    + size (optional, number) - The count of distinct values to get
+        + Default: `200`
+    + page (optional, number)
+        + Default: `0`
+    + direction (optional, enum[string])
+
+        + Members:
+            + `asc`
+            + `desc`
+
+    + orderBy (optional, string)
     
 + Request (application/json)
 
     + Headers
     
             Authorization: Bearer {{accessToken}}
+            Accept: application/json
 
 + Response 200 (application/json)
 

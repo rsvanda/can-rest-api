@@ -4168,7 +4168,7 @@ Restricted to *EDITOR* project role that has the permission to delete metadata o
 This read-only resource contains all own properties of a Dataset, as well as all DWH properties linked through Dataset's foreign key properties.
 It is used to create a list of available filters, sorted into categories.
 
-### Get Dataset Properties List [GET /rest/projects/{projectId}/md/datasetProperties{?dataset}{?properties}] 
+### Get Dataset Properties List [GET /rest/projects/{projectId}/md/datasetProperties{?dataset,properties}] 
 Returns a list of all DWH properties of given *dataset*.
 
 #### Response statuses
@@ -4177,6 +4177,7 @@ Returns a list of all DWH properties of given *dataset*.
 * 404 - Not Found - Dataset with given name was not found
 
 + Parameters 
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
     + dataset (optional, string) - return properties of that dataset
     + properties (enum[String], optional)
         Specifies if only properties marked as filterable, or all properties should be included.
@@ -4185,7 +4186,7 @@ Returns a list of all DWH properties of given *dataset*.
             + `filterable` - returns only properties marked as filterable
 
 
-+ Request dataset
++ Request Fetching properties of a single dataset
 
     + Headers
     
@@ -4194,122 +4195,169 @@ Returns a list of all DWH properties of given *dataset*.
             
     + Parameters
 
-        + dataset: orders_dwh
+        + dataset: `baskets`
 
 + Response 200 (application/json)
 
         {
-            "dataset": "orders_dwh",
-            "listedProperties": "filterable",
+            "dataset": "baskets",
+            "listedProperties": "all",
             "ownProperties": [
                 {
                     "filterable": true,
-                    "name": "id",
-                    "title": "Order ID",
-                    "column": "id",
-                    "type": "integer"
+                    "name": "date_iso",
+                    "title": "Date ISO",
+                    "column": "date_iso",
+                    "type": "string",
+                    "foreignKey": "dim_dates"
                 },
                 {
                     "filterable": true,
-                    "name": "id_user",
-                    "title": "Customer ID",
-                    "column": "id_user",
-                    "type": "integer"
+                    "name": "shop_id",
+                    "title": "Shop ID",
+                    "column": "shop_id",
+                    "type": "integer",
+                    "foreignKey": "shops"
                 },
                 {
                     "filterable": true,
-                    "foreignKey": "dim_dates",
-                    "name": "date",
-                    "title": "Order time",
-                    "column": "date",
-                    "type": "string"
+                    "name": "client_id",
+                    "title": "Client ID",
+                    "column": "client_id",
+                    "type": "integer",
+                    "foreignKey": "clients"
                 },
                 {
                     "filterable": true,
-                    "name": "price",
-                    "title": "Order size",
-                    "column": "price",
+                    "name": "amount",
+                    "title": "Purchase value",
+                    "column": "amount",
                     "type": "double"
                 },
                 {
                     "filterable": true,
-                    "name": "delay",
-                    "title": "Order delay",
-                    "column": "delay",
+                    "name": "month",
+                    "title": "Month",
+                    "column": "month",
                     "type": "integer"
                 },
                 {
                     "filterable": true,
-                    "name": "city",
-                    "title": "City",
-                    "column": "city",
+                    "name": "on_off_name",
+                    "title": "Channel",
+                    "column": "on_off_name",
                     "type": "string"
                 },
                 {
                     "filterable": true,
-                    "foreignKey": "zsj_d_dwh",
-                    "name": "kod_zsj_d",
-                    "title": "Order location",
-                    "column": "kod_zsj_d",
+                    "name": "courier",
+                    "title": "Delivery type",
+                    "column": "courier",
                     "type": "string"
                 }
             ],
             "linkedProperties": [
                 {
-                    "foreignKeyTitle": "Order time",
+                    "foreignKeyTitle": "Date ISO",
                     "properties": [
                         {
-                            "dataset": "dim_dates_year",
-                            "filterable": true,
-                            "name": "year_name",
-                            "title": "Year",
-                            "column": "year_name",
-                            "type": "string"
+                            "dataset": "dim_dates",
+                            "name": "date_iso",
+                            "title": "date_iso",
+                            "column": "date_iso",
+                            "type": "string",
+                            "filterable": true
                         },
                         {
-                            "dataset": "dim_dates_month",
-                            "filterable": true,
-                            "name": "month_name_en",
-                            "title": "Month",
-                            "column": "month_name_en",
-                            "type": "string"
+                            "dataset": "dim_dates",
+                            "name": "day_of_month",
+                            "title": "day_of_month",
+                            "column": "day_of_month",
+                            "type": "integer",
+                            "filterable": true
                         },
                         {
-                            "dataset": "dim_dates_week",
-                            "filterable": true,
-                            "name": "week_name",
-                            "title": "Day of week",
-                            "column": "week_name",
-                            "type": "string"
+                            "dataset": "dim_dates",
+                            "name": "day_of_quarter",
+                            "title": "day_of_quarter",
+                            "column": "day_of_quarter",
+                            "type": "integer",
+                            "filterable": true
+                        },
+                        {
+                            "dataset": "dim_dates",
+                            "name": "day_of_year",
+                            "title": "day_of_year",
+                            "column": "day_of_year",
+                            "type": "integer",
+                            "filterable": true
                         }
                     ]
                 },
                 {
-                    "foreignKeyTitle": "Order location",
+                    "foreignKeyTitle": "Shop ID",
                     "properties": [
                         {
-                            "dataset": "zsj_d_dwh",
-                            "filterable": true,
-                            "name": "kod_zsj_d",
-                            "title": "Basic administrative unit",
-                            "column": "kod_zsj_d",
-                            "type": "string"
+                            "dataset": "shops",
+                            "name": "shop_id",
+                            "title": "Shop ID",
+                            "column": "shop_id",
+                            "type": "integer",
+                            "filterable": true
                         },
                         {
-                            "dataset": "municipality_dwh",
-                            "filterable": true,
-                            "name": "municipality",
-                            "title": "Municipality",
-                            "column": "municipality",
-                            "type": "string"
+                            "dataset": "shops",
+                            "name": "name",
+                            "title": "Name",
+                            "column": "name",
+                            "type": "string",
+                            "filterable": true
                         },
                         {
-                            "dataset": "county_dwh",
-                            "filterable": true,
-                            "name": "county",
-                            "title": "County",
-                            "column": "county",
-                            "type": "string"
+                            "dataset": "shops",
+                            "name": "address",
+                            "title": "Address",
+                            "column": "address",
+                            "type": "string",
+                            "filterable": true
+                        },
+                        {
+                            "dataset": "shops",
+                            "name": "opening_hours",
+                            "title": "Opening hours",
+                            "column": "opening_hours",
+                            "type": "string",
+                            "filterable": true
+                        },
+                        {
+                            "dataset": "shops",
+                            "name": "opening_hours_sun",
+                            "title": "Opening hours (Sun)",
+                            "column": "opening_hours_sun",
+                            "type": "string",
+                            "filterable": true
+                        },
+                        {
+                            "dataset": "shops",
+                            "name": "partner",
+                            "title": "Partner",
+                            "column": "partner",
+                            "type": "integer",
+                            "filterable": true
+                        },
+                        {
+                            "dataset": "shops",
+                            "name": "lat",
+                            "column": "lat",
+                            "type": "latitude",
+                            "filterable": true
+                        },
+                        {
+                            "dataset": "shops",
+                            "name": "lng",
+                            "column": "lng",
+                            "type": "longitude",
+                            "filterable": true
                         }
                     ]
                 }
@@ -4317,7 +4365,7 @@ Returns a list of all DWH properties of given *dataset*.
         }
 
 
-+ Request allDatasets
++ Request Fetching properties of all dataset
 
     + Headers
     

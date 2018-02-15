@@ -3036,21 +3036,57 @@ Returns Dashboard with given *id*.
 
 + Response 200 (application/json)
 
-### Get Dashboard by name [GET /rest/projects/{projectId}/md/dashboards?name={name}]
-Returns Dashboard with given *name*.
+### Get Dashboard by name [GET /rest/projects/{projectId}/md/dashboards?name={dashboardName}]
+
+Returns Dashboard identified by given *name*.
 
 #### Response statuses
 * 200 - OK
 * 404 - Not Found
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + dashboardName: `catchment_area_dashboard` (string) - The code name of the dashboard
+
 + Request
 
     + Headers
 
-            Accept: application/json
             Authorization: Bearer {{accessToken}}
+            Accept: application/json
 
 + Response 200 (application/json)
+
+        {
+            "id": "naln8j15edsjq4d2",
+            "name": "catchment_area_dashboard",
+            "type": "dashboard",
+            "content": {
+                "indicators": [
+                    {
+                        "indicator": "/rest/projects/vb2b3d8v91jao331/md/indicators?name=turnover_indicator",
+                        "indicatorDrill": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills?name=turnover_indicator_drill"
+                    },
+                    {
+                        "indicator": "/rest/projects/vb2b3d8v91jao331/md/indicators?name=customers_indicator",
+                        "indicatorDrill": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills?name=customers_indicator_drill"
+                    },
+                    {
+                        "indicator": "/rest/projects/vb2b3d8v91jao331/md/indicators?name=purchases_customer_indicator",
+                        "indicatorDrill": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills?name=purchases_customer_indicator_drill"
+                    }
+                ]
+            },
+            "accessInfo": {
+                "createdAt": "2018-01-25T15:29:30Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/dashboards/naln8j15edsjq4d2"
+                }
+            ]
+        }
 
 ### Get Dashboards [GET /rest/projects/{projectId}/md/dashboards]
 Returns paged collection of all Dashboards in a project.

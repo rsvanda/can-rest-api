@@ -2930,6 +2930,119 @@ Dashboard is an ordered list of Indicator and Indicator Drill pairs.
 
 Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/120336827/Dashboards).
 
+### List Dashboards [GET /rest/projects/{projectId}/md/dashboards{?page,size,sort}]
+Returns paged collection of all Dashboards in a project.
+
+#### Response statuses
+* 200 - OK
+
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + size (optional, number) - The count of records to return for one page
+        + Default: `20`
+    + page (optional, number) - Number of the page
+        + Default: `0`
+    + sort: `name,asc` (optional, string) - Name of the attribute to use for sorting the results, together with direction (`asc` or `desc`)
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {{accessToken}}
+
++ Response 200 (application/json)
+
+        {
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/dashboards?page=0&size=5&sort=id"
+                }
+            ],
+            "content": [
+                {
+                    "id": "j13im1r3rbvs4tus",
+                    "name": "penetration_dashboard",
+                    "type": "dashboard",
+                    "content": {
+                        "indicators": [
+                            {
+                                "indicator": "/rest/projects/vb2b3d8v91jao331/md/indicators?name=orders_indicator",
+                                "indicatorDrill": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills?name=orders_indicator_drill"
+                            },
+                            {
+                                "indicator": "/rest/projects/vb2b3d8v91jao331/md/indicators?name=revenue_indicator",
+                                "indicatorDrill": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills?name=revenue_indicator_drill"
+                            },
+                            {
+                                "indicator": "/rest/projects/vb2b3d8v91jao331/md/indicators?name=customers_indicator",
+                                "indicatorDrill": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills?name=customers_indicator_drill"
+                            },
+                            {
+                                "indicator": "/rest/projects/vb2b3d8v91jao331/md/indicators?name=average_order_indicator",
+                                "indicatorDrill": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills?name=average_order_indicator_drill"
+                            },
+                            {
+                                "indicator": "/rest/projects/vb2b3d8v91jao331/md/indicators?name=orders_per_customer_indicator",
+                                "indicatorDrill": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills?name=orders_per_customer_indicator_drill"
+                            }
+                        ]
+                    },
+                    "accessInfo": {
+                        "createdAt": "2017-10-18T10:15:40Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dashboards/j13im1r3rbvs4tus"
+                        }
+                    ]
+                },
+                {
+                    "id": "m6snd88062msunu1",
+                    "name": "potential_dashboard",
+                    "type": "dashboard",
+                    "content": {
+                        "indicators": [
+                            {
+                                "indicator": "/rest/projects/vb2b3d8v91jao331/md/indicators?name=households_indicator",
+                                "indicatorDrill": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills?name=households_indicator_drill"
+                            },
+                            {
+                                "indicator": "/rest/projects/vb2b3d8v91jao331/md/indicators?name=customers_indicator",
+                                "indicatorDrill": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills?name=customers_indicator_drill"
+                            },
+                            {
+                                "indicator": "/rest/projects/vb2b3d8v91jao331/md/indicators?name=purchase_strenght_indicator",
+                                "indicatorDrill": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills?name=purchase_strenght_indicator_drill"
+                            },
+                            {
+                                "indicator": "/rest/projects/vb2b3d8v91jao331/md/indicators?name=households_penetration_indicator",
+                                "indicatorDrill": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills?name=households_penetration_indicator_drill"
+                            }
+                        ]
+                    },
+                    "accessInfo": {
+                        "createdAt": "2017-10-18T10:18:04Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/vb2b3d8v91jao331/md/dashboards/m6snd88062msunu1"
+                        }
+                    ]
+                }
+            ],
+            "page": {
+                "size": 5,
+                "totalElements": 2,
+                "totalPages": 1,
+                "number": 0
+            }
+        }
+
+
 ### Create Dashboard [POST]
 Creates new Dashboard.
 
@@ -3030,7 +3143,7 @@ Returns Dashboard identified by given *id*.
 
 + Parameters
     + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
-    + dashboardId: `naln8j15edsjq4d2xxx` (string) - The id of a dashboard
+    + dashboardId: `naln8j15edsjq4d2` (string) - The id of a dashboard
 
 + Request
 
@@ -3125,109 +3238,6 @@ Returns Dashboard identified by given *name*.
             ]
         }
 
-### Get Dashboards [GET /rest/projects/{projectId}/md/dashboards]
-Returns paged collection of all Dashboards in a project.
-
-#### Response statuses
-* 200 - OK
-
-+ Request
-
-    + Headers
-
-            Accept: application/json
-            Authorization: Bearer {{accessToken}}
-
-+ Response 200 (application/json)
-
-            {
-                "links": [
-                    {
-                        "rel": "self",
-                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dashboards?page=0&size=5&sort=id"
-                    }
-                ],
-                "content": [
-                    {
-                        "id": "j13im1r3rbvs4tus",
-                        "name": "penetration_dashboard",
-                        "type": "dashboard",
-                        "content": {
-                            "indicators": [
-                                {
-                                    "indicator": "/rest/projects/$projectId/md/indicators?name=orders_indicator",
-                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=orders_indicator_drill"
-                                },
-                                {
-                                    "indicator": "/rest/projects/$projectId/md/indicators?name=revenue_indicator",
-                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=revenue_indicator_drill"
-                                },
-                                {
-                                    "indicator": "/rest/projects/$projectId/md/indicators?name=customers_indicator",
-                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=customers_indicator_drill"
-                                },
-                                {
-                                    "indicator": "/rest/projects/$projectId/md/indicators?name=average_order_indicator",
-                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=average_order_indicator_drill"
-                                },
-                                {
-                                    "indicator": "/rest/projects/$projectId/md/indicators?name=orders_per_customer_indicator",
-                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=orders_per_customer_indicator_drill"
-                                }
-                            ]
-                        },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T10:15:40Z"
-                        },
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dashboards/j13im1r3rbvs4tus"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "m6snd88062msunu1",
-                        "name": "potential_dashboard",
-                        "type": "dashboard",
-                        "content": {
-                            "indicators": [
-                                {
-                                    "indicator": "/rest/projects/$projectId/md/indicators?name=households_indicator",
-                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=households_indicator_drill"
-                                },
-                                {
-                                    "indicator": "/rest/projects/$projectId/md/indicators?name=customers_indicator",
-                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=customers_indicator_drill"
-                                },
-                                {
-                                    "indicator": "/rest/projects/$projectId/md/indicators?name=purchase_strenght_indicator",
-                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=purchase_strenght_indicator_drill"
-                                },
-                                {
-                                    "indicator": "/rest/projects/$projectId/md/indicators?name=households_penetration_indicator",
-                                    "indicatorDrill": "/rest/projects/$projectId/md/indicatorDrills?name=households_penetration_indicator_drill"
-                                }
-                            ]
-                        },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T10:18:04Z"
-                        },
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dashboards/m6snd88062msunu1"
-                            }
-                        ]
-                    }
-                ],
-                "page": {
-                    "size": 5,
-                    "totalElements": 2,
-                    "totalPages": 1,
-                    "number": 0
-                }
-            }
 
 ### Update Dashboard [PUT /rest/projects/{projectId}/md/dashboards/{id}]
 Updates Dashboard with given *id*.

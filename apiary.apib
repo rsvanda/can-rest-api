@@ -6046,12 +6046,18 @@ Restricted to *EDITOR* project role that has the permission to update metadata o
             }
 
 ### Get Marker Selector by id [GET /rest/projects/{projectId}/md/markerSelectors/{id}]
+
 Returns Marker Selector with given *id*.
 
 #### Response statuses
 * 200 - OK
 * 404 - Not Found
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + id: `r05a5hfr1pi3sndp` (string) - Id of the marker
+
+
 + Request
 
     + Headers
@@ -6061,13 +6067,51 @@ Returns Marker Selector with given *id*.
 
 + Response 200 (application/json)
 
-### Get Marker Selector by name [GET /rest/projects/{projectId}/md/markerSelectors?name={name}]
+            {
+                "id": "r05a5hfr1pi3sndp",
+                "name": "marker_selector_shops",
+                "type": "markerSelector",
+                "content": {
+                    "categories": [
+                        {
+                            "dataset": "/rest/projects/vb2b3d8v91jao331/md/datasets?name=shops",
+                            "markers": [
+                                {
+                                    "name": "marker_shops",
+                                    "visible": true
+                                },
+                                {
+                                    "name": "marker_partners",
+                                    "visible": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "accessInfo": {
+                    "createdAt": "2018-01-25T15:29:44Z"
+                },
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/vb2b3d8v91jao331/md/markerSelectors/r05a5hfr1pi3sndp"
+                    }
+                ]
+            }
+
+### Get Marker Selector by name [GET /rest/projects/{projectId}/md/markerSelectors{?name}]
+
 Returns Marker Selector with given *name*.
 
 #### Response statuses
 * 200 - OK
 * 404 - Not Found
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + name: `marker_selector_shops` (string) - The marker name
+
+
 + Request
 
     + Headers
@@ -6077,11 +6121,53 @@ Returns Marker Selector with given *name*.
 
 + Response 200 (application/json)
 
-### Get Marker Selectors [GET /rest/projects/{projectId}/md/markerSelectors]
+            {
+                "id": "r05a5hfr1pi3sndp",
+                "name": "marker_selector_shops",
+                "type": "markerSelector",
+                "content": {
+                    "categories": [
+                        {
+                            "dataset": "/rest/projects/vb2b3d8v91jao331/md/datasets?name=shops",
+                            "markers": [
+                                {
+                                    "name": "marker_shops",
+                                    "visible": true
+                                },
+                                {
+                                    "name": "marker_partners",
+                                    "visible": true
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "accessInfo": {
+                    "createdAt": "2018-01-25T15:29:44Z"
+                },
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/vb2b3d8v91jao331/md/markerSelectors/r05a5hfr1pi3sndp"
+                    }
+                ]
+            }
+
+### List Marker Selectors [GET /rest/projects/{projectId}/md/markerSelectors{?page,size,sort}]
+
 Returns paged collection of all Marker Selectors in a project.
 
 #### Response statuses
 * 200 - OK
+
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + size (optional, number) - The count of records to return for one page
+        + Default: `20`
+    + page (optional, number) - Number of the page
+        + Default: `0`
+    + sort: `name,asc` (optional, string) - Name of the attribute to use for sorting the results, together with direction (`asc` or `desc`)
+
 
 + Request
 
@@ -6096,84 +6182,50 @@ Returns paged collection of all Marker Selectors in a project.
                 "links": [
                     {
                         "rel": "self",
-                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markerSelectors?page=0&size=5&sort=id"
+                        "href": "/rest/projects/kt3hz932v53vabh8/md/markerSelectors?page=0&size=20"
                     }
                 ],
                 "content": [
                     {
-                        "id": "hauq9taqq3733mtv",
-                        "name": "atms_marker_selector",
+                        "id": "r05a5hfr1pi3sndp",
+                        "name": "marker_selector_shops",
                         "type": "markerSelector",
                         "content": {
                             "categories": [
                                 {
+                                    "dataset": "/rest/projects/kt3hz932v53vabh8/md/datasets?name=shops",
                                     "markers": [
                                         {
-                                            "visible": true,
-                                            "name": "red_marker"
+                                            "name": "marker_shops",
+                                            "visible": true
                                         },
                                         {
-                                            "visible": true,
-                                            "name": "green_marker"
+                                            "name": "marker_partners",
+                                            "visible": true
                                         }
-                                    ],
-                                    "dataset": "/rest/projects/$projectId/md/datasets?name=atms_dwh"
+                                    ]
                                 }
                             ]
                         },
                         "accessInfo": {
-                            "createdAt": "2017-10-18T12:19:08Z"
+                            "createdAt": "2018-01-25T15:29:44Z"
                         },
                         "links": [
                             {
                                 "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markerSelectors/hauq9taqq3733mtv"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "mgp4vpel6orfeh85",
-                        "name": "shops_marker_selector",
-                        "type": "markerSelector",
-                        "content": {
-                            "categories": [
-                                {
-                                    "markers": [
-                                        {
-                                            "visible": true,
-                                            "name": "red_marker"
-                                        },
-                                        {
-                                            "visible": true,
-                                            "name": "orange_marker"
-                                        },
-                                        {
-                                            "visible": true,
-                                            "name": "green_marker"
-                                        }
-                                    ],
-                                    "dataset": "/rest/projects/$projectId/md/datasets?name=shops_dwh"
-                                }
-                            ]
-                        },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T12:18:03Z"
-                        },
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markerSelectors/mgp4vpel6orfeh85"
+                                "href": "/rest/projects/kt3hz932v53vabh8/md/markerSelectors/r05a5hfr1pi3sndp"
                             }
                         ]
                     }
                 ],
                 "page": {
-                    "size": 5,
-                    "totalElements": 2,
+                    "size": 20,
+                    "totalElements": 1,
                     "totalPages": 1,
                     "number": 0
                 }
             }
+
 
 ### Update Marker Selector [PUT /rest/projects/{projectId}/md/markerSelectors/{id}]
 Updates Marker Selector with given *id*.

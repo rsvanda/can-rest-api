@@ -4168,7 +4168,7 @@ Restricted to *EDITOR* project role that has the permission to delete metadata o
 This read-only resource contains all own properties of a Dataset, as well as all DWH properties linked through Dataset's foreign key properties.
 It is used to create a list of available filters, sorted into categories.
 
-### Get Dataset Properties List [GET /rest/projects/{projectId}/md/datasetProperties{?dataset,properties}] 
+### Get Dataset Properties List [GET /rest/projects/{projectId}/md/datasetProperties{?dataset,properties,page,size,sort}] 
 Returns a list of all DWH properties of given *dataset*.
 
 #### Response statuses
@@ -4184,6 +4184,11 @@ Returns a list of all DWH properties of given *dataset*.
         + Members
             + `all` - return all properties
             + `filterable` - returns only properties marked as filterable
+    + size (optional, number) - The count of records to return for one page
+        + Default: `20`
+    + page (optional, number) - Number of the page
+        + Default: `0`
+    + sort: `name,asc` (optional, string) - Name of the attribute to use for sorting the results, together with direction (`asc` or `desc`)
 
 
 + Request Fetching properties of a single dataset
@@ -4519,7 +4524,7 @@ Export defines a set of dataset properties, which will be present in the exporte
 
 Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/165773419/Exports).
 
-### List Exports [GET /rest/projects/{projectId}/md/exports]
+### List Exports [GET /rest/projects/{projectId}/md/exports{?page,size,sort}]
 Returns paged collection of all Exports in a project.
 
 #### Response statuses
@@ -4527,6 +4532,11 @@ Returns paged collection of all Exports in a project.
 
 + Parameters
     + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + size (optional, number) - The count of records to return for one page
+        + Default: `20`
+    + page (optional, number) - Number of the page
+        + Default: `0`
+    + sort: `name,asc` (optional, string) - Name of the attribute to use for sorting the results, together with direction (`asc` or `desc`)
 
 + Request
 
@@ -4603,7 +4613,6 @@ Returns paged collection of all Exports in a project.
                 "number": 0
             }
         }
-
 
 ### Get Export by id [GET /rest/projects/{projectId}/md/exports/{id}]
 Returns Export with given *id*.
@@ -4885,6 +4894,10 @@ Returns Indicator with given *id*.
 * 200 - OK
 * 404 - Not Found
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + id: `n2ma1svl5o5oihrc` (string) - Id of the indicator
+
 + Request
 
     + Headers
@@ -4894,13 +4907,44 @@ Returns Indicator with given *id*.
 
 + Response 200 (application/json)
 
-### Get Indicator by name [GET /rest/projects/{projectId}/md/indicators?name={name}]
+        {
+            "id": "ipadjtohq10cgq4r",
+            "name": "average_purchase_indicator",
+            "type": "indicator",
+            "title": "Average Purchase value",
+            "description": "Average purchase value indicates the average monetary size of purchases or orders made offline or online.",
+            "content": {
+                "metric": "/rest/projects/kt3hz932v53vabh8/md/metrics?name=average_purchase_metric",
+                "scale": "standard",
+                "distribution": "uniform",
+                "format": {
+                    "type": "number",
+                    "fraction": 1,
+                    "symbol": "£"
+                }
+            },
+            "accessInfo": {
+                "createdAt": "2018-01-25T15:29:38Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/kt3hz932v53vabh8/md/indicators/ipadjtohq10cgq4r"
+                }
+            ]
+        }
+
+### Get Indicator by name [GET /rest/projects/{projectId}/md/indicators{?name}]
 Returns Indicator with given *name*.
 
 #### Response statuses
 * 200 - OK
 * 404 - Not Found
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + name: `average_purchase_indicator` (string) - Name of the indicator
+
 + Request
 
     + Headers
@@ -4910,12 +4954,47 @@ Returns Indicator with given *name*.
 
 + Response 200 (application/json)
 
-### Get Indicators [GET /rest/projects/{projectId}/md/indicators]
+        {
+            "id": "ipadjtohq10cgq4r",
+            "name": "average_purchase_indicator",
+            "type": "indicator",
+            "title": "Average Purchase value",
+            "description": "Average purchase value indicates the average monetary size of purchases or orders made offline or online.",
+            "content": {
+                "metric": "/rest/projects/kt3hz932v53vabh8/md/metrics?name=average_purchase_metric",
+                "scale": "standard",
+                "distribution": "uniform",
+                "format": {
+                    "type": "number",
+                    "fraction": 1,
+                    "symbol": "£"
+                }
+            },
+            "accessInfo": {
+                "createdAt": "2018-01-25T15:29:38Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/kt3hz932v53vabh8/md/indicators/ipadjtohq10cgq4r"
+                }
+            ]
+        }
+
+### List Indicators [GET /rest/projects/{projectId}/md/indicators{?page,size,sort}]
 Returns paged collection of all Indicators in a project.
 
 #### Response statuses
 * 200 - OK
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + size (optional, number) - The count of records to return for one page
+        + Default: `20`
+    + page (optional, number) - Number of the page
+        + Default: `0`
+    + sort: `name,asc` (optional, string) - Name of the attribute to use for sorting the results, together with direction (`asc` or `desc`)
+
 + Request
 
     + Headers
@@ -4925,74 +5004,210 @@ Returns paged collection of all Indicators in a project.
 
 + Response 200 (application/json)
 
-            {
-                "links": [
-                    {
-                        "rel": "self",
-                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicators?page=0&size=5&sort=id"
-                    }
-                ],
-                "content": [
-                    {
-                        "id": "k6hornp6l2bmo14f",
-                        "name": "average_delay_indicator",
-                        "type": "indicator",
-                        "title": "Average delay",
-                        "description": "Average order delay",
-                        "content": {
-                            "metric": "/rest/projects/$projectId/md/metrics?name=average_delay_metric",
-                            "scale": "negative",
-                            "distribution": "geometric",
-                            "format": {
-                                "type": "number",
-                                "fraction": 1,
-                                "symbol": "min"
-                            }
-                        },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T11:49:47Z"
-                        },
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicators/k6hornp6l2bmo14f"
-                            }
-                        ]
+    + Body
+
+        {
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/indicators?page=0&size=5&sort=id"
+                }
+            ],
+            "content": [
+                {
+                    "id": "k6hornp6l2bmo14f",
+                    "name": "average_delay_indicator",
+                    "type": "indicator",
+                    "title": "Average delay",
+                    "description": "Average order delay",
+                    "content": {
+                        "metric": "/rest/projects/vb2b3d8v91jao331/md/metrics?name=average_delay_metric",
+                        "scale": "negative",
+                        "distribution": "geometric",
+                        "format": {
+                            "type": "number",
+                            "fraction": 1,
+                            "symbol": "min"
+                        }
                     },
-                    {
-                        "id": "utvm7qp1i0qu0eaa",
-                        "name": "average_purchase_indicator",
-                        "type": "indicator",
-                        "title": "Average purchase",
-                        "description": "Average purchase value of a customer",
-                        "content": {
-                            "metric": "/rest/projects/$projectId/md/metrics?name=average_purchase_metric",
-                            "scale": "standard",
-                            "distribution": "uniform",
-                            "format": {
-                                "type": "number",
-                                "fraction": 1,
-                                "symbol": "£"
+                    "accessInfo": {
+                        "createdAt": "2017-10-18T11:49:47Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/vb2b3d8v91jao331/md/indicators/k6hornp6l2bmo14f"
+                        }
+                    ]
+                },
+                {
+                    "id": "utvm7qp1i0qu0eaa",
+                    "name": "average_purchase_indicator",
+                    "type": "indicator",
+                    "title": "Average purchase",
+                    "description": "Average purchase value of a customer",
+                    "content": {
+                        "metric": "/rest/projects/vb2b3d8v91jao331/md/metrics?name=average_purchase_metric",
+                        "scale": "standard",
+                        "distribution": "uniform",
+                        "format": {
+                            "type": "number",
+                            "fraction": 1,
+                            "symbol": "£"
+                        }
+                    },
+                    "accessInfo": {
+                        "createdAt": "2017-10-18T11:51:05Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/vb2b3d8v91jao331/md/indicators/utvm7qp1i0qu0eaa"
+                        }
+                    ]
+                }
+            ],
+            "page": {
+                "size": 5,
+                "totalElements": 2,
+                "totalPages": 1,
+                "number": 0
+            }
+        }
+
+    + Schema
+
+        {
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": {
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "rel": {
+                                "type": "string"
+                            },
+                            "href": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "content": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "title": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "content": {
+                                "type": "object",
+                                "properties": {
+                                    "metric": {
+                                        "type": "string"
+                                    },
+                                    "scale": {
+                                        "type": "string"
+                                    },
+                                    "distribution": {
+                                        "type": "string"
+                                    },
+                                    "format": {
+                                        "type": "object",
+                                        "properties": {
+                                            "type": {
+                                                "type": "string"
+                                            },
+                                            "fraction": {
+                                                "type": "number"
+                                            },
+                                            "symbol": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "type",
+                                            "fraction"
+                                        ]
+                                    }
+                                }
+                            },
+                            "accessInfo": {
+                                "type": "object",
+                                "properties": {
+                                    "createdAt": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "links": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "rel": {
+                                            "type": "string"
+                                        },
+                                        "href": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
                             }
                         },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T11:51:05Z"
-                        },
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicators/utvm7qp1i0qu0eaa"
-                            }
+                        "required": [
+                            "id",
+                            "name",
+                            "type",
+                            "title",
+                            "description",
+                            "content",
+                            "accessInfo",
+                            "links"
                         ]
                     }
-                ],
+                },
                 "page": {
-                    "size": 5,
-                    "totalElements": 2,
-                    "totalPages": 1,
-                    "number": 0
+                    "type": "object",
+                    "properties": {
+                        "size": {
+                            "type": "number"
+                        },
+                        "totalElements": {
+                            "type": "number"
+                        },
+                        "totalPages": {
+                            "type": "number"
+                        },
+                        "number": {
+                            "type": "number"
+                        }
+                    },
+                    "required": [
+                        "size",
+                        "totalElements",
+                        "totalPages",
+                        "number"
+                    ]
                 }
             }
+        }
+
 
 ### Update Indicator [PUT /rest/projects/{projectId}/md/indicators/{id}]
 Updates Indicator with given *id*.
@@ -5148,6 +5363,10 @@ Returns Indicator Drill with given *id*.
 * 200 - OK
 * 404 - Not Found
 
+// + Parameters
+//     + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+//     + id: `ipadjtohq10cgq4r` (string) - Id of the indicator
+
 + Request
 
     + Headers
@@ -5156,6 +5375,34 @@ Returns Indicator Drill with given *id*.
             Authorization: Bearer {{accessToken}}
 
 + Response 200 (application/json)
+
+        // {
+        //     "id": "ipadjtohq10cgq4r",
+        //     "name": "average_purchase_indicator",
+        //     "type": "indicator",
+        //     "title": "Average Purchase value",
+        //     "description": "Average purchase value indicates the average monetary size of purchases or orders made offline or online.",
+        //     "content": {
+        //         "metric": "/rest/projects/kt3hz932v53vabh8/md/metrics?name=average_purchase_metric",
+        //         "scale": "standard",
+        //         "distribution": "uniform",
+        //         "format": {
+        //             "type": "number",
+        //             "fraction": 1,
+        //             "symbol": "£"
+        //         }
+        //     },
+        //     "accessInfo": {
+        //         "createdAt": "2018-01-25T15:29:38Z"
+        //     },
+        //     "links": [
+        //         {
+        //             "rel": "self",
+        //             "href": "/rest/projects/kt3hz932v53vabh8/md/indicators/ipadjtohq10cgq4r"
+        //         }
+        //     ]
+        // }
+
 
 ### Get Indicator Drill by name [GET /rest/projects/{projectId}/md/indicatorDrills?name={name}]
 Returns Indicator Drill with given *name*.
@@ -5164,6 +5411,10 @@ Returns Indicator Drill with given *name*.
 * 200 - OK
 * 404 - Not Found
 
+// + Parameters
+//     + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+//     + name: `average_purchase_indicator` (string) - Id of the export
+
 + Request
 
     + Headers
@@ -5172,6 +5423,34 @@ Returns Indicator Drill with given *name*.
             Authorization: Bearer {{accessToken}}
 
 + Response 200 (application/json)
+
+        // {
+        //     "id": "ipadjtohq10cgq4r",
+        //     "name": "average_purchase_indicator",
+        //     "type": "indicator",
+        //     "title": "Average Purchase value",
+        //     "description": "Average purchase value indicates the average monetary size of purchases or orders made offline or online.",
+        //     "content": {
+        //         "metric": "/rest/projects/kt3hz932v53vabh8/md/metrics?name=average_purchase_metric",
+        //         "scale": "standard",
+        //         "distribution": "uniform",
+        //         "format": {
+        //             "type": "number",
+        //             "fraction": 1,
+        //             "symbol": "£"
+        //         }
+        //     },
+        //     "accessInfo": {
+        //         "createdAt": "2018-01-25T15:29:38Z"
+        //     },
+        //     "links": [
+        //         {
+        //             "rel": "self",
+        //             "href": "/rest/projects/kt3hz932v53vabh8/md/indicators/ipadjtohq10cgq4r"
+        //         }
+        //     ]
+        // }
+
 
 ### Get Indicator Drills [GET /rest/projects/{projectId}/md/indicatorDrills]
 Returns paged collection of all Indicator Drills in a project.

@@ -5724,6 +5724,11 @@ Returns Marker with given *id*.
 * 200 - OK
 * 404 - Not Found
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + id: `fvnckjtij5v863hb` (string) - Id of the marker
+
+
 + Request
 
     + Headers
@@ -5733,13 +5738,47 @@ Returns Marker with given *id*.
 
 + Response 200 (application/json)
 
-### Get Marker by name [GET /rest/projects/{projectId}/md/markers?name={name}]
+        {
+            "id": "fvnckjtij5v863hb",
+            "name": "marker_partners",
+            "type": "marker",
+            "title": "Pick Up Partners",
+            "description": "Shops",
+            "content": {
+                "visible": true,
+                "filterBy": [
+                    {
+                        "property": "shops.partner",
+                        "value": 1,
+                        "operator": "eq"
+                    }
+                ],
+                "style": "marker-green"
+            },
+            "accessInfo": {
+                "createdAt": "2018-01-25T15:29:43Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/markers/fvnckjtij5v863hb"
+                }
+            ]
+        }
+
+### Get Marker by name [GET /rest/projects/{projectId}/md/markers{?name}]
+
 Returns Marker with given *name*.
 
 #### Response statuses
 * 200 - OK
 * 404 - Not Found
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + name: `marker_partners` (string) - The marker name
+
+
 + Request
 
     + Headers
@@ -5749,12 +5788,50 @@ Returns Marker with given *name*.
 
 + Response 200 (application/json)
 
-### Get Markers [GET /rest/projects/{projectId}/md/markers]
+        {
+            "id": "fvnckjtij5v863hb",
+            "name": "marker_partners",
+            "type": "marker",
+            "title": "Pick Up Partners",
+            "description": "Shops",
+            "content": {
+                "visible": true,
+                "filterBy": [
+                    {
+                        "property": "shops.partner",
+                        "value": 1,
+                        "operator": "eq"
+                    }
+                ],
+                "style": "marker-green"
+            },
+            "accessInfo": {
+                "createdAt": "2018-01-25T15:29:43Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/markers/fvnckjtij5v863hb"
+                }
+            ]
+        }
+
+### List Markers [GET /rest/projects/{projectId}/md/markers{?page,size,sort}]
+
 Returns paged collection of all Markers in a project.
 
 #### Response statuses
 * 200 - OK
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + size (optional, number) - The count of records to return for one page
+        + Default: `20`
+    + page (optional, number) - Number of the page
+        + Default: `0`
+    + sort: `name,asc` (optional, string) - Name of the attribute to use for sorting the results, together with direction (`asc` or `desc`)
+
+
 + Request
 
     + Headers
@@ -5764,76 +5841,76 @@ Returns paged collection of all Markers in a project.
 
 + Response 200 (application/json)
 
-            {
-                "links": [
-                    {
-                        "rel": "self",
-                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markers?page=0&size=5&sort=id"
-                    }
-                ],
-                "content": [
-                    {
-                        "id": "jvs7k5iv835i6lbm",
-                        "name": "marker_warehouse_2",
-                        "type": "marker",
-                        "title": "Warehouses",
-                        "description": "Warehouses owned by the company.",
-                        "content": {
-                            "visible": true,
-                            "filterBy": [
-                                {
-                                    "property": "warehouse.type",
-                                    "value": "2",
-                                    "operator": "eq"
-                                }
-                            ],
-                            "style": "marker-blue"
-                        },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T12:10:23Z"
-                        },
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markers/jvs7k5iv835i6lbm"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "pkcu7en74e7695tm",
-                        "name": "marker_warehouse_1",
-                        "type": "marker",
-                        "title": "Warehouses",
-                        "description": "Warehouses owned by the company.",
-                        "content": {
-                            "visible": true,
-                            "filterBy": [
-                                {
-                                    "property": "warehouse.type",
-                                    "value": "1",
-                                    "operator": "eq"
-                                }
-                            ],
-                            "style": "marker-orange"
-                        },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T12:09:48Z"
-                        },
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/markers/pkcu7en74e7695tm"
-                            }
-                        ]
-                    }
-                ],
-                "page": {
-                    "size": 5,
-                    "totalElements": 2,
-                    "totalPages": 1,
-                    "number": 0
+        {
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/markers?page=0&size=20"
                 }
+            ],
+            "content": [
+                {
+                    "id": "fvnckjtij5v863hb",
+                    "name": "marker_partners",
+                    "type": "marker",
+                    "title": "Pick Up Partners",
+                    "description": "Shops",
+                    "content": {
+                        "visible": true,
+                        "filterBy": [
+                            {
+                                "property": "shops.partner",
+                                "value": 1,
+                                "operator": "eq"
+                            }
+                        ],
+                        "style": "marker-green"
+                    },
+                    "accessInfo": {
+                        "createdAt": "2018-01-25T15:29:43Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/vb2b3d8v91jao331/md/markers/fvnckjtij5v863hb"
+                        }
+                    ]
+                },
+                {
+                    "id": "tso74eoifpeoihch",
+                    "name": "marker_shops",
+                    "type": "marker",
+                    "title": "Stores",
+                    "description": "Stores",
+                    "content": {
+                        "visible": true,
+                        "filterBy": [
+                            {
+                                "property": "shops.partner",
+                                "value": 0,
+                                "operator": "eq"
+                            }
+                        ],
+                        "style": "marker-orange"
+                    },
+                    "accessInfo": {
+                        "createdAt": "2018-01-25T15:29:44Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/vb2b3d8v91jao331/md/markers/tso74eoifpeoihch"
+                        }
+                    ]
+                }
+            ],
+            "page": {
+                "size": 20,
+                "totalElements": 2,
+                "totalPages": 1,
+                "number": 0
             }
+        }   
 
 ### Update Marker [PUT /rest/projects/{projectId}/md/markers/{id}]
 Updates Marker with given *id*.

@@ -1544,7 +1544,7 @@ The dataset's objects are indexed during dataset pull job. It means that if the 
             }
             
 # Group Data Warehouse Service
-## DWH Query [/rest/projects/{projectId}/dwh/query{?size,page,sort}]
+## DWH Query [/rest/projects/{projectId}/dwh/query{?size,page}]
 ### Run Query [POST] 
 Executes a multidimensional query on datawarehouse. 
 Thanks to the query language you are just defining which properities do you want to get 
@@ -1612,9 +1612,11 @@ Boolean operators for building advanced conditions:
 * 200 - OK - query was successfully executed
 
 + Parameters 
-    + size = `200` (optional, number)
-    + page = `0` (optional, number)
-    + sort = `null` (optional, string, `transactions.zsj_d_id`)
+    + projectId: `vb2b3d8v91jao331` (string) The ID of an actual project
+    + size (optional, number) - The count of records to return for one page
+        + Default: `20`
+    + page (optional, number) - Number of the page
+        + Default: `0`
 
 + Request (application/json)
 
@@ -1627,91 +1629,106 @@ Boolean operators for building advanced conditions:
             {
                 "properties": [
                     {
-                        "id": "zsj_d_id",
+                        "id": "_split_property",
                         "type": "property",
-                        "value": "transactions.zsj_d_id"
+                        "value": "baskets.value_name"
                     },
                     {
-                        "id": "stores_count",
-                        "type": "function_count",
-                        "content": [{
-                            "type": "property",
-                            "value": "mystores.store_id"
-                        }]
-                    },
-                    {
-                        "id": "cart_avg",
-                        "type": "function_avg",
-                        "content": [{
-                            "type": "property",
-                            "value": "transactions.cart_value"
-                        }]
+                        "id": "turnover_metric",
+                        "type": "function_sum",
+                        "content": [
+                            {
+                                "type": "property",
+                                "value": "baskets.amount"
+                            }
+                        ]
                     }
                 ],
                 "filterBy": [
                     {
-                        "property": "mycustomers.customer_value",
-                        "value": 1000,
-                        "operator": "lt"
-                    }
-                ],
-                "having": [
-                    {
-                        "propertyId": "stores_count",
-                        "value": 5,
-                        "operator": "gte"
-                    }
-                ],
-                "orderBy": [
-                    {
-                        "property": "mycustomers.aqusition_date",
-                        "direction": "asc"
+                        "property": "dim_dates.date_iso",
+                        "operator": "gte",
+                        "value": "2017-09-24"
                     },
                     {
-                        "propertyId": "cart_avg",
-                        "direction": "desc"
+                        "property": "dim_dates.date_iso",
+                        "operator": "lte",
+                        "value": "2017-09-30"
+                    },
+                    {
+                        "property": "baskets.amount",
+                        "operator": "gte",
+                        "value": 5
+                    },
+                    {
+                        "property": "baskets.amount",
+                        "operator": "lte",
+                        "value": 898.17
+                    }
+                ],
+                "having": [],
+                "orderBy": [
+                    {
+                        "property": "baskets.value_cat",
+                        "direction": "asc",
+                        "sort": "asc"
                     }
                 ]
             }
 
 + Response 200 (application/json)
 
-        {
-            "content": [
-                {
-                    "content": {
-                        "zsj_d_id": 123,
-                        "stores_count": 12,
-                        "cart_avg": 452
+            {
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/kt3hz932v53vabh8/dwh/query?page=0&size=200&sort=null"
+                    }
+                ],
+                "content": [
+                    {
+                        "content": {
+                            "_split_property": "Up to £ 20",
+                            "turnover_metric": 3103.23
+                        },
+                        "links": []
                     },
-                    "links": [ ]
-                },
-                {
-                    "content": {
-                        "zsj_d_id": 42,
-                        "stores_count": 4,
-                        "cart_avg": 320
+                    {
+                        "content": {
+                            "_split_property": "£ 20 - 50",
+                            "turnover_metric": 30531.54
+                        },
+                        "links": []
                     },
-                    "links": [ ]
+                    {
+                        "content": {
+                            "_split_property": "£ 50 - 100",
+                            "turnover_metric": 109640.42
+                        },
+                        "links": []
+                    },
+                    {
+                        "content": {
+                            "_split_property": "£ 100 - 250",
+                            "turnover_metric": 109927.28
+                        },
+                        "links": []
+                    },
+                    {
+                        "content": {
+                            "_split_property": "£ more than 250",
+                            "turnover_metric": 99700.79
+                        },
+                        "links": []
+                    }
+                ],
+                "page": {
+                    "size": 200,
+                    "totalElements": 5,
+                    "totalPages": 1,
+                    "number": 0
                 }
-            ],
-            "links": [
-                {
-                    "rel": "self",
-                    "href": "/rest/projects/{projectId}/dwh/query/page=0&size=200"
-                },
-                {
-                    "rel": "next",
-                    "href": "/rest/projects/{projectId}/dwh/query/page=1&size=200"
-                }
-            ],
-            "page": {
-                "size": 200,
-                "totalElements": 563,
-                "totalPages": 3,
-                "number": 0
             }
-        }
 
 ## DWH Explain Query [/rest/projects/{projectId}/dwh/explain{?size,page,sort}]
 ### Explain Query [POST] 

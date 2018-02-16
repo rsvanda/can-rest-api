@@ -2235,11 +2235,11 @@ By default, the values are ordered ascending by the property value. Optionaly th
             "links": [
                 {
                     "rel": "self",
-                    "href": "/rest/projects/kt3hz932v53vabh8/dwh/values?property=baskets.courier&filter=&page=0&orderBy=baskets.courier&dir=asc"
+                    "href": "/rest/projects/vb2b3d8v91jao331/dwh/values?property=baskets.courier&filter=&page=0&orderBy=baskets.courier&dir=asc"
                 },
                 {
                     "rel": "next",
-                    "href": "/rest/projects/kt3hz932v53vabh8/dwh/values?property=baskets.courier&filter=&page=1&orderBy=baskets.courier&dir=asc"
+                    "href": "/rest/projects/vb2b3d8v91jao331/dwh/values?property=baskets.courier&filter=&page=1&orderBy=baskets.courier&dir=asc"
                 }
             ],
             "page": {
@@ -3962,7 +3962,7 @@ Returns Dataset with given *name*.
             "links": [
                 {
                     "rel": "self",
-                    "href": "/rest/projects/kt3hz932v53vabh8/md/datasets/n2ma1svl5o5oihrc"
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/datasets/n2ma1svl5o5oihrc"
                 }
             ]
         }
@@ -4914,7 +4914,7 @@ Returns Indicator with given *id*.
             "title": "Average Purchase value",
             "description": "Average purchase value indicates the average monetary size of purchases or orders made offline or online.",
             "content": {
-                "metric": "/rest/projects/kt3hz932v53vabh8/md/metrics?name=average_purchase_metric",
+                "metric": "/rest/projects/vb2b3d8v91jao331/md/metrics?name=average_purchase_metric",
                 "scale": "standard",
                 "distribution": "uniform",
                 "format": {
@@ -4929,7 +4929,7 @@ Returns Indicator with given *id*.
             "links": [
                 {
                     "rel": "self",
-                    "href": "/rest/projects/kt3hz932v53vabh8/md/indicators/ipadjtohq10cgq4r"
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/indicators/ipadjtohq10cgq4r"
                 }
             ]
         }
@@ -4961,7 +4961,7 @@ Returns Indicator with given *name*.
             "title": "Average Purchase value",
             "description": "Average purchase value indicates the average monetary size of purchases or orders made offline or online.",
             "content": {
-                "metric": "/rest/projects/kt3hz932v53vabh8/md/metrics?name=average_purchase_metric",
+                "metric": "/rest/projects/vb2b3d8v91jao331/md/metrics?name=average_purchase_metric",
                 "scale": "standard",
                 "distribution": "uniform",
                 "format": {
@@ -4976,7 +4976,7 @@ Returns Indicator with given *name*.
             "links": [
                 {
                     "rel": "self",
-                    "href": "/rest/projects/kt3hz932v53vabh8/md/indicators/ipadjtohq10cgq4r"
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/indicators/ipadjtohq10cgq4r"
                 }
             ]
         }
@@ -5477,7 +5477,7 @@ Returns Indicator Drill with given *name*.
             "links": [
                 {
                     "rel": "self",
-                    "href": "/rest/projects/kt3hz932v53vabh8/md/indicatorDrills/vj1q1d41i96skcjv"
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills/vj1q1d41i96skcjv"
                 }
             ]
         }
@@ -6182,7 +6182,7 @@ Returns paged collection of all Marker Selectors in a project.
                 "links": [
                     {
                         "rel": "self",
-                        "href": "/rest/projects/kt3hz932v53vabh8/md/markerSelectors?page=0&size=20"
+                        "href": "/rest/projects/vb2b3d8v91jao331/md/markerSelectors?page=0&size=20"
                     }
                 ],
                 "content": [
@@ -6193,7 +6193,7 @@ Returns paged collection of all Marker Selectors in a project.
                         "content": {
                             "categories": [
                                 {
-                                    "dataset": "/rest/projects/kt3hz932v53vabh8/md/datasets?name=shops",
+                                    "dataset": "/rest/projects/vb2b3d8v91jao331/md/datasets?name=shops",
                                     "markers": [
                                         {
                                             "name": "marker_shops",
@@ -6213,7 +6213,7 @@ Returns paged collection of all Marker Selectors in a project.
                         "links": [
                             {
                                 "rel": "self",
-                                "href": "/rest/projects/kt3hz932v53vabh8/md/markerSelectors/r05a5hfr1pi3sndp"
+                                "href": "/rest/projects/vb2b3d8v91jao331/md/markerSelectors/r05a5hfr1pi3sndp"
                             }
                         ]
                     }
@@ -6341,12 +6341,17 @@ Restricted to *EDITOR* project role that has the permission to update metadata o
             }
 
 ### Get Metric by id [GET /rest/projects/{projectId}/md/metrics/{id}]
+
 Returns Metric with given *id*.
 
 #### Response statuses
 * 200 - OK
 * 404 - Not Found
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + id: `nt95udbdc2c0qv7k` (string) - Id of the export
+
 + Request
 
     + Headers
@@ -6356,13 +6361,73 @@ Returns Metric with given *id*.
 
 + Response 200 (application/json)
 
-### Get Metric by name [GET /rest/projects/{projectId}/md/metrics?name={name}]
+        {
+            "id": "nt95udbdc2c0qv7k",
+            "name": "potential_customers_metric",
+            "type": "metric",
+            "content": {
+                "type": "function_ifnull",
+                "content": [
+                    {
+                        "type": "function_minus",
+                        "content": [
+                            {
+                                "type": "function_sum",
+                                "content": [
+                                    {
+                                        "type": "property",
+                                        "value": "demography_postcode.households"
+                                    }
+                                ],
+                                "options": {
+                                    "aggregateBy": [],
+                                    "withoutFilters": [
+                                        "dim_dates.*",
+                                        "baskets.*"
+                                    ],
+                                    "acceptFilters": [],
+                                    "filterBy": []
+                                }
+                            },
+                            {
+                                "type": "function_count",
+                                "content": [
+                                    {
+                                        "type": "property",
+                                        "value": "clients.client_id"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "number",
+                        "value": 0
+                    }
+                ]
+            },
+            "accessInfo": {
+                "createdAt": "2018-01-25T15:29:48Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/metrics/nt95udbdc2c0qv7k"
+                }
+            ]
+        }
+
+### Get Metric by name [GET /rest/projects/{projectId}/md/metrics{?name}]
 Returns Metric with given *name*.
 
 #### Response statuses
 * 200 - OK
 * 404 - Not Found
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + name: `potential_customers_metric` (string) - Name of the metric
+
 + Request
 
     + Headers
@@ -6372,12 +6437,78 @@ Returns Metric with given *name*.
 
 + Response 200 (application/json)
 
-### Get Metrics [GET /rest/projects/{projectId}/md/metrics]
+        {
+            "id": "nt95udbdc2c0qv7k",
+            "name": "potential_customers_metric",
+            "type": "metric",
+            "content": {
+                "type": "function_ifnull",
+                "content": [
+                    {
+                        "type": "function_minus",
+                        "content": [
+                            {
+                                "type": "function_sum",
+                                "content": [
+                                    {
+                                        "type": "property",
+                                        "value": "demography_postcode.households"
+                                    }
+                                ],
+                                "options": {
+                                    "aggregateBy": [],
+                                    "withoutFilters": [
+                                        "dim_dates.*",
+                                        "baskets.*"
+                                    ],
+                                    "acceptFilters": [],
+                                    "filterBy": []
+                                }
+                            },
+                            {
+                                "type": "function_count",
+                                "content": [
+                                    {
+                                        "type": "property",
+                                        "value": "clients.client_id"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "number",
+                        "value": 0
+                    }
+                ]
+            },
+            "accessInfo": {
+                "createdAt": "2018-01-25T15:29:48Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/metrics/nt95udbdc2c0qv7k"
+                }
+            ]
+        }
+
+### List Metrics [GET /rest/projects/{projectId}/md/metrics{?page,size,sort}]
+
 Returns paged collection of all Metrics in a project.
 
 #### Response statuses
 * 200 - OK
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + size (optional, number) - The count of records to return for one page
+        + Default: `20`
+    + page (optional, number) - Number of the page
+        + Default: `0`
+    + sort: `name,asc` (optional, string) - Name of the attribute to use for sorting the results, together with direction (`asc` or `desc`)
+
+
 + Request
 
     + Headers
@@ -6387,80 +6518,45 @@ Returns paged collection of all Metrics in a project.
 
 + Response 200 (application/json)
 
+    + Body
             {
                 "links": [
                     {
                         "rel": "self",
-                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/metrics?page=0&size=5&sort=id"
+                        "href": "/rest/projects/vb2b3d8v91jao331/md/metrics?page=0&size=20"
                     }
                 ],
                 "content": [
                     {
-                        "id": "hgosavqognbk4qj7",
-                        "name": "orders_metric",
+                        "id": "onb0i86sf4415ks7",
+                        "name": "average_purchase_metric",
                         "type": "metric",
-                        "title": "Orders",
-                        "description": "Number of orders (according to chosen time window and filters)",
                         "content": {
-                            "type": "function_count",
+                            "type": "function_avg",
                             "content": [
                                 {
-                                    "type": "property",
-                                    "value": "objednavky_dwh.id"
+                                    "type": "property"
                                 }
                             ]
                         },
                         "accessInfo": {
-                            "createdAt": "2017-10-18T12:24:39Z"
+                            "createdAt": "2018-01-25T15:29:45Z"
                         },
                         "links": [
                             {
                                 "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/metrics/hgosavqognbk4qj7"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "llhegoo8q1b5fv3n",
-                        "name": "delayed_orders_metric",
-                        "type": "metric",
-                        "content": {
-                            "type": "function_count",
-                            "content": [
-                                {
-                                    "type": "property",
-                                    "value": "objednavky_dwh.id"
-                                }
-                            ],
-                            "options": {
-                                "filterBy": [
-                                    {
-                                        "property": "objednavky_dwh.delay",
-                                        "value": "0",
-                                        "operator": "gt"
-                                    }
-                                ]
-                            }
-                        },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T12:25:19Z"
-                        },
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/metrics/llhegoo8q1b5fv3n"
+                                "href": "/rest/projects/vb2b3d8v91jao331/md/metrics/onb0i86sf4415ks7"
                             }
                         ]
                     }
                 ],
                 "page": {
-                    "size": 5,
-                    "totalElements": 2,
+                    "size": 20,
+                    "totalElements": 10,
                     "totalPages": 1,
                     "number": 0
                 }
             }
-
 ### Update Metric [PUT /rest/projects/{projectId}/md/metrics/{id}]
 Updates Metric with given *id*.
 

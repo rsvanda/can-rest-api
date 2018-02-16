@@ -4519,6 +4519,92 @@ Export defines a set of dataset properties, which will be present in the exporte
 
 Detailed description in the [developer documentation](https://clevermaps.atlassian.net/wiki/spaces/CDD/pages/165773419/Exports).
 
+### List Exports [GET /rest/projects/{projectId}/md/exports]
+Returns paged collection of all Exports in a project.
+
+#### Response statuses
+* 200 - OK
+
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {{accessToken}}
+
++ Response 200 (application/json)
+
+        {
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/exports?page=0&size=5&sort=id"
+                }
+            ],
+            "content": [
+                {
+                    "id": "eqf3525q9jbs2hff",
+                    "name": "project_export_1",
+                    "type": "export",
+                    "title": "Export version 1",
+                    "description": "All delayed orders made in specific city districts.",
+                    "content": {
+                        "properties": [
+                            "city_district_dwh.name",
+                            "city_district_dwh.upper_name",
+                            "orders_dwh.id",
+                            "orders_dwh.id_user",
+                            "orders_dwh.date",
+                            "orders_dwh.price",
+                            "orders_dwh.delay"
+                        ]
+                    },
+                    "accessInfo": {
+                        "createdAt": "2017-10-18T11:33:43Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/exports/eqf3525q9jbs2hff"
+                        }
+                    ]
+                },
+                {
+                    "id": "in89l9pi38ldse6m",
+                    "name": "project_export_2",
+                    "type": "export",
+                    "title": "Export version 2",
+                    "content": {
+                        "properties": [
+                            "city_district_dwh.name",
+                            "orders_dwh.id",
+                            "orders_dwh.date",
+                            "orders_dwh.price"
+                        ]
+                    },
+                    "accessInfo": {
+                        "createdAt": "2017-10-18T11:34:46Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/exports/in89l9pi38ldse6m"
+                        }
+                    ]
+                }
+            ],
+            "page": {
+                "size": 5,
+                "totalElements": 2,
+                "totalPages": 1,
+                "number": 0
+            }
+        }
+
+
 ### Create Export [POST]
 Creates new Export.
 
@@ -4619,87 +4705,6 @@ Returns Export with given *name*.
 
 + Response 200 (application/json)
 
-### Get Exports [GET /rest/projects/{projectId}/md/exports]
-Returns paged collection of all Exports in a project.
-
-#### Response statuses
-* 200 - OK
-
-+ Request
-
-    + Headers
-
-            Accept: application/json
-            Authorization: Bearer {{accessToken}}
-
-+ Response 200 (application/json)
-
-            {
-                "links": [
-                    {
-                        "rel": "self",
-                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/exports?page=0&size=5&sort=id"
-                    }
-                ],
-                "content": [
-                    {
-                        "id": "eqf3525q9jbs2hff",
-                        "name": "project_export_1",
-                        "type": "export",
-                        "title": "Export version 1",
-                        "description": "All delayed orders made in specific city districts.",
-                        "content": {
-                            "properties": [
-                                "city_district_dwh.name",
-                                "city_district_dwh.upper_name",
-                                "orders_dwh.id",
-                                "orders_dwh.id_user",
-                                "orders_dwh.date",
-                                "orders_dwh.price",
-                                "orders_dwh.delay"
-                            ]
-                        },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T11:33:43Z"
-                        },
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/exports/eqf3525q9jbs2hff"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "in89l9pi38ldse6m",
-                        "name": "project_export_2",
-                        "type": "export",
-                        "title": "Export version 2",
-                        "content": {
-                            "properties": [
-                                "city_district_dwh.name",
-                                "orders_dwh.id",
-                                "orders_dwh.date",
-                                "orders_dwh.price"
-                            ]
-                        },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T11:34:46Z"
-                        },
-                        "links": [
-                            {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/exports/in89l9pi38ldse6m"
-                            }
-                        ]
-                    }
-                ],
-                "page": {
-                    "size": 5,
-                    "totalElements": 2,
-                    "totalPages": 1,
-                    "number": 0
-                }
-            }
 
 ### Update Export [PUT /rest/projects/{projectId}/md/exports/{id}]
 Updates Export with given *id*.

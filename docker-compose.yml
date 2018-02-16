@@ -9,11 +9,10 @@ services:
       # https://login.apiary.io/tokens
       - APIARY_API_KEY=${APIARY_API_KEY}
     volumes: 
-      - "./apiary.apib:/build/apiary.apib"
+      - ".:/build/"
     # https://help.apiary.io/tools/apiary-cli/
     command: [
         "apiary", "preview", 
         "--server", "--host", "0.0.0.0", 
-        "--path=/build/apiary.apib",
-        "--watch"
+        "--path=/build/apiary.apib"
       ]

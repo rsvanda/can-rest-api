@@ -4605,6 +4605,96 @@ Returns paged collection of all Exports in a project.
         }
 
 
+### Get Export by id [GET /rest/projects/{projectId}/md/exports/{id}]
+Returns Export with given *id*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + id: `n2ma1svl5o5oihrc` (string) - Id of the export
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {{accessToken}}
+
++ Response 200 (application/json)
+
+        {
+            "id": "j49psu9af5ijhbnk",
+            "name": "retail_solution_demo_export_list_of_areas",
+            "type": "export",
+            "title": "List of Areas",
+            "description": "Returns postcodes, lower super output areas, middle super output areas and value of indicators available in the view into CSV file.",
+            "content": {
+                "properties": [
+                    "codepoint_plg.msoa11nm",
+                    "codepoint_plg.lsoa11nm",
+                    "codepoint_plg.postcode"
+                ]
+            },
+            "accessInfo": {
+                "createdAt": "2018-01-25T15:29:32Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/exports/j49psu9af5ijhbnk"
+                }
+            ]
+        }
+
+
+### Get Export by name [GET /rest/projects/{projectId}/md/exports?name={name}]
+Returns Export with given *name*.
+
+#### Response statuses
+* 200 - OK
+* 404 - Not Found
+
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + name: `retail_solution_demo_export_list_of_areas` (string) - Name the export object
+
++ Request
+
+    + Headers
+
+            Accept: application/json
+            Authorization: Bearer {{accessToken}}
+
++ Response 200 (application/json)
+
+        {
+            "id": "j49psu9af5ijhbnk",
+            "name": "retail_solution_demo_export_list_of_areas",
+            "type": "export",
+            "title": "List of Areas",
+            "description": "Returns postcodes, lower super output areas, middle super output areas and value of indicators available in the view into CSV file.",
+            "content": {
+                "properties": [
+                    "codepoint_plg.msoa11nm",
+                    "codepoint_plg.lsoa11nm",
+                    "codepoint_plg.postcode"
+                ]
+            },
+            "accessInfo": {
+                "createdAt": "2018-01-25T15:29:32Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/exports/j49psu9af5ijhbnk"
+                }
+            ]
+        }
+
+
 ### Create Export [POST]
 Creates new Export.
 
@@ -4672,38 +4762,6 @@ Restricted to *EDITOR* project role that has the permission to update metadata o
                     }
                 ]
             }
-
-### Get Export by id [GET /rest/projects/{projectId}/md/exports/{id}]
-Returns Export with given *id*.
-
-#### Response statuses
-* 200 - OK
-* 404 - Not Found
-
-+ Request
-
-    + Headers
-
-            Accept: application/json
-            Authorization: Bearer {{accessToken}}
-
-+ Response 200 (application/json)
-
-### Get Export by name [GET /rest/projects/{projectId}/md/exports?name={name}]
-Returns Export with given *name*.
-
-#### Response statuses
-* 200 - OK
-* 404 - Not Found
-
-+ Request
-
-    + Headers
-
-            Accept: application/json
-            Authorization: Bearer {{accessToken}}
-
-+ Response 200 (application/json)
 
 
 ### Update Export [PUT /rest/projects/{projectId}/md/exports/{id}]

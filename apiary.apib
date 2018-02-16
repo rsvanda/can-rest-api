@@ -5363,9 +5363,9 @@ Returns Indicator Drill with given *id*.
 * 200 - OK
 * 404 - Not Found
 
-// + Parameters
-//     + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
-//     + id: `ipadjtohq10cgq4r` (string) - Id of the indicator
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + id: `vj1q1d41i96skcjv` (string) - Id of the indicator drill
 
 + Request
 
@@ -5376,33 +5376,48 @@ Returns Indicator Drill with given *id*.
 
 + Response 200 (application/json)
 
-        // {
-        //     "id": "ipadjtohq10cgq4r",
-        //     "name": "average_purchase_indicator",
-        //     "type": "indicator",
-        //     "title": "Average Purchase value",
-        //     "description": "Average purchase value indicates the average monetary size of purchases or orders made offline or online.",
-        //     "content": {
-        //         "metric": "/rest/projects/kt3hz932v53vabh8/md/metrics?name=average_purchase_metric",
-        //         "scale": "standard",
-        //         "distribution": "uniform",
-        //         "format": {
-        //             "type": "number",
-        //             "fraction": 1,
-        //             "symbol": "£"
-        //         }
-        //     },
-        //     "accessInfo": {
-        //         "createdAt": "2018-01-25T15:29:38Z"
-        //     },
-        //     "links": [
-        //         {
-        //             "rel": "self",
-        //             "href": "/rest/projects/kt3hz932v53vabh8/md/indicators/ipadjtohq10cgq4r"
-        //         }
-        //     ]
-        // }
-
+        {
+            "id": "vj1q1d41i96skcjv",
+            "name": "average_purchase_indicator_drill",
+            "type": "indicatorDrill",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "histogram",
+                        "description": "Progress of indicator value over selected period of time"
+                    },
+                    {
+                        "type": "ranking",
+                        "size": 10,
+                        "description": "Ranking of related features"
+                    },
+                    {
+                        "type": "trend",
+                        "description": "Distribution of selected indicator in all areas of selected granularity"
+                    },
+                    {
+                        "type": "barchart",
+                        "title": "Average Purchase value by channel",
+                        "splitProperty": "baskets.on_off_name",
+                        "orderBy": {
+                            "property": "baskets.on_off_name",
+                            "direction": "asc",
+                            "sort": "asc"
+                        },
+                        "description": "Average Purchase value by channel"
+                    }
+                ]
+            },
+            "accessInfo": {
+                "createdAt": "2018-01-25T15:29:33Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills/vj1q1d41i96skcjv"
+                }
+            ]
+        }
 
 ### Get Indicator Drill by name [GET /rest/projects/{projectId}/md/indicatorDrills?name={name}]
 Returns Indicator Drill with given *name*.
@@ -5411,9 +5426,9 @@ Returns Indicator Drill with given *name*.
 * 200 - OK
 * 404 - Not Found
 
-// + Parameters
-//     + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
-//     + name: `average_purchase_indicator` (string) - Id of the export
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + name: `average_purchase_indicator_drill` (string) - Name of the indicator drill object
 
 + Request
 
@@ -5424,40 +5439,59 @@ Returns Indicator Drill with given *name*.
 
 + Response 200 (application/json)
 
-        // {
-        //     "id": "ipadjtohq10cgq4r",
-        //     "name": "average_purchase_indicator",
-        //     "type": "indicator",
-        //     "title": "Average Purchase value",
-        //     "description": "Average purchase value indicates the average monetary size of purchases or orders made offline or online.",
-        //     "content": {
-        //         "metric": "/rest/projects/kt3hz932v53vabh8/md/metrics?name=average_purchase_metric",
-        //         "scale": "standard",
-        //         "distribution": "uniform",
-        //         "format": {
-        //             "type": "number",
-        //             "fraction": 1,
-        //             "symbol": "£"
-        //         }
-        //     },
-        //     "accessInfo": {
-        //         "createdAt": "2018-01-25T15:29:38Z"
-        //     },
-        //     "links": [
-        //         {
-        //             "rel": "self",
-        //             "href": "/rest/projects/kt3hz932v53vabh8/md/indicators/ipadjtohq10cgq4r"
-        //         }
-        //     ]
-        // }
+        {
+            "id": "vj1q1d41i96skcjv",
+            "name": "average_purchase_indicator_drill",
+            "type": "indicatorDrill",
+            "content": {
+                "blocks": [
+                    {
+                        "type": "histogram",
+                        "description": "Progress of indicator value over selected period of time"
+                    },
+                    {
+                        "type": "ranking",
+                        "size": 10,
+                        "description": "Ranking of related features"
+                    },
+                    {
+                        "type": "trend",
+                        "description": "Distribution of selected indicator in all areas of selected granularity"
+                    },
+                    {
+                        "type": "barchart",
+                        "title": "Average Purchase value by channel",
+                        "splitProperty": "baskets.on_off_name",
+                        "orderBy": {
+                            "property": "baskets.on_off_name",
+                            "direction": "asc",
+                            "sort": "asc"
+                        },
+                        "description": "Average Purchase value by channel"
+                    }
+                ]
+            },
+            "accessInfo": {
+                "createdAt": "2018-01-25T15:29:33Z"
+            },
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/kt3hz932v53vabh8/md/indicatorDrills/vj1q1d41i96skcjv"
+                }
+            ]
+        }
 
-
-### Get Indicator Drills [GET /rest/projects/{projectId}/md/indicatorDrills]
+### List Indicator Drills [GET /rest/projects/{projectId}/md/indicatorDrills]
 Returns paged collection of all Indicator Drills in a project.
 
 #### Response statuses
 * 200 - OK
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+
+
 + Request
 
     + Headers
@@ -5467,105 +5501,105 @@ Returns paged collection of all Indicator Drills in a project.
 
 + Response 200 (application/json)
 
-            {
-                "links": [
-                    {
-                        "rel": "self",
-                        "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicatorDrills?page=0&size=5&sort=id"
-                    }
-                ],
-                "content": [
-                    {
-                        "id": "euh1qkanhjo28690",
-                        "name": "average_purchase_indicator_drill",
-                        "type": "indicatorDrill",
-                        "content": {
-                            "blocks": [
-                                {
-                                    "type": "histogram",
-                                    "description": "Progress of indicator value over selected period of time"
-                                },
-                                {
-                                    "type": "ranking",
-                                    "size": 10,
-                                    "description": "Ranking of areas with the highest average purchases"
-                                },
-                                {
-                                    "type": "trend",
-                                    "description": "Distribution of selected indicator in all areas of selected granularity"
-                                },
-                                {
-                                    "type": "barchart",
-                                    "title": "Purchases by channel",
-                                    "splitProperty": "baskets.on_off_name",
-                                    "orderBy": {
-                                        "property": "baskets.on_off_name",
-                                        "direction": "asc"
-                                    },
-                                    "description": "Average purchase by channel (Online / Offline)"
-                                }
-                            ]
-                        },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T12:05:38Z"
-                        },
-                        "links": [
+        {
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/rest/projects/ld3y3gtm7jtvb2b3d8v91jao3316z1fx/md/indicatorDrills?page=0&size=5&sort=id"
+                }
+            ],
+            "content": [
+                {
+                    "id": "euh1qkanhjo28690",
+                    "name": "average_purchase_indicator_drill",
+                    "type": "indicatorDrill",
+                    "content": {
+                        "blocks": [
                             {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicatorDrills/euh1qkanhjo28690"
+                                "type": "histogram",
+                                "description": "Progress of indicator value over selected period of time"
+                            },
+                            {
+                                "type": "ranking",
+                                "size": 10,
+                                "description": "Ranking of areas with the highest average purchases"
+                            },
+                            {
+                                "type": "trend",
+                                "description": "Distribution of selected indicator in all areas of selected granularity"
+                            },
+                            {
+                                "type": "barchart",
+                                "title": "Purchases by channel",
+                                "splitProperty": "baskets.on_off_name",
+                                "orderBy": {
+                                    "property": "baskets.on_off_name",
+                                    "direction": "asc"
+                                },
+                                "description": "Average purchase by channel (Online / Offline)"
                             }
                         ]
                     },
-                    {
-                        "id": "oq0d6btmb7istcc4",
-                        "name": "turnover_indicator_drill",
-                        "type": "indicatorDrill",
-                        "content": {
-                            "blocks": [
-                                {
-                                    "type": "histogram",
-                                    "description": "Progress of indicator Turnover value over selected period of time."
-                                },
-                                {
-                                    "type": "ranking",
-                                    "size": 10,
-                                    "description": "Rank of areas according to Turnover value."
-                                },
-                                {
-                                    "type": "trend",
-                                    "description": "Distribution of Turnover in all areas of selected granularity."
-                                },
-                                {
-                                    "type": "barchart",
-                                    "title": "Turnover by channel",
-                                    "splitProperty": "baskets.on_off_name",
-                                    "orderBy": {
-                                        "property": "baskets.on_off_name",
-                                        "direction": "asc",
-                                        "sort": "asc"
-                                    },
-                                    "description": "Turnover by channel."
-                                }
-                            ]
-                        },
-                        "accessInfo": {
-                            "createdAt": "2017-10-18T12:04:52Z"
-                        },
-                        "links": [
+                    "accessInfo": {
+                        "createdAt": "2017-10-18T12:05:38Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills/euh1qkanhjo28690"
+                        }
+                    ]
+                },
+                {
+                    "id": "oq0d6btmb7istcc4",
+                    "name": "turnover_indicator_drill",
+                    "type": "indicatorDrill",
+                    "content": {
+                        "blocks": [
                             {
-                                "rel": "self",
-                                "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/indicatorDrills/oq0d6btmb7istcc4"
+                                "type": "histogram",
+                                "description": "Progress of indicator Turnover value over selected period of time."
+                            },
+                            {
+                                "type": "ranking",
+                                "size": 10,
+                                "description": "Rank of areas according to Turnover value."
+                            },
+                            {
+                                "type": "trend",
+                                "description": "Distribution of Turnover in all areas of selected granularity."
+                            },
+                            {
+                                "type": "barchart",
+                                "title": "Turnover by channel",
+                                "splitProperty": "baskets.on_off_name",
+                                "orderBy": {
+                                    "property": "baskets.on_off_name",
+                                    "direction": "asc",
+                                    "sort": "asc"
+                                },
+                                "description": "Turnover by channel."
                             }
                         ]
-                    }
-                ],
-                "page": {
-                    "size": 5,
-                    "totalElements": 2,
-                    "totalPages": 1,
-                    "number": 0
+                    },
+                    "accessInfo": {
+                        "createdAt": "2017-10-18T12:04:52Z"
+                    },
+                    "links": [
+                        {
+                            "rel": "self",
+                            "href": "/rest/projects/vb2b3d8v91jao331/md/indicatorDrills/oq0d6btmb7istcc4"
+                        }
+                    ]
                 }
+            ],
+            "page": {
+                "size": 5,
+                "totalElements": 2,
+                "totalPages": 1,
+                "number": 0
             }
+        }
 
 ### Update Indicator Drill [PUT /rest/projects/{projectId}/md/indicatorDrills/{id}]
 Updates Indicator Drill with given *id*.

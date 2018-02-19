@@ -1553,6 +1553,7 @@ The querying properties can be from any datasets (if there is some connection be
 
 Query service applies a GROUP BY operation on all properties that are NOT aggregated.
 In the example bellow the query in SQL syntax would look like: 
+
 ```sql
 SELECT
     baskets.value_name,
@@ -1925,46 +1926,6 @@ Following example returns the `min` and `max` of *stores_count* and *turnover* f
                 ]
             }
 
-
-## DWH Available Granularities [/rest/projects/{projectId}/dwh/availableGranularities]
-### Available Granularities [POST] 
-
-+ Request (application/json)
-
-    + Headers
-    
-            Authorization: Bearer {{accessToken}}
-
-    + Body
-        
-            {
-                "metrics": [
-                    {
-                        "id": "num_of_stores",
-                        "type": "function_count_dist",
-                        "content": [
-                            {
-                                "type": "property",
-                                "value": "mystores.store_id"
-                            }
-                        ]
-                    }
-                ]
-            }
-        
-
-+ Response 200 (application/json)
-
-        {
-            "content": [
-                {
-                    "metricId": "num_of_stores",
-                    "availableGranularities": [
-                        "/rest/projects/{projectId}/md/datasets/bpotfxdi4pozhx9e",
-                    ]
-                }
-            ]
-        }
 
 ## DWH Available Datasets [/rest/projects/{projectId}/dwh/availableDatasets{?subtype,expand}]
 ### Available Datasets [POST] 

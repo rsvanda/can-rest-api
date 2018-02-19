@@ -1553,13 +1553,20 @@ The querying properties can be from any datasets (if there is some connection be
 
 Query service applies a GROUP BY operation on all properties that are NOT aggregated.
 In the example bellow the query in SQL syntax would look like: 
-```
-SELECT 
-    catchment_areas.zsj_d_id as zsj_d_id, 
-    count(catchment_areas.store_id) as stores_count, 
-    avg(transactions.cart_value) as cart_avg 
-WHERE customers.customer_value > 1000 
-GROUP BY catchment_areas.zsj_d_id
+```sql
+SELECT
+    baskets.value_name,
+    sum(baskets.amount)
+FROM
+    baskets
+    JOIN dim_dates ON dim_dates.date_iso = baskets.date_iso
+WHERE
+    dim_dates.date_iso > "2017-09-24"
+    AND dim_dates.date_iso < "2017-09-30"
+    AND baskets.amount > 5
+    AND baskets.amount < 898.17
+GROUP BY
+    baskets.value_name
 ```
 
 List of supported aggregation function:
@@ -1730,17 +1737,14 @@ Boolean operators for building advanced conditions:
                 }
             }
 
-## DWH Explain Query [/rest/projects/{projectId}/dwh/explain{?size,page,sort}]
-### Explain Query [POST] 
+### Explain Query [POST /rest/projects/{projectId}/dwh/explain] 
 This resource is useful for debugging and tuning DWH queries. 
 The resource accept standard DWH Query and shows the corresponding SQL statement.
 
 * 200 - OK - query was successfully executed
 
 + Parameters 
-    + size = `200` (optional, number)
-    + page = `0` (optional, number)
-    + sort = `null` (optional, string, `transactions.zsj_d_id`)
+    + projectId: `vb2b3d8v91jao331` (string) The ID of an actual project
 
 + Request (application/json)
 
@@ -1750,62 +1754,97 @@ The resource accept standard DWH Query and shows the corresponding SQL statement
 
     + Body
             
-            {  
-               "properties":[  
-                  {  
-                     "id":"geometry",
-                     "type":"property",
-                     "value":"restaurant_phx.geometry"
-                  }
-               ],
-               "filterBy":[  
-                  {  
-                     "property":"restaurant_phx.stars",
-                     "operator":"gte",
-                     "value":3
-                  },
-                  {  
-                     "property":"restaurant_phx.stars",
-                     "operator":"lte",
-                     "value":5
-                  },
-                  {  
-                     "property":"restaurant_phx.review_count",
-                     "operator":"gte",
-                     "value":0
-                  },
-                  {  
-                     "property":"restaurant_phx.review_count",
-                     "operator":"lte",
-                     "value":1800
-                  }
-               ]
-            }        
+            {
+                "properties": [
+                    {
+                        "id": "_split_property",
+                        "type": "property",
+                        "value": "baskets.value_name"
+                    },
+                    {
+                        "id": "turnover_metric",
+                        "type": "function_sum",
+                        "content": [
+                            {
+                                "type": "property",
+                                "value": "baskets.amount"
+                            }
+                        ]
+                    }
+                ],
+                "filterBy": [
+                    {
+                        "property": "dim_dates.date_iso",
+                        "operator": "gte",
+                        "value": "2017-09-24"
+                    },
+                    {
+                        "property": "dim_dates.date_iso",
+                        "operator": "lte",
+                        "value": "2017-09-30"
+                    },
+                    {
+                        "property": "baskets.amount",
+                        "operator": "gte",
+                        "value": 5
+                    },
+                    {
+                        "property": "baskets.amount",
+                        "operator": "lte",
+                        "value": 898.17
+                    }
+                ],
+                "having": [],
+                "orderBy": [
+                    {
+                        "property": "baskets.value_cat",
+                        "direction": "asc",
+                        "sort": "asc"
+                    }
+                ]
+            }
         
 + Response 200 (text/plain)
 
-        select *
+        select 
+          "_split_property", 
+          "turnover_metric", 
+          count(*) over () as "total_rows_count"
         from (
-          with "no_agg_func" as (
-            select restaurant_phx.geometry as "geometry"
-            from restaurant_phx
+          with "turnover_metric" as (
+            select 
+              "baskets"."value_name" as "_split_property", 
+              "baskets"."value_cat" as "sort_value_cat_0", 
+              sum("baskets"."amount") as "turnover_metric"
+            from "baskets"
+              join "dim_dates"
+              on "baskets"."date_iso" = "dim_dates"."date_iso"
             where (
-              restaurant_phx.stars >= 3
-              and restaurant_phx.stars <= 5
-              and restaurant_phx.review_count >= 0
-              and restaurant_phx.review_count <= 1800
+              "dim_dates"."date_iso" >= 2017-09-24
+              and "dim_dates"."date_iso" <= 2017-09-30
+              and "baskets"."amount" >= 5
+              and "baskets"."amount" <= 898.17
             )
-            group by restaurant_phx.geometry
+            group by 
+              "baskets"."value_cat", 
+              "baskets"."value_name"
+            order by 
+              "_split_property" asc, 
+              "sort_value_cat_0" asc
           )
           select 
-            coalesce(no_agg_func.geometry) as "geometry", 
-            count(*) over () as "total_rows_count"
-          from no_agg_func
-          group by 1
-          order by 1 asc
+            coalesce("turnover_metric"."_split_property") as "_split_property", 
+            coalesce("turnover_metric"."sort_value_cat_0") as "sort_value_cat_0", 
+            "turnover_metric" as "turnover_metric"
+          from "turnover_metric"
+          group by 
+            1, 
+            2, 
+            "turnover_metric"
+          order by "sort_value_cat_0" asc
         ) as "inner"
         limit 200
-        
+
 
 ## DWH Metric Range [/rest/projects/{projectId}/dwh/metricRange]
 ### Metric Range Values [POST] 

@@ -941,7 +941,7 @@ Restricted to *ADMIN* project role.
             "status": "ENABLED",
         }
 
-## Membership [/rest/projects/{projectId}/members/{membershipId}]
+## Membership
 
 ### Get Membership by AccountId [GET /rest/projects/{projectId}/members{?accountId,expand}]
 Get membership for given project and accountId
@@ -987,7 +987,7 @@ Restricted to *ADMIN* project role or is allowed when *accountId* corresponds wi
             ]
         }
 
-### Get Membership by Id [GET]
+### Get Membership by Id [GET /rest/projects/{projectId}/members/{id}]
 Get detail of user membership in project
 
 #### Security
@@ -995,7 +995,7 @@ Restricted to *ADMIN* project role.
 
 + Parameters
     + projectId: `vb2b3d8v91jao331` (string) - The ID of the actual project
-    + membershipId: `hcdjbj20rboo7go2` (string) - The ID of a record in members table
+    + id: `hcdjbj20rboo7go2` (string) - The ID of a record in members table
 
 + Request (application/json)
 
@@ -1027,7 +1027,7 @@ Restricted to *ADMIN* project role.
             ]
         }
 
-### Update Membership [PUT]
+### Update Membership [PUT /rest/projects/{projectId}/members/{id}]
 Change the user role or status in a project.
 
 #### Response statuses
@@ -1072,7 +1072,7 @@ Restricted to *ADMIN* project role.
             ]
         }
         
-### Disable Membership [DELETE]
+### Disable Membership [DELETE /rest/projects/{projectId}/members/{id}]
 Disables membership of user in project
 
 #### Response statuses
@@ -1214,7 +1214,7 @@ Restricted to *ADMIN* project role.
             ]
         }
 
-### Get Invitation [GET /rest/projects/{projectId}/invitations/{invitationId}]
+### Get Invitation [GET /rest/projects/{projectId}/invitations/{id}]
 Get detail of an invitation. An invitation status value is one of:
 * PENDING
 * ACCEPTED
@@ -1226,7 +1226,7 @@ Restricted to *ADMIN* project role.
 
 + Parameters
     + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
-    + invitationId: `aH2b62AIqwNswG5VMlye` (string) - The ID of an actual invitation
+    + id: `aH2b62AIqwNswG5VMlye` (string) - The ID of an actual invitation
 
 + Request (application/json)
 
@@ -3319,7 +3319,7 @@ Restricted to *EDITOR* project role that has the permission to update metadata o
                 ]
             }
 
-### Get Dashboard by id [GET /rest/projects/{projectId}/md/dashboards/{dashboardId}]
+### Get Dashboard by id [GET /rest/projects/{projectId}/md/dashboards/{id}]
 
 Returns Dashboard identified by given *id*.
 
@@ -3329,7 +3329,7 @@ Returns Dashboard identified by given *id*.
 
 + Parameters
     + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
-    + dashboardId: `naln8j15edsjq4d2` (string) - The id of a dashboard
+    + id: `naln8j15edsjq4d2` (string) - The id of a dashboard
 
 + Request
 
@@ -3372,7 +3372,7 @@ Returns Dashboard identified by given *id*.
         }
 
 
-### Get Dashboard by name [GET /rest/projects/{projectId}/md/dashboards?name={dashboardName}]
+### Get Dashboard by name [GET /rest/projects/{projectId}/md/dashboards{?name}]
 
 Returns Dashboard identified by given *name*.
 
@@ -3382,7 +3382,7 @@ Returns Dashboard identified by given *name*.
 
 + Parameters
     + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
-    + dashboardName: `catchment_area_dashboard` (string) - The code name of the dashboard
+    + name: `catchment_area_dashboard` (string) - The code name of the dashboard
 
 + Request
 
@@ -3509,7 +3509,7 @@ Restricted to *ADMIN* project role that has the permission to update data permis
                         "href": "/rest/projects/ld3y3gtm7jt6z1fx/md/dataPermissions?page=0&size=5&sort=id"
                     }
                 ],
-                "contents": [
+                "content": [
                     {
                         "id": "b4j3pm51i1hobqfo",
                         "name": "data_permission_1",
@@ -3888,7 +3888,7 @@ Returns paged collection of all Datasets in a project.
         }
 
 
-### Get Dataset by id [GET /rest/projects/{projectId}/md/datasets/{datasetId}]
+### Get Dataset by id [GET /rest/projects/{projectId}/md/datasets/{id}]
 Returns Dataset with given *id*.
 
 #### Response statuses
@@ -3897,7 +3897,7 @@ Returns Dataset with given *id*.
 
 + Parameters
     + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
-    + datasetId: `n2ma1svl5o5oihrc` (string) - Id of the dataset
+    + id: `n2ma1svl5o5oihrc` (string) - Id of the dataset
 
 + Request
 

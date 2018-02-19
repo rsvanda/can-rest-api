@@ -1986,117 +1986,7 @@ This endpoint checks the relations from data model and lists only the available 
                     {
                         "metricId": "customers_metric",
                         "availableDatasets": [
-                            {
-                                "id": "raopcg3tfoen2po4",
-                                "name": "shops",
-                                "type": "dataset",
-                                "title": "Shops",
-                                "origin": "https://staging.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=shops",
-                                "properties": {
-                                    "featureTitle": {
-                                        "type": "property",
-                                        "value": "name"
-                                    },
-                                    "featureSubtitle": {
-                                        "type": "property",
-                                        "value": "address"
-                                    },
-                                    "featureAttributes": [
-                                        {
-                                            "type": "property",
-                                            "value": "shop_id"
-                                        },
-                                        {
-                                            "type": "property",
-                                            "value": "name"
-                                        },
-                                        {
-                                            "type": "property",
-                                            "value": "address"
-                                        },
-                                        {
-                                            "type": "property",
-                                            "value": "opening_hours"
-                                        },
-                                        {
-                                            "type": "property",
-                                            "value": "opening_hours_sun"
-                                        }
-                                    ]
-                                },
-                                "ref": {
-                                    "subtype": "geometryPoint",
-                                    "type": "dwh",
-                                    "table": "shops",
-                                    "primaryKey": "shop_id",
-                                    "properties": [
-                                        {
-                                            "filterable": true,
-                                            "name": "shop_id",
-                                            "title": "Shop ID",
-                                            "column": "shop_id",
-                                            "type": "integer"
-                                        },
-                                        {
-                                            "filterable": true,
-                                            "name": "name",
-                                            "title": "Name",
-                                            "column": "name",
-                                            "type": "string"
-                                        },
-                                        {
-                                            "filterable": true,
-                                            "name": "address",
-                                            "title": "Address",
-                                            "column": "address",
-                                            "type": "string"
-                                        },
-                                        {
-                                            "filterable": true,
-                                            "name": "opening_hours",
-                                            "title": "Opening hours",
-                                            "column": "opening_hours",
-                                            "type": "string"
-                                        },
-                                        {
-                                            "filterable": true,
-                                            "name": "opening_hours_sun",
-                                            "title": "Opening hours (Sun)",
-                                            "column": "opening_hours_sun",
-                                            "type": "string"
-                                        },
-                                        {
-                                            "filterable": true,
-                                            "name": "partner",
-                                            "title": "Partner",
-                                            "column": "partner",
-                                            "type": "integer"
-                                        },
-                                        {
-                                            "filterable": true,
-                                            "name": "lat",
-                                            "column": "lat",
-                                            "type": "latitude"
-                                        },
-                                        {
-                                            "filterable": true,
-                                            "name": "lng",
-                                            "column": "lng",
-                                            "type": "longitude"
-                                        }
-                                    ]
-                                },
-                                "accessInfo": {
-                                    "createdAt": "2018-01-25T15:30:00Z",
-                                    "modifiedAt": null
-                                },
-                                "links": [
-                                    {
-                                        "rel": "self",
-                                        "href": "/rest/projects/vb2b3d8v91jao331/md/datasets/raopcg3tfoen2po4"
-                                    }
-                                ]
-                            }
+                            "/rest/projects/kt3hz932v53vabh8/md/datasets/raopcg3tfoen2po4"
                         ]
                     }
                 ]
@@ -2113,6 +2003,7 @@ number of equal size buckets. The frequency is the count of occurencies of given
     + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
     + property: `baskets.amount` (required, string) - The name of a property
     + buckets: `3` (optional, number) - Number of buckets to split results into
+        + Default: `20`
     + min (optional, number) - Set minimal value for distribution. By default it is a minimal value for the property.
     + max (optional, number) - Set maximal value for distribution. By default it is a maximal value for the property.
 

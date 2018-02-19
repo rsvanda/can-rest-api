@@ -2190,6 +2190,10 @@ Returns:
 * 400 - bad request 
     * 400006 - metric values distribution for given metric and filters is not supported. The min and max values equals and therefore cannot be splitted into buckets.
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+
+
 + Request (application/json)
 
     + Headers
@@ -2199,137 +2203,290 @@ Returns:
     + Body
             
             {
-              "buckets": 3,
-              "query": {
+                "buckets": 20,
+                "query": {
                     "properties": [
                         {
-                            "id": "state",
+                            "id": "msoa11cd",
                             "type": "property",
-                            "value": "state.id"
+                            "value": "msoa_demo_uk.msoa11cd"
                         },
                         {
-                            "id": "turnover",
-                            "type": "function_sum",
+                            "id": "purchases_customer_metric",
+                            "type": "function_divide",
                             "content": [
                                 {
-                                    "type": "property",
-                                    "value": "transactions.amount"
+                                    "type": "function_count",
+                                    "content": [
+                                        {
+                                            "type": "property",
+                                            "value": "baskets.basket_id"
+                                        }
+                                    ],
+                                    "options": {
+                                        "aggregateBy": [],
+                                        "withoutFilters": [],
+                                        "acceptFilters": [],
+                                        "filterBy": []
+                                    }
+                                },
+                                {
+                                    "type": "function_count",
+                                    "content": [
+                                        {
+                                            "type": "property",
+                                            "value": "clients.client_id"
+                                        }
+                                    ],
+                                    "options": {
+                                        "aggregateBy": [],
+                                        "withoutFilters": [],
+                                        "acceptFilters": [],
+                                        "filterBy": []
+                                    }
                                 }
                             ]
                         }
                     ],
                     "filterBy": [
                         {
-                            "property": "mycustomers.customer_value",
-                            "value": 1000,
-                            "operator": "lt"
+                            "property": "shops.shop_id",
+                            "value": [
+                                "9"
+                            ],
+                            "operator": "in"
+                        },
+                        {
+                            "property": "dim_dates.date_iso",
+                            "operator": "gte",
+                            "value": "2017-09-05"
+                        },
+                        {
+                            "property": "dim_dates.date_iso",
+                            "operator": "lte",
+                            "value": "2017-09-21"
+                        },
+                        {
+                            "property": "baskets.amount",
+                            "operator": "gte",
+                            "value": 5
+                        },
+                        {
+                            "property": "baskets.amount",
+                            "operator": "lte",
+                            "value": 898.17
                         }
                     ]
                 }
             }
 
+
 + Response 200 (application/json)
 
-        {
-            "content": [
-                 {
-                    "min": 100,
-                    "max": 200,
-                    "content": [
-                        {
-                            "propertyId" : "turnover"
-                            "frequency": 84
-                        }
-                    ]
-                },
-                {
-                    "min": 200,
-                    "max": 300,
-                    "content": [
-                        {
-                            "propertyId" : "turnover"
-                            "frequency": null
-                        }
-                    ]
-                },
-                {
-                    "min": 300,
-                    "max": 400,
-                    "content": [
-                        {
-                            "propertyId" : "turnover"
-                            "frequency": 12
-                        }
-                    ]
-                }
-            ]
-        }
-        
-        
-+ Request (application/json)
-
-    + Headers
-    
-            Authorization: Bearer {{accessToken}}
-
-    + Body
-            
             {
-              "breakpoints": [12, 35.7, 62],
-              "query": {
-                    "properties": [
-                        {
-                            "id": "state",
-                            "type": "property",
-                            "value": "state.id"
-                        },
-                        {
-                            "id": "turnover",
-                            "type": "function_sum",
-                            "content": [
-                                {
-                                    "type": "property",
-                                    "value": "transactions.amount"
-                                }
-                            ]
-                        }
-                    ],
-                    "filterBy": [
-                        {
-                            "property": "mycustomers.customer_value",
-                            "value": 1000,
-                            "operator": "lt"
-                        }
-                    ]
-                }
-            }
-
-+ Response 200 (application/json)
-
-        {
-            "content": [
-                {
-                    "min": 12,
-                    "max": 35.7,
-                    "content": [
-                        {
-                            "propertyId" : "turnover"
-                            "count": 0
-                        }
-                    ]
-                },
-                {
-                    "min": 35.7,
-                    "max": 62,
-                    "content": [
-                        {
-                            "propertyId" : "turnover"
-                            "count": 204
-                        }
-                    ]
-                }
-            ]
-        }
+                "content": [
+                    {
+                        "min": 1,
+                        "max": 1.005,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 12
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.005,
+                        "max": 1.01,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.01,
+                        "max": 1.015,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.015,
+                        "max": 1.02,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.02,
+                        "max": 1.025,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.025,
+                        "max": 1.03,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.03,
+                        "max": 1.035,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.035,
+                        "max": 1.04,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 1
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.04,
+                        "max": 1.045,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.045,
+                        "max": 1.05,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.05,
+                        "max": 1.055,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.055,
+                        "max": 1.06,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.06,
+                        "max": 1.065,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 2
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.065,
+                        "max": 1.07,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 2
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.07,
+                        "max": 1.075,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.075,
+                        "max": 1.08,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 2
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.08,
+                        "max": 1.085,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.085,
+                        "max": 1.09,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.09,
+                        "max": 1.095,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 0
+                            }
+                        ]
+                    },
+                    {
+                        "min": 1.095,
+                        "max": 1.1,
+                        "content": [
+                            {
+                                "propertyId": "purchases_customer_metric",
+                                "frequency": 1
+                            }
+                        ]
+                    }
+                ]
+            }        
         
 
 ## Property Values [/rest/projects/{projectId}/dwh/values{?property,filter,size,page,direction,orderBy}]

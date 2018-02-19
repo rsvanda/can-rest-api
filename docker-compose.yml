@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  preview:
+    build: .
+    ports:
+      - "18080:8080"
+    environment:
+      # https://login.apiary.io/tokens
+      - APIARY_API_KEY=${APIARY_API_KEY}
+    volumes: 
+      - ".:/build/"
+    # https://help.apiary.io/tools/apiary-cli/
+    command: [
+        "apiary", "preview", 
+        "--server", "--host", "0.0.0.0", 
+        "--path=/build/apiary.apib"
+      ]

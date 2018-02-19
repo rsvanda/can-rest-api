@@ -1857,6 +1857,10 @@ The resource returns for each metrics:
 
 Following example returns the `min` and `max` of *stores_count* and *turnover* from all states. The customers with `turnover < 1000` are not calculated.
 
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+
+
 + Request (application/json)
 
     + Headers
@@ -1868,52 +1872,59 @@ Following example returns the `min` and `max` of *stores_count* and *turnover* f
             {
                 "properties": [
                     {
-                        "id": "state",
+                        "id": "districtcode",
                         "type": "property",
-                        "value": "state.id"
+                        "value": "district.districtcode"
                     },
                     {
-                        "id": "stores_count",
-                        "type": "function_count_dist",
-                        "content": [{
-                            "type": "property",
-                            "value": "mystores.store_id"
-                        }]
-                    },
-                    {
-                        "id": "turnover",
+                        "id": "turnover_metric",
                         "type": "function_sum",
-                        "content": [{
-                            "type": "property",
-                            "value": "transactions.amount"
-                        }]
+                        "content": [
+                            {
+                                "type": "property",
+                                "value": "baskets.amount"
+                            }
+                        ]
                     }
                 ],
                 "filterBy": [
                     {
-                        "property": "mycustomers.customer_value",
-                        "value": 1000,
-                        "operator": "lt"
+                        "property": "dim_dates.date_iso",
+                        "operator": "gte",
+                        "value": "2017-09-24"
+                    },
+                    {
+                        "property": "dim_dates.date_iso",
+                        "operator": "lte",
+                        "value": "2017-09-30"
+                    },
+                    {
+                        "property": "baskets.amount",
+                        "operator": "gte",
+                        "value": 5
+                    },
+                    {
+                        "property": "baskets.amount",
+                        "operator": "lte",
+                        "value": 898.17
+                    }
+                ],
+                "having": []
+            }
+
+
++ Response 200 (application/json)
+
+            {
+                "content": [
+                    {
+                        "propertyId": "turnover_metric",
+                        "min": 64.66,
+                        "max": 203394.85
                     }
                 ]
             }
 
-+ Response 200 (application/json)
-
-        {
-            "content": [
-                 {
-                    "propertyId": "stores_count",
-                    "min": 5,
-                    "max": 452
-                },
-                {
-                    "propertyId": "turnover",
-                    "min": 5456,
-                    "max": 1024453
-                }
-            ]
-        }
 
 ## DWH Available Granularities [/rest/projects/{projectId}/dwh/availableGranularities]
 ### Available Granularities [POST] 
@@ -5062,207 +5073,207 @@ Returns paged collection of all Indicators in a project.
 
     + Body
 
-        {
-            "links": [
-                {
-                    "rel": "self",
-                    "href": "/rest/projects/vb2b3d8v91jao331/md/indicators?page=0&size=5&sort=id"
+            {
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/vb2b3d8v91jao331/md/indicators?page=0&size=5&sort=id"
+                    }
+                ],
+                "content": [
+                    {
+                        "id": "k6hornp6l2bmo14f",
+                        "name": "average_delay_indicator",
+                        "type": "indicator",
+                        "title": "Average delay",
+                        "description": "Average order delay",
+                        "content": {
+                            "metric": "/rest/projects/vb2b3d8v91jao331/md/metrics?name=average_delay_metric",
+                            "scale": "negative",
+                            "distribution": "geometric",
+                            "format": {
+                                "type": "number",
+                                "fraction": 1,
+                                "symbol": "min"
+                            }
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T11:49:47Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/vb2b3d8v91jao331/md/indicators/k6hornp6l2bmo14f"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "utvm7qp1i0qu0eaa",
+                        "name": "average_purchase_indicator",
+                        "type": "indicator",
+                        "title": "Average purchase",
+                        "description": "Average purchase value of a customer",
+                        "content": {
+                            "metric": "/rest/projects/vb2b3d8v91jao331/md/metrics?name=average_purchase_metric",
+                            "scale": "standard",
+                            "distribution": "uniform",
+                            "format": {
+                                "type": "number",
+                                "fraction": 1,
+                                "symbol": "£"
+                            }
+                        },
+                        "accessInfo": {
+                            "createdAt": "2017-10-18T11:51:05Z"
+                        },
+                        "links": [
+                            {
+                                "rel": "self",
+                                "href": "/rest/projects/vb2b3d8v91jao331/md/indicators/utvm7qp1i0qu0eaa"
+                            }
+                        ]
+                    }
+                ],
+                "page": {
+                    "size": 5,
+                    "totalElements": 2,
+                    "totalPages": 1,
+                    "number": 0
                 }
-            ],
-            "content": [
-                {
-                    "id": "k6hornp6l2bmo14f",
-                    "name": "average_delay_indicator",
-                    "type": "indicator",
-                    "title": "Average delay",
-                    "description": "Average order delay",
-                    "content": {
-                        "metric": "/rest/projects/vb2b3d8v91jao331/md/metrics?name=average_delay_metric",
-                        "scale": "negative",
-                        "distribution": "geometric",
-                        "format": {
-                            "type": "number",
-                            "fraction": 1,
-                            "symbol": "min"
-                        }
-                    },
-                    "accessInfo": {
-                        "createdAt": "2017-10-18T11:49:47Z"
-                    },
-                    "links": [
-                        {
-                            "rel": "self",
-                            "href": "/rest/projects/vb2b3d8v91jao331/md/indicators/k6hornp6l2bmo14f"
-                        }
-                    ]
-                },
-                {
-                    "id": "utvm7qp1i0qu0eaa",
-                    "name": "average_purchase_indicator",
-                    "type": "indicator",
-                    "title": "Average purchase",
-                    "description": "Average purchase value of a customer",
-                    "content": {
-                        "metric": "/rest/projects/vb2b3d8v91jao331/md/metrics?name=average_purchase_metric",
-                        "scale": "standard",
-                        "distribution": "uniform",
-                        "format": {
-                            "type": "number",
-                            "fraction": 1,
-                            "symbol": "£"
-                        }
-                    },
-                    "accessInfo": {
-                        "createdAt": "2017-10-18T11:51:05Z"
-                    },
-                    "links": [
-                        {
-                            "rel": "self",
-                            "href": "/rest/projects/vb2b3d8v91jao331/md/indicators/utvm7qp1i0qu0eaa"
-                        }
-                    ]
-                }
-            ],
-            "page": {
-                "size": 5,
-                "totalElements": 2,
-                "totalPages": 1,
-                "number": 0
             }
-        }
 
     + Schema
 
-        {
-            "$schema": "http://json-schema.org/draft-04/schema#",
-            "type": "object",
-            "properties": {
-                "links": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "rel": {
-                                "type": "string"
-                            },
-                            "href": {
-                                "type": "string"
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "links": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "rel": {
+                                    "type": "string"
+                                },
+                                "href": {
+                                    "type": "string"
+                                }
                             }
                         }
-                    }
-                },
-                "content": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "id": {
-                                "type": "string"
-                            },
-                            "name": {
-                                "type": "string"
-                            },
-                            "type": {
-                                "type": "string"
-                            },
-                            "title": {
-                                "type": "string"
-                            },
-                            "description": {
-                                "type": "string"
-                            },
-                            "content": {
-                                "type": "object",
-                                "properties": {
-                                    "metric": {
-                                        "type": "string"
-                                    },
-                                    "scale": {
-                                        "type": "string"
-                                    },
-                                    "distribution": {
-                                        "type": "string"
-                                    },
-                                    "format": {
-                                        "type": "object",
-                                        "properties": {
-                                            "type": {
-                                                "type": "string"
-                                            },
-                                            "fraction": {
-                                                "type": "number"
-                                            },
-                                            "symbol": {
-                                                "type": "string"
-                                            }
-                                        },
-                                        "required": [
-                                            "type",
-                                            "fraction"
-                                        ]
-                                    }
-                                }
-                            },
-                            "accessInfo": {
-                                "type": "object",
-                                "properties": {
-                                    "createdAt": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "links": {
-                                "type": "array",
-                                "items": {
+                    },
+                    "content": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "type": {
+                                    "type": "string"
+                                },
+                                "title": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "content": {
                                     "type": "object",
                                     "properties": {
-                                        "rel": {
+                                        "metric": {
                                             "type": "string"
                                         },
-                                        "href": {
+                                        "scale": {
+                                            "type": "string"
+                                        },
+                                        "distribution": {
+                                            "type": "string"
+                                        },
+                                        "format": {
+                                            "type": "object",
+                                            "properties": {
+                                                "type": {
+                                                    "type": "string"
+                                                },
+                                                "fraction": {
+                                                    "type": "number"
+                                                },
+                                                "symbol": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "type",
+                                                "fraction"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "accessInfo": {
+                                    "type": "object",
+                                    "properties": {
+                                        "createdAt": {
                                             "type": "string"
                                         }
                                     }
+                                },
+                                "links": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "rel": {
+                                                "type": "string"
+                                            },
+                                            "href": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
                                 }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "type",
+                                "title",
+                                "description",
+                                "content",
+                                "accessInfo",
+                                "links"
+                            ]
+                        }
+                    },
+                    "page": {
+                        "type": "object",
+                        "properties": {
+                            "size": {
+                                "type": "number"
+                            },
+                            "totalElements": {
+                                "type": "number"
+                            },
+                            "totalPages": {
+                                "type": "number"
+                            },
+                            "number": {
+                                "type": "number"
                             }
                         },
                         "required": [
-                            "id",
-                            "name",
-                            "type",
-                            "title",
-                            "description",
-                            "content",
-                            "accessInfo",
-                            "links"
+                            "size",
+                            "totalElements",
+                            "totalPages",
+                            "number"
                         ]
                     }
-                },
-                "page": {
-                    "type": "object",
-                    "properties": {
-                        "size": {
-                            "type": "number"
-                        },
-                        "totalElements": {
-                            "type": "number"
-                        },
-                        "totalPages": {
-                            "type": "number"
-                        },
-                        "number": {
-                            "type": "number"
-                        }
-                    },
-                    "required": [
-                        "size",
-                        "totalElements",
-                        "totalPages",
-                        "number"
-                    ]
                 }
             }
-        }
 
 
 ### Update Indicator [PUT /rest/projects/{projectId}/md/indicators/{id}]
@@ -6575,6 +6586,7 @@ Returns paged collection of all Metrics in a project.
 + Response 200 (application/json)
 
     + Body
+
             {
                 "links": [
                     {
@@ -6613,6 +6625,7 @@ Returns paged collection of all Metrics in a project.
                     "number": 0
                 }
             }
+
 ### Update Metric [PUT /rest/projects/{projectId}/md/metrics/{id}]
 Updates Metric with given *id*.
 

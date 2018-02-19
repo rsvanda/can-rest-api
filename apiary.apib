@@ -1937,6 +1937,7 @@ E.g. population defined on State level cannot be calculated for granularity (dat
 This endpoint checks the relations from data model and lists only the available datasets for the metrics.
 
 + Parameters 
+    + projectId: `vb2b3d8v91jao331` (string) The ID of an actual project
     + subtype (optional, string[]) available datasets of subtypes
 
         If the parameter present, only the datasets of given subtype(s) are returned.
@@ -1966,31 +1967,140 @@ This endpoint checks the relations from data model and lists only the available 
             {
                 "metrics": [
                     {
-                        "id": "num_of_stores",
-                        "type": "function_count_dist",
+                        "id": "customers_metric",
+                        "type": "function_count",
                         "content": [
                             {
                                 "type": "property",
-                                "value": "mystores.store_id"
+                                "value": "clients.client_id"
+                            }
+                        ]
+                    }
+                ]
+            }        
+
++ Response 200 (application/json)
+
+            {
+                "content": [
+                    {
+                        "metricId": "customers_metric",
+                        "availableDatasets": [
+                            {
+                                "id": "raopcg3tfoen2po4",
+                                "name": "shops",
+                                "type": "dataset",
+                                "title": "Shops",
+                                "origin": "https://staging.cleveranalytics.com/rest/projects/yufqzxkbiecj7jot/md/datasets?name=shops",
+                                "properties": {
+                                    "featureTitle": {
+                                        "type": "property",
+                                        "value": "name"
+                                    },
+                                    "featureSubtitle": {
+                                        "type": "property",
+                                        "value": "address"
+                                    },
+                                    "featureAttributes": [
+                                        {
+                                            "type": "property",
+                                            "value": "shop_id"
+                                        },
+                                        {
+                                            "type": "property",
+                                            "value": "name"
+                                        },
+                                        {
+                                            "type": "property",
+                                            "value": "address"
+                                        },
+                                        {
+                                            "type": "property",
+                                            "value": "opening_hours"
+                                        },
+                                        {
+                                            "type": "property",
+                                            "value": "opening_hours_sun"
+                                        }
+                                    ]
+                                },
+                                "ref": {
+                                    "subtype": "geometryPoint",
+                                    "type": "dwh",
+                                    "table": "shops",
+                                    "primaryKey": "shop_id",
+                                    "properties": [
+                                        {
+                                            "filterable": true,
+                                            "name": "shop_id",
+                                            "title": "Shop ID",
+                                            "column": "shop_id",
+                                            "type": "integer"
+                                        },
+                                        {
+                                            "filterable": true,
+                                            "name": "name",
+                                            "title": "Name",
+                                            "column": "name",
+                                            "type": "string"
+                                        },
+                                        {
+                                            "filterable": true,
+                                            "name": "address",
+                                            "title": "Address",
+                                            "column": "address",
+                                            "type": "string"
+                                        },
+                                        {
+                                            "filterable": true,
+                                            "name": "opening_hours",
+                                            "title": "Opening hours",
+                                            "column": "opening_hours",
+                                            "type": "string"
+                                        },
+                                        {
+                                            "filterable": true,
+                                            "name": "opening_hours_sun",
+                                            "title": "Opening hours (Sun)",
+                                            "column": "opening_hours_sun",
+                                            "type": "string"
+                                        },
+                                        {
+                                            "filterable": true,
+                                            "name": "partner",
+                                            "title": "Partner",
+                                            "column": "partner",
+                                            "type": "integer"
+                                        },
+                                        {
+                                            "filterable": true,
+                                            "name": "lat",
+                                            "column": "lat",
+                                            "type": "latitude"
+                                        },
+                                        {
+                                            "filterable": true,
+                                            "name": "lng",
+                                            "column": "lng",
+                                            "type": "longitude"
+                                        }
+                                    ]
+                                },
+                                "accessInfo": {
+                                    "createdAt": "2018-01-25T15:30:00Z",
+                                    "modifiedAt": null
+                                },
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "href": "/rest/projects/vb2b3d8v91jao331/md/datasets/raopcg3tfoen2po4"
+                                    }
+                                ]
                             }
                         ]
                     }
                 ]
             }
-        
-
-+ Response 200 (application/json)
-
-        {
-            "content": [
-                {
-                    "metricId": "num_of_stores",
-                    "availableDatasets": [
-                        "/rest/projects/{projectId}/md/datasets/bpotfxdi4pozhx9e",
-                    ]
-                }
-            ]
-        }        
 
 ## DWH Values Distribution [/rest/projects/{projectId}/dwh/valuesDistribution{?property,buckets,min,max}]
 

@@ -1,13 +1,14 @@
 version: '3'
 
+# create file .env in root of the project and put your apiary key there
+# get it here https://login.apiary.io/tokens
+# APIARY_API_KEY=....
+
 services:
   preview:
     build: .
     ports:
       - "18080:8080"
-    environment:
-      # https://login.apiary.io/tokens
-      - APIARY_API_KEY=${APIARY_API_KEY}
     volumes: 
       - ".:/build/"
     # https://help.apiary.io/tools/apiary-cli/

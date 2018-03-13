@@ -1478,9 +1478,9 @@ Restricted to invited user. Authenticated user email must equals to email in the
 
 # Group Search
 
-## Search [/rest/projects/{projectId}/search{?query,dataset,size,page}]
+## Search
 
-### Search [GET] 
+### Search [GET /rest/projects/{projectId}/search{?query,dataset,size,page}] 
 
 Full text search on all internal project data.
 The search searvice indexes `title` and `subtitle` of all geometry datasets (`geometryPoint`, `geometryLine`, `geometryPolygon`).
@@ -1543,6 +1543,71 @@ The dataset's objects are indexed during dataset pull job. It means that if the 
                 }
             }
             
+### Geographic Search [GET /rest/projects/{projectId}/geosearch{?query,size,page}]
+
+Full text search for a location identified by the `query` parameter.
+
++ Parameters
+    + projectId: `vb2b3d8v91jao331` (string) - The ID of an actual project
+    + query: `Birmingham` (string) - Query search phrase. It is split into terms and the resource return dataset's object that contains all terms in their `title` or `subtitle`. 
+    + size = `20` (optional, number)
+    + page = `0` (optional, number)
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Bearer {{accessToken}}
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "content": [
+                    {
+                        "title": "Birmingham",
+                        "subtitle": "West Midlands Combined Authority",
+                        "position": {
+                            "lat": 52.4949,
+                            "long": -1.852658
+                        }
+                    },
+                    {
+                        "title": "Birmingham New Road",
+                        "subtitle": "Dudley",
+                        "position": {
+                            "lat": 52.533226,
+                            "long": -2.08706
+                        }
+                    },
+                    {
+                        "title": "New Frankley in Birmingham",
+                        "subtitle": "Birmingham",
+                        "position": {
+                            "lat": 52.405514,
+                            "long": -2.016126
+                        }
+                    }
+                ],
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "/rest/projects/vb2b3d8v91jao331/geosearch?query=Birmingham"
+                    },
+                    {
+                        "rel": "next",
+                        "href": "/rest/projects/vb2b3d8v91jao331/geosearch?query=Birmingham&size=10&page=1"
+                    }
+                ],
+                "page": {
+                    "size": 10,
+                    "totalElements": 1,
+                    "totalPages": 1,
+                    "number": 0
+                }
+            }
+
 # Group Data Warehouse Service
 ## DWH Query [/rest/projects/{projectId}/dwh/query{?size,page}]
 ### Run Query [POST] 

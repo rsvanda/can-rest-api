@@ -1570,15 +1570,21 @@ Full text search for a location identified by the `query` parameter.
                         "subtitle": "West Midlands Combined Authority",
                         "position": {
                             "lat": 52.4949,
-                            "log": -1.852658
+                            "lng": -1.852658
                         },
                         "highlight": {
                             "title": "<em>Birmingham</em>",
                             "subtitle": "West Midlands Combined Authority"
                         },
                         "boundingBox": {
-                            "upperLeft": 0
-                            "lowerRight": 0
+                            "upperLeft": {
+                                "lat": 52.327674,
+                                "lng": -2.045202
+                            }
+                            "lowerRight": {
+                                "lat": 52.570615,
+                                "lng": -1.597742
+                            }
                         },
                         "placeType": "city"
                     },
@@ -1587,15 +1593,11 @@ Full text search for a location identified by the `query` parameter.
                         "subtitle": "Dudley",
                         "position": {
                             "lat": 52.533226,
-                            "long": -2.08706
+                            "lng": -2.08706
                         },
                         "highlight": {
                             "title": "<em>Birmingham</em> New Road",
                             "subtitle": "Dudley",
-                        },
-                        "boundingBox": {
-                            "upperLeft": 0
-                            "lowerRight": 0
                         },
                         "placeType": "street"
                     },
@@ -1604,15 +1606,11 @@ Full text search for a location identified by the `query` parameter.
                         "subtitle": "Birmingham",
                         "position": {
                             "lat": 52.405514,
-                            "long": -2.016126
+                            "lng": -2.016126
                         },
                         "highlight": {
                             "title": "New Frankley in <em>Birmingham</em>",
                             "subtitle": "<em>Birmingham</em>",
-                        },
-                        "boundingBox": {
-                            "upperLeft": 0
-                            "lowerRight": 0
                         },
                         "placeType": "place"
                     }
@@ -1634,6 +1632,7 @@ Full text search for a location identified by the `query` parameter.
                     "number": 0
                 }
             }
+
 
 # Group Data Warehouse Service
 ## DWH Query [/rest/projects/{projectId}/dwh/query{?size,page}]
